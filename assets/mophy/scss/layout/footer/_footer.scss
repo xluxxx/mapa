@@ -1,0 +1,28 @@
+
+
+
+.footer {
+    padding-left: 21.563rem;
+    background-color: $body-bg;
+    @include respond('laptop'){
+		padding-left: 17rem;
+	}
+    .copyright {
+        padding: 0.9375rem;
+		
+        p {
+            text-align: center;
+            margin: 0;
+            color: #d7d7d7;
+        }
+
+        a{
+            color: var(--rgba-primary-5);
+        }
+		@include custommq($min: 991px) {
+			border-radius:0 0 0 50px;
+		}
+    }
+}
+
+
