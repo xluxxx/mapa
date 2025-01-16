@@ -51,33 +51,50 @@ stage.on('mouseup', () => {
     }
 });
 
-// Evento de clic en el rectángulo
-rectangle.on('click', () => {
-    const info = `Posición: (${rectangle.x()}, ${rectangle.y()})<br>Tamaño: ${rectangle.width()} x ${rectangle.height()}`;
-    document.getElementById('rectangle-info').innerHTML = info;
-    document.getElementById('modal').style.display = 'block'; // Mostrar el modal
-    document.getElementById('modal-overlay').style.display = 'block'; // Mostrar el overlay
-});
-
-// Evento para eliminar el rectángulo
-document.getElementById('delete-rectangle').addEventListener('click', () => {
-    if (rectangle) {
-        rectangle.destroy(); // Eliminar el rectángulo
-        rectangle = null; // Limpiar la referencia
-        layer.batchDraw(); // Redibuja la capa
-    }
-    document.getElementById('modal').style.display = 'none'; // Ocultar el modal
-    document.getElementById('modal-overlay').style.display = 'none'; // Ocultar el overlay
-});
-
-// Evento para cerrar el modal
-document.getElementById('close-modal').addEventListener('click', () => {
-    document.getElementById('modal').style.display = 'none'; // Ocultar el modal
-    document.getElementById('modal-overlay').style.display = 'none'; // Ocultar el overlay
-});
-
-// Evento para cerrar el modal al hacer clic en el overlay
-document.getElementById('modal-overlay').addEventListener('click', () => {
-    document.getElementById('modal').style.display = 'none'; // Ocultar el modal
-    document.getElementById('modal-overlay').style.display = 'none'; // Ocultar el overlay
-});
+// // add click listener
+// node.on('click', function() {
+//     console.log('you clicked me!');
+//   });
+  
+//   // get the target node
+//   node.on('click', function(evt) {
+//     console.log(evt.target);
+//   });
+  
+//   // stop event propagation
+//   node.on('click', function(evt) {
+//     evt.cancelBubble = true;
+//   });
+  
+//   // bind multiple listeners
+//   node.on('click touchstart', function() {
+//     console.log('you clicked/touched me!');
+//   });
+  
+//   // namespace listener
+//   node.on('click.foo', function() {
+//     console.log('you clicked/touched me!');
+//   });
+  
+//   // get the event type
+//   node.on('click tap', function(evt) {
+//     var eventType = evt.type;
+//   });
+  
+//   // get native event object
+//   node.on('click tap', function(evt) {
+//     var nativeEvent = evt.evt;
+//   });
+  
+//   // for change events, get the old and new val
+//   node.on('xChange', function(evt) {
+//     var oldVal = evt.oldVal;
+//     var newVal = evt.newVal;
+//   });
+  
+//   // get event targets
+//   // with event delegations
+//   layer.on('click', 'Group', function(evt) {
+//     var shape = evt.target;
+//     var group = evt.currentTarget;
+//   });
