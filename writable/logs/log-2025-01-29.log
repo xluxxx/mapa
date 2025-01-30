@@ -1,0 +1,66 @@
+ERROR - 2025-01-29 22:19:20 --> mysqli_sql_exception: Table 'configurador_mapas.v_users_groups' doesn't exist in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT *\nFROM `...', 0)
+#1 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT *\nFROM `...')
+#2 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT *\nFROM `...')
+#3 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\laragon\www\mapa\app\Controllers\Auth.php(88): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+#6 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+#7 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\laragon\www\mapa\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\laragon\www\mapa\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\laragon\www\mapa\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2025-01-29 22:19:20 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'configurador_mapas.v_users_groups' doesn't exist
+[Method: POST, Route: auth/login]
+in VENDORPATH\codeigniter4\framework\system\Database\BaseConnection.php on line 692.
+ 1 VENDORPATH\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = :user_id:', [...], false)
+ 2 APPPATH\Controllers\Auth.php(88): CodeIgniter\Database\BaseBuilder->get()
+ 3 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+ 4 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 5 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-01-29 22:19:20 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'configurador_mapas.v_users_groups' doesn't exist
+in VENDORPATH\codeigniter4\framework\system\Database\MySQLi\Connection.php on line 332.
+ 1 VENDORPATH\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = \'2\'')
+ 2 VENDORPATH\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = \'2\'')
+ 3 VENDORPATH\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = :user_id:', [...], false)
+ 4 APPPATH\Controllers\Auth.php(88): CodeIgniter\Database\BaseBuilder->get()
+ 5 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+ 6 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 7 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-01-29 22:19:20 --> [Caused by] mysqli_sql_exception: Table 'configurador_mapas.v_users_groups' doesn't exist
+in VENDORPATH\codeigniter4\framework\system\Database\MySQLi\Connection.php on line 327.
+ 1 VENDORPATH\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = \'2\'', 0)
+ 2 VENDORPATH\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = \'2\'')
+ 3 VENDORPATH\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = \'2\'')
+ 4 VENDORPATH\codeigniter4\framework\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `v_users_groups`
+WHERE `user_id` = :user_id:', [...], false)
+ 5 APPPATH\Controllers\Auth.php(88): CodeIgniter\Database\BaseBuilder->get()
+ 6 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+ 7 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 8 VENDORPATH\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

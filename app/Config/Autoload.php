@@ -40,6 +40,7 @@ class Autoload extends AutoloadConfig
      * @var array<string, list<string>|string>
      */
     public $psr4 = [
+        'IonAuth' => ROOTPATH . 'CodeIgniter-Ion-Auth',
         APP_NAMESPACE => APPPATH,
     ];
 
