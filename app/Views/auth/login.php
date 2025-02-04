@@ -13,7 +13,7 @@
 	<meta property="og:description" content="MOPHY : Payment Admin Dashboard  Bootstrap 5 Template" />
 	<meta property="og:image" content="https://mophy.dexignzone.com/xhtml/social-image.png"/>
 	<meta name="format-detection" content="telephone=no">
-    <title>SIEP | Login</title>
+    <title>incia sesión</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon.png">
     <link href="<?= base_url('assets/mophy/css/style.css'); ?>" rel="stylesheet">
@@ -31,8 +31,8 @@
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
-                                    <h1>BIENVENIDO AL SIEP</h1>
-                                    <p>Ingrese su usuario y PIN</p>
+                                    <h1>BIENVENIDO</h1>
+                                    <p>Ingrese su usuario contraseña</p>
                                     <div id="infoMessage">
                                         <?php if (isset($message)) {
                                             echo $message;

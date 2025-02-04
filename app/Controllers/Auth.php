@@ -81,12 +81,10 @@ else
 			$remember = (bool)$this->request->getVar('remember');
 			//IonAuth valida si el user exite
 			if ($this->ionAuth->login($this->request->getVar('identity'), $this->request->getVar('password'), $remember)){
-				return $this->response->setJson(['msg'=>'si']);
-				$user = $this->ionAuth->user()->row(); 
+				return redirect()->to('vistas/principal')->withCookies();
 
 			}else{
 				$this->session->setFlashdata('message', $this->ionAuth->errors($this->validationListTemplate));
-				return $this->response->setJson(['msg'=>'no']);
 				return redirect()->back()->withInput();
 
 			}
