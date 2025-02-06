@@ -3,8 +3,9 @@
 <html lang="en">
 
 <body>
-<?= $this->extend('layouts/header') ?>
+<?= $this->extend('layouts/main') ?>
 <?=$this->section('content')?>
+
    
 <h2 class="text-black font-w600 mb-0 me-auto mb-2 pe-3">Todos los eventos</h2>
 
