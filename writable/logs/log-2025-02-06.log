@@ -1,0 +1,30 @@
+CRITICAL - 2025-02-06 14:48:56 --> ErrorException: Attempt to read property "email" on null
+[Method: GET, Route: panel]
+in APPPATH\Views\layouts\header.php on line 161.
+ 1 APPPATH\Views\layouts\header.php(161): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Attempt to read property "email" on null', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\header.php', 161)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\header.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 FCPATH\vendor\codeigniter4\framework\system\View\View.php(240): CodeIgniter\View\View->render('layouts/header', [], true)
+ 5 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/panel', [], true)
+ 6 APPPATH\Controllers\Panel.php(9): view('layouts/panel')
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Panel->Home()
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Panel))
+ 9 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-06 15:10:17 --> ErrorException: Attempt to read property "email" on null
+[Method: GET, Route: panel]
+in APPPATH\Views\layouts\header.php on line 161.
+ 1 APPPATH\Views\layouts\header.php(161): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Attempt to read property "email" on null', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\header.php', 161)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\header.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 FCPATH\vendor\codeigniter4\framework\system\View\View.php(240): CodeIgniter\View\View->render('layouts/header', [], true)
+ 5 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/panel', [], true)
+ 6 APPPATH\Controllers\Panel.php(9): view('layouts/panel')
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Panel->Home()
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Panel))
+ 9 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

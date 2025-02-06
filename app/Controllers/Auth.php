@@ -81,13 +81,24 @@ else
 			$remember = (bool)$this->request->getVar('remember');
 			//IonAuth valida si el user exite
 			if ($this->ionAuth->login($this->request->getVar('identity'), $this->request->getVar('password'), $remember)){
-				return redirect()->to('vistas/principal')->withCookies();
+				$user = $this->ionAuth->user()->row(); // Recuperar datos del usuario
+				$data['username'] = $user->username;  // Pasar el nombre de usuario a la vista
+
+				$this->session->set([
+					'user'=> $user->username,
+					'todo'=> $user
+				]);
+
+				return redirect()->route('panel')->with('username', $data['username']); // Pasar el nombre a la vista del panel
+
 
 			}else{
-				$this->session->setFlashdata('message', $this->ionAuth->errors($this->validationListTemplate));
+				$this->session->setFlashdata('message', "error al incial sesion");
+				//return $this->response->setJson(['msg'=>'no']);
 				return redirect()->back()->withInput();
 
 			}
+			
 
 		}else{
 			$data['message'] = $this->validation->getErrors() ? $this->validation->listErrors($this->validationListTemplate) : $this->session->getFlashdata('message');
@@ -107,6 +118,17 @@ else
 
 			return view('auth/login', $data);
 		}
+
 	}
+
+	public function logout()
+{
+    // Llamamos a IonAuth para cerrar la sesión
+    $this->ionAuth->logout();
+
+    // Redirigimos al usuario a la página de login 
+    return redirect()->to('auth/login');
+}
+
 
 }

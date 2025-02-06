@@ -1,0 +1,69 @@
+CRITICAL - 2025-02-05 21:09:49 --> ErrorException: Undefined property: CodeIgniter\View\View::$ionAuth
+[Method: GET, Route: panel]
+in APPPATH\Views\layouts\panel.php on line 3.
+ 1 APPPATH\Views\layouts\panel.php(3): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: CodeIgniter\\View\\View::$ionAuth', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\panel.php', 3)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\panel.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/panel', [], true)
+ 5 APPPATH\Controllers\Panel.php(9): view('layouts/panel')
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Panel->Home()
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Panel))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-05 21:10:02 --> ErrorException: Undefined property: CodeIgniter\View\View::$ionAuth
+[Method: GET, Route: panel]
+in APPPATH\Views\layouts\panel.php on line 3.
+ 1 APPPATH\Views\layouts\panel.php(3): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: CodeIgniter\\View\\View::$ionAuth', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\panel.php', 3)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\panel.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/panel', [], true)
+ 5 APPPATH\Controllers\Panel.php(9): view('layouts/panel')
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Panel->Home()
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Panel))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-05 21:22:57 --> ErrorException: Undefined property: CodeIgniter\View\View::$ionAuth
+[Method: GET, Route: panel]
+in APPPATH\Views\layouts\panel.php on line 3.
+ 1 APPPATH\Views\layouts\panel.php(3): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: CodeIgniter\\View\\View::$ionAuth', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\panel.php', 3)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\panel.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/panel', [], true)
+ 5 APPPATH\Controllers\Panel.php(9): view('layouts/panel')
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Panel->Home()
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Panel))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-05 22:07:23 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "header.php"
+[Method: GET, Route: panel]
+in FCPATH\vendor\codeigniter4\framework\system\Exceptions\FrameworkException.php on line 39.
+ 1 FCPATH\vendor\codeigniter4\framework\system\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('header.php')
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(240): CodeIgniter\View\View->render('header', [], true)
+ 3 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/panel', [], true)
+ 4 APPPATH\Controllers\Panel.php(9): view('layouts/panel')
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Panel->Home()
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Panel))
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-05 22:07:53 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "header.php"
+[Method: GET, Route: panel]
+in FCPATH\vendor\codeigniter4\framework\system\Exceptions\FrameworkException.php on line 39.
+ 1 FCPATH\vendor\codeigniter4\framework\system\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('header.php')
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(240): CodeIgniter\View\View->render('header', [], true)
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(240): CodeIgniter\View\View->render('layouts/header', [], true)
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/panel', [], true)
+ 5 APPPATH\Controllers\Panel.php(9): view('layouts/panel')
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Panel->Home()
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Panel))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

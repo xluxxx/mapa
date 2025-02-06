@@ -1,0 +1,48 @@
+CRITICAL - 2025-02-04 22:11:53 --> CodeIgniter\Exceptions\ConfigException: "error al incial sesion" is not a valid Validation template.
+[Method: POST, Route: auth/login]
+in FCPATH\vendor\benedmunds\codeigniter-ion-auth\Models\IonAuthModel.php on line 2491.
+ 1 [internal function]: IonAuth\Models\IonAuthModel->errors('error al incial sesion')
+ 2 FCPATH\vendor\benedmunds\codeigniter-ion-auth\Libraries\IonAuth.php(104): call_user_func_array([...], [...])
+ 3 APPPATH\Controllers\Auth.php(88): IonAuth\Libraries\IonAuth->__call('errors', [...])
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-04 22:26:22 --> CodeIgniter\HTTP\Exceptions\HTTPException: The route for "http://localhost/mapa/" cannot be found.
+[Method: POST, Route: auth/login]
+in FCPATH\vendor\codeigniter4\framework\system\HTTP\RedirectResponse.php on line 63.
+ 1 FCPATH\vendor\codeigniter4\framework\system\HTTP\RedirectResponse.php(63): CodeIgniter\HTTP\Exceptions\HTTPException::forInvalidRedirectRoute('http://localhost/mapa/')
+ 2 SYSTEMPATH\Common.php(853): CodeIgniter\HTTP\RedirectResponse->route(false)
+ 3 APPPATH\Controllers\Auth.php(84): redirect('http://localhost/mapa/')
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-04 22:27:04 --> CodeIgniter\HTTP\Exceptions\HTTPException: The route for "http://localhost/mapa/" cannot be found.
+[Method: POST, Route: auth/login]
+in FCPATH\vendor\codeigniter4\framework\system\HTTP\RedirectResponse.php on line 63.
+ 1 FCPATH\vendor\codeigniter4\framework\system\HTTP\RedirectResponse.php(63): CodeIgniter\HTTP\Exceptions\HTTPException::forInvalidRedirectRoute('http://localhost/mapa/')
+ 2 SYSTEMPATH\Common.php(853): CodeIgniter\HTTP\RedirectResponse->route(false)
+ 3 APPPATH\Controllers\Auth.php(84): redirect('http://localhost/mapa/')
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-04 22:27:50 --> CodeIgniter\HTTP\Exceptions\HTTPException: The route for "http://localhost/mapa/" cannot be found.
+[Method: POST, Route: auth/login]
+in FCPATH\vendor\codeigniter4\framework\system\HTTP\RedirectResponse.php on line 63.
+ 1 FCPATH\vendor\codeigniter4\framework\system\HTTP\RedirectResponse.php(63): CodeIgniter\HTTP\Exceptions\HTTPException::forInvalidRedirectRoute('http://localhost/mapa/')
+ 2 SYSTEMPATH\Common.php(853): CodeIgniter\HTTP\RedirectResponse->route(false)
+ 3 APPPATH\Controllers\Auth.php(84): redirect('http://localhost/mapa/')
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Auth->login()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
