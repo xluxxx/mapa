@@ -5,10 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MOPHY - Payment Bootstrap Admin Dashboard</title>
+    <title>SISTEMA CONFIGURADOR DE MAPAS INTERACTIVOS</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/mophy/images/favicon.png'); ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/mophy/images/sta.jpg'); ?>">
     
     <!-- Estilos -->
     <link href="<?= base_url('assets/mophy/css/style.css'); ?>" rel="stylesheet">
@@ -24,7 +24,7 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
                                     <div class="text-center mb-3">
-                                        <a href="<?= base_url(); ?>"><img src="<?= base_url('assets/mophy/images/logo-full.png'); ?>" alt=""></a>
+                                        <a href="<?= base_url(); ?>"><img src="<?= base_url('assets/mophy/images/logocompleto.png'); ?>" alt=""></a>
                                     </div>
                                     <h4 class="text-center mb-4 text-white">Ingrese su usuario y contraseña</h4>
 

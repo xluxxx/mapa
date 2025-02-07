@@ -1,0 +1,242 @@
+CRITICAL - 2025-02-07 16:47:54 --> TypeError: CodeIgniter\Validation\Validation::setRules(): Argument #1 ($rules) must be of type array, CodeIgniter\Validation\Validation given, called in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Controller.php on line 182
+[Method: POST, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Validation\Validation.php on line 588.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Controller.php(182): CodeIgniter\Validation\Validation->setRules(Object(CodeIgniter\Validation\Validation), [])
+ 2 FCPATH\vendor\codeigniter4\framework\system\Controller.php(136): CodeIgniter\Controller->setValidator(Object(CodeIgniter\Validation\Validation), [])
+ 3 APPPATH\Controllers\Eventos.php(31): CodeIgniter\Controller->validate(Object(CodeIgniter\Validation\Validation))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 16:49:54 --> TypeError: CodeIgniter\Validation\Validation::setRules(): Argument #1 ($rules) must be of type array, CodeIgniter\Validation\Validation given, called in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Controller.php on line 182
+[Method: POST, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Validation\Validation.php on line 588.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Controller.php(182): CodeIgniter\Validation\Validation->setRules(Object(CodeIgniter\Validation\Validation), [])
+ 2 FCPATH\vendor\codeigniter4\framework\system\Controller.php(136): CodeIgniter\Controller->setValidator(Object(CodeIgniter\Validation\Validation), [])
+ 3 APPPATH\Controllers\Eventos.php(29): CodeIgniter\Controller->validate(Object(CodeIgniter\Validation\Validation))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 16:51:05 --> TypeError: CodeIgniter\Validation\Validation::setRules(): Argument #1 ($rules) must be of type array, CodeIgniter\Validation\Validation given, called in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Controller.php on line 182
+[Method: POST, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Validation\Validation.php on line 588.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Controller.php(182): CodeIgniter\Validation\Validation->setRules(Object(CodeIgniter\Validation\Validation), [])
+ 2 FCPATH\vendor\codeigniter4\framework\system\Controller.php(136): CodeIgniter\Controller->setValidator(Object(CodeIgniter\Validation\Validation), [])
+ 3 APPPATH\Controllers\Eventos.php(29): CodeIgniter\Controller->validate(Object(CodeIgniter\Validation\Validation))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-02-07 16:51:58 --> mysqli_sql_exception: Unknown column 'created_at' in 'field list' in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `ev...', 0)
+#1 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `ev...')
+#2 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `ev...')
+#3 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `ev...', Array, false)
+#4 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert(Array)
+#6 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert(Array, false)
+#7 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert(Array, false)
+#8 C:\laragon\www\mapa\app\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save(Array)
+#9 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+#10 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+#11 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\laragon\www\mapa\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 C:\laragon\www\mapa\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\laragon\www\mapa\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+CRITICAL - 2025-02-07 16:51:58 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'created_at' in 'field list'
+[Method: POST, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php on line 692.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (:event_name:, :description:, :event_date:, :event_place:, :created_at:, :updated_at:)', [...], false)
+ 2 FCPATH\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 3 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert([...])
+ 4 FCPATH\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 5 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert([...], false)
+ 6 APPPATH\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save([...])
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 9 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 16:51:58 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'created_at' in 'field list'
+in FCPATH\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php on line 332.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2026-04-03\', \'Place 1\', \'2025-02-07 16:51:58\', \'2025-02-07 16:51:58\')')
+ 2 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2026-04-03\', \'Place 1\', \'2025-02-07 16:51:58\', \'2025-02-07 16:51:58\')')
+ 3 FCPATH\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (:event_name:, :description:, :event_date:, :event_place:, :created_at:, :updated_at:)', [...], false)
+ 4 FCPATH\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 5 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert([...])
+ 6 FCPATH\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 7 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert([...], false)
+ 8 APPPATH\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save([...])
+ 9 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+10 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+11 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 16:51:58 --> [Caused by] mysqli_sql_exception: Unknown column 'created_at' in 'field list'
+in FCPATH\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php on line 327.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2026-04-03\', \'Place 1\', \'2025-02-07 16:51:58\', \'2025-02-07 16:51:58\')', 0)
+ 2 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2026-04-03\', \'Place 1\', \'2025-02-07 16:51:58\', \'2025-02-07 16:51:58\')')
+ 3 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2026-04-03\', \'Place 1\', \'2025-02-07 16:51:58\', \'2025-02-07 16:51:58\')')
+ 4 FCPATH\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (:event_name:, :description:, :event_date:, :event_place:, :created_at:, :updated_at:)', [...], false)
+ 5 FCPATH\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 6 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert([...])
+ 7 FCPATH\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 8 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert([...], false)
+ 9 APPPATH\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save([...])
+10 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+11 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+12 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2025-02-07 16:52:19 --> mysqli_sql_exception: Unknown column 'created_at' in 'field list' in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `ev...', 0)
+#1 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `ev...')
+#2 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `ev...')
+#3 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `ev...', Array, false)
+#4 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+#5 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert(Array)
+#6 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert(Array, false)
+#7 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert(Array, false)
+#8 C:\laragon\www\mapa\app\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save(Array)
+#9 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+#10 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+#11 C:\laragon\www\mapa\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\laragon\www\mapa\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 C:\laragon\www\mapa\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\laragon\www\mapa\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+CRITICAL - 2025-02-07 16:52:19 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'created_at' in 'field list'
+[Method: POST, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php on line 692.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (:event_name:, :description:, :event_date:, :event_place:, :created_at:, :updated_at:)', [...], false)
+ 2 FCPATH\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 3 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert([...])
+ 4 FCPATH\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 5 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert([...], false)
+ 6 APPPATH\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save([...])
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 9 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 16:52:19 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'created_at' in 'field list'
+in FCPATH\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php on line 332.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2025-09-23\', \'Place 1\', \'2025-02-07 16:52:19\', \'2025-02-07 16:52:19\')')
+ 2 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2025-09-23\', \'Place 1\', \'2025-02-07 16:52:19\', \'2025-02-07 16:52:19\')')
+ 3 FCPATH\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (:event_name:, :description:, :event_date:, :event_place:, :created_at:, :updated_at:)', [...], false)
+ 4 FCPATH\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 5 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert([...])
+ 6 FCPATH\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 7 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert([...], false)
+ 8 APPPATH\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save([...])
+ 9 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+10 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+11 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 16:52:19 --> [Caused by] mysqli_sql_exception: Unknown column 'created_at' in 'field list'
+in FCPATH\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php on line 327.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(327): mysqli->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2025-09-23\', \'Place 1\', \'2025-02-07 16:52:19\', \'2025-02-07 16:52:19\')', 0)
+ 2 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2025-09-23\', \'Place 1\', \'2025-02-07 16:52:19\', \'2025-02-07 16:52:19\')')
+ 3 FCPATH\vendor\codeigniter4\framework\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (\'abneas\', \'un pequeño evento \', \'2025-09-23\', \'Place 1\', \'2025-02-07 16:52:19\', \'2025-02-07 16:52:19\')')
+ 4 FCPATH\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `events` (`event_name`, `description`, `event_date`, `event_place`, `created_at`, `updated_at`) VALUES (:event_name:, :description:, :event_date:, :event_place:, :created_at:, :updated_at:)', [...], false)
+ 5 FCPATH\vendor\codeigniter4\framework\system\Model.php(394): CodeIgniter\Database\BaseBuilder->insert()
+ 6 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(839): CodeIgniter\Model->doInsert([...])
+ 7 FCPATH\vendor\codeigniter4\framework\system\Model.php(800): CodeIgniter\BaseModel->insert([...], false)
+ 8 FCPATH\vendor\codeigniter4\framework\system\BaseModel.php(750): CodeIgniter\Model->insert([...], false)
+ 9 APPPATH\Controllers\Eventos.php(42): CodeIgniter\BaseModel->save([...])
+10 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+11 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+12 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 17:17:44 --> TypeError: CodeIgniter\Validation\Validation::setRules(): Argument #1 ($rules) must be of type array, CodeIgniter\Validation\Validation given, called in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Controller.php on line 182
+[Method: POST, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Validation\Validation.php on line 588.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Controller.php(182): CodeIgniter\Validation\Validation->setRules(Object(CodeIgniter\Validation\Validation), [])
+ 2 FCPATH\vendor\codeigniter4\framework\system\Controller.php(136): CodeIgniter\Controller->setValidator(Object(CodeIgniter\Validation\Validation), [])
+ 3 APPPATH\Controllers\Eventos.php(29): CodeIgniter\Controller->validate(Object(CodeIgniter\Validation\Validation))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 19:39:01 --> TypeError: CodeIgniter\Validation\Validation::setRules(): Argument #1 ($rules) must be of type array, CodeIgniter\Validation\Validation given, called in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Controller.php on line 182
+[Method: POST, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Validation\Validation.php on line 588.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Controller.php(182): CodeIgniter\Validation\Validation->setRules(Object(CodeIgniter\Validation\Validation), [])
+ 2 FCPATH\vendor\codeigniter4\framework\system\Controller.php(136): CodeIgniter\Controller->setValidator(Object(CodeIgniter\Validation\Validation), [])
+ 3 APPPATH\Controllers\Eventos.php(29): CodeIgniter\Controller->validate(Object(CodeIgniter\Validation\Validation))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 19:41:29 --> TypeError: CodeIgniter\Validation\Validation::setRules(): Argument #1 ($rules) must be of type array, CodeIgniter\Validation\Validation given, called in C:\laragon\www\mapa\vendor\codeigniter4\framework\system\Controller.php on line 182
+[Method: GET, Route: eventos/save]
+in FCPATH\vendor\codeigniter4\framework\system\Validation\Validation.php on line 588.
+ 1 FCPATH\vendor\codeigniter4\framework\system\Controller.php(182): CodeIgniter\Validation\Validation->setRules(Object(CodeIgniter\Validation\Validation), [])
+ 2 FCPATH\vendor\codeigniter4\framework\system\Controller.php(136): CodeIgniter\Controller->setValidator(Object(CodeIgniter\Validation\Validation), [])
+ 3 APPPATH\Controllers\Eventos.php(29): CodeIgniter\Controller->validate(Object(CodeIgniter\Validation\Validation))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 5 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 19:51:58 --> ErrorException: Undefined variable $validation
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 27.
+ 1 APPPATH\Controllers\Eventos.php(27): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $validation', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 27)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 19:52:14 --> Error: Call to a member function getErrors() on array
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 27.
+ 1 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 19:52:36 --> Error: Call to a member function getErrors() on array
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 27.
+ 1 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-07 19:53:42 --> ErrorException: Undefined variable $eventModel
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 39.
+ 1 APPPATH\Controllers\Eventos.php(39): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $eventModel', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 39)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
