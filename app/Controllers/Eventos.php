@@ -17,20 +17,55 @@ class Eventos extends BaseController
         $eventModel = new EventModel();
 
         // Definir reglas de validación como array
-      $rules = [
+     /* $rules = [
         'event_name'  => 'required|min_length[3]',
         'description' => 'required|min_length[5]',
         'event_date'  => 'required',
         'event_place' => 'required',
-      ];
+      ];*/
 
-        // Verificar si los datos son válidos
+      $rules =([
+        'event_name' => [
+            'label'  => 'event_name',
+            'rules'  => 'required|min_length[3]',
+            'errors' => [
+                'required' => 'el campo {field} es requerido',
+                'min_length' => 'el campo {field} debe tener mas de 3 caracteres',
+
+            ],
+        ],
+        'description' => [
+            'label'  => 'description',
+            'rules'  => 'required|min_length[5]',
+            'errors' => [
+                'required' => 'el campo {field} es requerido',
+                'min_length' => 'el campo {field} debe tener mas de 5 caracteres',
+
+            ],
+        ],
+        'event_date' => [
+            'label'  => 'event_date',
+            'rules'  => 'required',
+            'errors' => [
+                'required' => 'el campo {field} es requerido',
+
+            ],
+        ],
+        'event_place' => [
+            'label'  => 'event_place',
+            'rules'  => 'required',
+            'errors' => [
+                'required' => 'el campo {field} es requerido',
+
+            ],
+        ],
+
+    ]);
+
        // Verificar si los datos son válidos
     if (!$this->validate($rules)) {
-        return $this
-						->response
-						->setJSON(["result" => $this->validator->getErrors()]);
-        return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        return $this->response->setJSON(["result" => $this->validator->getErrors(),"success" => false]);
+       // return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
         // Recibir los datos del formulario
@@ -45,13 +80,9 @@ class Eventos extends BaseController
         $guardar = $eventModel->save($data);
 
         if ($guardar){
-			return $this
-						->response
-						->setJSON(["result" => "success"]);
+			return $this->response->setJSON(["result" => true,"success" => true]);
 		} else {
-			return $this
-						->response
-						->setJSON(["result" => "error"]);
+			return $this->response->setJSON(["result" => false,"success" => false]);
 		}
 
         // Redirigir con un mensaje de éxito

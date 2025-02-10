@@ -22,7 +22,7 @@
 	<link href="<?= base_url('assets/mophy/vendor/datatables/css/jquery.dataTables.min.css')?>" rel="stylesheet">
     <link href="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/css/bootstrap-select.min.css')?>" rel="stylesheet">
     <link href="<?= base_url('assets/mophy/css/style.css')?>" rel="stylesheet">
-	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <!--************

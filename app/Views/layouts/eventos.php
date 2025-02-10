@@ -68,7 +68,6 @@
     </div>
 </div>
 
-<?=$this->endSection(); ?>
 <script>
 document.querySelector("form").addEventListener("submit", function(event) {
     event.preventDefault(); // Evita el envío tradicional del formulario
@@ -80,9 +79,33 @@ document.querySelector("form").addEventListener("submit", function(event) {
         body: formData
     })
     .then(response => response.json()) // Convertir la respuesta a JSON
-    .then(data => console.log("Respuesta del servidor:", data)) // Imprimir en consola
-    .catch(error => console.error("Error:", error)); // Manejar errores
+    .then(data => {
+        console.log("Respuesta del servidor:", data); // Imprimir en consola
+
+// Verificar si la respuesta fue exitosa
+if (data.success) {
+    Swal.fire({
+        title: "¡Éxito!",
+        text: data.message || "El evento se ha guardado correctamente.",
+        icon: "success"
+    }).then(() => {
+        location.reload(); // Recargar la página si es necesario
+    });
+} else {
+    // Imprimir los errores detallados en la consola
+    console.log("Errores del servidor:", data.result);
+
+    Swal.fire({
+        title: "Error",
+        text: data.message || "Hubo un problema al guardar el evento.",
+        icon: "error"
+    });
+}
+
+    });
 });
+
 </script>
 
 </body>
+<?=$this->endSection(); ?>
