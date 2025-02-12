@@ -131,30 +131,19 @@
     <!--************
         Main wrapper end
     *************-->
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="<?= base_url('assets/mophy/vendor/global/global.min.js')?>"></script>
 	<script src="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/js/bootstrap-select.min.js')?>"></script>
 	<script src="<?= base_url('assets/mophy/vendor/chart.js/Chart.bundle.min.js')?>"></script>
     <script src="<?= base_url('assets/mophy/js/custom.min.js')?>"></script>
 	<script src="<?= base_url('assets/mophy/js/deznav-init.js')?>"></script>
-
+    
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" 
 	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  	<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 
-	<script>
-		(function($) {
-			var table = $('#example5').DataTable({
-				searching: false,
-				paging:true,
-				select: false,
-				//info: false,         
-				lengthChange:false 
-				
-			});
-			$('#example tbody').on('click', 'tr', function () {
-				var data = table.row( this ).data();
-				
-			});
-		})(jQuery);
-	</script>
+	

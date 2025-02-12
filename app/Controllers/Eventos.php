@@ -88,4 +88,5 @@ class Eventos extends BaseController
         // Redirigir con un mensaje de éxito
 
     }
+    
 }

@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-
-<html lang="en">
-
-<body>
+<html lang="es">
 <?= $this->extend('layouts/header') ?>
 <?=$this->section('content')?>
-   
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
 <h2 class="text-black font-w600 mb-0 me-auto mb-2 pe-3">Todos los eventos</h2>
 
 <div class="dropdown custom-dropdown me-3 mb-0">
@@ -24,11 +29,7 @@
 <div class="dropdown custom-dropdown mb-0">
     <!-- Espacio para contenido adicional si es necesario -->
 </div>
-
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="table-responsive table-hover fs-14 card-table">
-						<table id="tablaEventos" class="display" style="width:100%">
+    <table id="tablaEventos" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -40,12 +41,9 @@
             </tr>
         </thead>
     </table>
-						</div>
-					</div>
-				</div>
-				<script>
-		(function($) {
-			var table = $(document).ready(function() {
+
+    <script>
+        $(document).ready(function() {
             $('#tablaEventos').DataTable({
                 "processing": true,
                 "serverSide": false, 
@@ -55,11 +53,7 @@
                 }
             });
         });
-
-			
-		})(jQuery);
-		
-	</script>
+    </script>
 				<?=$this->endSection(); ?>
-
-				
+</body>
+</html>
