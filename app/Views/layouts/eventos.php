@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <body>
 <?= $this->extend('layouts/header') ?>
 <?=$this->section('content')?>
@@ -22,15 +20,19 @@
     </div>
 <?php endif; ?>
 
-<div class="col-xl-12 col-lg-12">
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Formulario de Evento</h4>
+<div class="container-fluid">
+    <div class="page-titles form-head d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Formulario de Evento</h4>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="basic-form">
                 <!-- El formulario envía los datos al método save del controlador -->
-                <form >
+                <form method="POST" enctype="multipart/form-data"> <!-- Añadido el atributo enctype -->
 
                     <?= csrf_field() ?> <!-- CSRF Token para seguridad -->
 
@@ -58,6 +60,13 @@
                                 <option value="Place 2" <?= old('event_place') == 'Place 2' ? 'selected' : '' ?>>Place 2</option>
                                 <!-- Agrega más lugares aquí -->
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label">Subir Plano</label>
+                            <input type="file" name="event_file" class="form-control">
                         </div>
                     </div>
 
@@ -108,7 +117,6 @@ document.querySelector("form").addEventListener("submit", function(event) {
         });
     });
 });
-
 </script>
 
 </body>
