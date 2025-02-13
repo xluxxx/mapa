@@ -12,91 +12,94 @@ class Eventos extends BaseController
     }
 
     public function save()
-    {
-        // Cargar el modelo
-        $eventModel = new EventModel();
+{
+    // Cargar el modelo
+    $eventModel = new EventModel();
 
-        // Definir reglas de validación
-        $rules = [
-            'event_name' => [
-                'label'  => 'event_name',
-                'rules'  => 'required|min_length[3]',
-                'errors' => [
-                    'required' => 'El campo {field} es requerido',
-                    'min_length' => 'El campo {field} debe tener más de 3 caracteres',
-                ],
+    // Definir reglas de validación
+    $rules = [
+        'event_name' => [
+            'label'  => 'event_name',
+            'rules'  => 'required|min_length[3]',
+            'errors' => [
+                'required' => 'El campo {field} es requerido',
+                'min_length' => 'El campo {field} debe tener más de 3 caracteres',
             ],
-            'description' => [
-                'label'  => 'description',
-                'rules'  => 'required|min_length[5]',
-                'errors' => [
-                    'required' => 'El campo {field} es requerido',
-                    'min_length' => 'El campo {field} debe tener más de 5 caracteres',
-                ],
+        ],
+        'description' => [
+            'label'  => 'description',
+            'rules'  => 'required|min_length[5]',
+            'errors' => [
+                'required' => 'El campo {field} es requerido',
+                'min_length' => 'El campo {field} debe tener más de 5 caracteres',
             ],
-            'event_date' => [
-                'label'  => 'event_date',
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'El campo {field} es requerido',
-                ],
+        ],
+        'event_date' => [
+            'label'  => 'event_date',
+            'rules'  => 'required',
+            'errors' => [
+                'required' => 'El campo {field} es requerido',
             ],
-            'event_place' => [
-                'label'  => 'event_place',
-                'rules'  => 'required',
-                'errors' => [
-                    'required' => 'El campo {field} es requerido',
-                ],
-            ]
-        ];
+        ],
+        'event_place' => [
+            'label'  => 'event_place',
+            'rules'  => 'required',
+            'errors' => [
+                'required' => 'El campo {field} es requerido',
+            ],
+        ]
+    ];
 
-        // Validar los datos
-        if (!$this->validate($rules)) {
+    // Validar los datos
+    if (!$this->validate($rules)) {
+        return $this->response->setJSON([
+            "result" => $this->validator->getErrors(),
+            "success" => false
+        ]);
+    }
+
+    // Recibir los datos del formulario
+    $data = [
+        'event_name' => $this->request->getPost('event_name'),
+        'description' => $this->request->getPost('description'),
+        'event_date' => $this->request->getPost('event_date'),
+        'event_place' => $this->request->getPost('event_place'),
+    ];
+
+    // Insertar los datos en la base de datos
+    $guardar = $eventModel->save($data);
+
+    // Manejo del archivo
+    $file = $this->request->getFile('event_file');
+
+    if ($file && $file->isValid() && !$file->hasMoved()) {
+        // Validar que el archivo sea un SVG
+        if ($file->getMimeType() !== 'image/svg+xml') {
             return $this->response->setJSON([
-                "result" => $this->validator->getErrors(),
+                "result" => "Solo se permiten archivos SVG.",
                 "success" => false
             ]);
         }
 
-        // Recibir los datos del formulario
-        $data = [
-            'event_name' => $this->request->getPost('event_name'),
-            'description' => $this->request->getPost('description'),
-            'event_date' => $this->request->getPost('event_date'),
-            'event_place' => $this->request->getPost('event_place'),
-        ];
+        // Definir la ruta de almacenamiento
+        $newName = $file->getRandomName();
+        $file->move(ROOTPATH . 'public/uploads', $newName); // Guarda en /public/uploads/
 
-        // Insertar los datos en la base de datos
-        $guardar = $eventModel->save($data);
-
-        // Manejo del archivo
-        $file = $this->request->getFile('event_file');
-
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Validar que el archivo sea un SVG
-            if ($file->getMimeType() !== 'image/svg+xml') {
-                return $this->response->setJSON([
-                    "result" => "Solo se permiten archivos SVG.",
-                    "success" => false
-                ]);
-            }
-
-            // Definir la ruta de almacenamiento
-            $newName = $file->getRandomName();
-            $file->move(ROOTPATH . 'public/uploads', $newName); // Guarda en /public/uploads/
-
-            return $this->response->setJSON([
-                "result" => "Evento guardado y archivo subido correctamente.",
-                "success" => true,
-                "file_path" => base_url('uploads/' . $newName) // Devolver la ruta del archivo
-            ]);
-        }
-
+        // Devolver mensaje de éxito si el evento y el archivo se guardaron correctamente
         return $this->response->setJSON([
-            "result" => "Evento guardado, pero no se subió ningún archivo.",
-            "success" => true
+            "result" => "Evento guardado y archivo subido correctamente.",
+            "success" => true,
+            "file_path" => base_url('uploads/' . $newName) // Devolver la ruta del archivo
         ]);
     }
+
+    // Respuesta en caso de que el archivo no se haya subido pero el evento sí se guardó
+    return $this->response->setJSON([
+        "result" => "Evento guardado, pero no se subió ningún archivo.",
+        "success" => true
+    ]);
+}
+
 
     public function getEventos()
     {
