@@ -33,7 +33,6 @@
             <div class="basic-form">
                 <!-- El formulario envía los datos al método save del controlador -->
                 <form method="POST" enctype="multipart/form-data"> <!-- Añadido el atributo enctype -->
-
                     <?= csrf_field() ?> <!-- CSRF Token para seguridad -->
 
                     <div class="row">
@@ -66,7 +65,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Subir Plano</label>
-                            <input type="file" name="event_file" class="form-control">
+                            <input type="file" name="event_file" class="form-control" accept=".svg"> <!-- Aquí puedes limitar el tipo de archivo si es necesario -->
                         </div>
                     </div>
 
