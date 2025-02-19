@@ -32,7 +32,7 @@
         <div class="card-body">
             <div class="basic-form">
                 <!-- El formulario envía los datos al método save del controlador -->
-                <form method="POST" enctype="multipart/form-data"> <!-- Añadido el atributo enctype -->
+                <form action="<?= base_url('eventos/save') ?>" method="post" enctype="multipart/form-data"> <!-- Añadido el atributo enctype -->
                     <?= csrf_field() ?> <!-- CSRF Token para seguridad -->
 
                     <div class="row">
@@ -55,9 +55,38 @@
                             <label class="form-label">Lugar</label>
                             <select name="event_place" id="inputState" class="default-select form-control wide">
                                 <option selected>Choose...</option>
-                                <option value="Place 1" <?= old('event_place') == 'Place 1' ? 'selected' : '' ?>>Place 1</option>
-                                <option value="Place 2" <?= old('event_place') == 'Place 2' ? 'selected' : '' ?>>Place 2</option>
-                                <!-- Agrega más lugares aquí -->
+                                <option value="Aguascalientes" <?= old('event_place') == 'Aguascalientes' ? 'selected' : '' ?>>Aguascalientes</option>
+                                <option value="Baja California" <?= old('event_place') == 'Baja California' ? 'selected' : '' ?>>Baja California</option>
+                                <option value="Baja California Sur" <?= old('event_place') == 'Baja California Sur' ? 'selected' : '' ?>>Baja California Sur</option>
+                                <option value="Campeche" <?= old('event_place') == 'Campeche' ? 'selected' : '' ?>>Campeche</option>
+                                <option value="Coahuila" <?= old('event_place') == 'Coahuila' ? 'selected' : '' ?>>Coahuila</option>
+                                <option value="Colima" <?= old('event_place') == 'Colima' ? 'selected' : '' ?>>Colima</option>
+                                <option value="Chiapas" <?= old('event_place') == 'Chiapas' ? 'selected' : '' ?>>Chiapas</option>
+                                <option value="Chihuahua" <?= old('event_place') == 'Chihuahua' ? 'selected' : '' ?>>Chihuahua</option>
+                                <option value="Ciudad de México" <?= old('event_place') == 'Ciudad de México' ? 'selected' : '' ?>>Ciudad de México</option>
+                                <option value="Durango" <?= old('event_place') == 'Durango' ? 'selected' : '' ?>>Durango</option>
+                                <option value="Guanajuato" <?= old('event_place') == 'Guanajuato' ? 'selected' : '' ?>>Guanajuato</option>
+                                <option value="Guerrero" <?= old('event_place') == 'Guerrero' ? 'selected' : '' ?>>Guerrero</option>
+                                <option value="Hidalgo" <?= old('event_place') == 'Hidalgo' ? 'selected' : '' ?>>Hidalgo</option>
+                                <option value="Jalisco" <?= old('event_place') == 'Jalisco' ? 'selected' : '' ?>>Jalisco</option>
+                                <option value="Estado de México" <?= old('event_place') == 'Estado de México' ? 'selected' : '' ?>>Estado de México</option>
+                                <option value="Michoacán" <?= old('event_place') == 'Michoacán' ? 'selected' : '' ?>>Michoacán</option>
+                                <option value="Morelos" <?= old('event_place') == 'Morelos' ? 'selected' : '' ?>>Morelos</option>
+                                <option value="Nayarit" <?= old('event_place') == 'Nayarit' ? 'selected' : '' ?>>Nayarit</option>
+                                <option value="Nuevo León" <?= old('event_place') == 'Nuevo León' ? 'selected' : '' ?>>Nuevo León</option>
+                                <option value="Oaxaca" <?= old('event_place') == 'Oaxaca' ? 'selected' : '' ?>>Oaxaca</option>
+                                <option value="Puebla" <?= old('event_place') == 'Puebla' ? 'selected' : '' ?>>Puebla</option>
+                                <option value="Querétaro" <?= old('event_place') == 'Querétaro' ? 'selected' : '' ?>>Querétaro</option>
+                                <option value="Quintana Roo" <?= old('event_place') == 'Quintana Roo' ? 'selected' : '' ?>>Quintana Roo</option>
+                                <option value="San Luis Potosí" <?= old('event_place') == 'San Luis Potosí' ? 'selected' : '' ?>>San Luis Potosí</option>
+                                <option value="Sinaloa" <?= old('event_place') == 'Sinaloa' ? 'selected' : '' ?>>Sinaloa</option>
+                                <option value="Sonora" <?= old('event_place') == 'Sonora' ? 'selected' : '' ?>>Sonora</option>
+                                <option value="Tabasco" <?= old('event_place') == 'Tabasco' ? 'selected' : '' ?>>Tabasco</option>
+                                <option value="Tamaulipas" <?= old('event_place') == 'Tamaulipas' ? 'selected' : '' ?>>Tamaulipas</option>
+                                <option value="Tlaxcala" <?= old('event_place') == 'Tlaxcala' ? 'selected' : '' ?>>Tlaxcala</option>
+                                <option value="Veracruz" <?= old('event_place') == 'Veracruz' ? 'selected' : '' ?>>Veracruz</option>
+                                <option value="Yucatán" <?= old('event_place') == 'Yucatán' ? 'selected' : '' ?>>Yucatán</option>
+                                <option value="Zacatecas" <?= old('event_place') == 'Zacatecas' ? 'selected' : '' ?>>Zacatecas</option>
                             </select>
                         </div>
                     </div>
@@ -65,7 +94,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Subir Plano</label>
-                            <input type="file" name="event_file" class="form-control" accept=".svg"> <!-- Aquí puedes limitar el tipo de archivo si es necesario -->
+                            <input type="file" id="fileInput" name="name_file" class="form-control" accept=".svg,.jpg,.png"> <!-- Aquí puedes limitar el tipo de archivo si es necesario -->
                         </div>
                     </div>
 
@@ -117,6 +146,7 @@ document.querySelector("form").addEventListener("submit", function(event) {
     });
 });
 </script>
+
 
 </body>
 <?=$this->endSection(); ?>

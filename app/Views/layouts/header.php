@@ -16,7 +16,7 @@
 	<meta name="format-detection" content="telephone=no">
     <title> SISTEMA CONFIGURADOR DE MAPAS INTERACTIVOS</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/mophy/images/sta.jpg')?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/mophy/images/logod.png')?>">
     <link href="<?= base_url('assets/mophy/vendor/jqvmap/css/jqvmap.min.css')?>" rel="stylesheet">
 	<link rel="stylesheet" href="<?= base_url('assets/mophy/vendor/chartist/css/chartist.min.css')?>">
 	<link href="<?= base_url('assets/mophy/vendor/datatables/css/jquery.dataTables.min.css')?>" rel="stylesheet">
@@ -71,7 +71,7 @@
                             <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown">
                                     <div class="header-info">
                                         <!-- Mostrar el nombre del usuario -->
-                                        <span class="text-black">Hello,<strong><?= session()->get('user'); ?></strong></span>
+                                        <span class="text-black">Hola,<strong><?= session()->get('user'); ?></strong></span>
                                         <p class="fs-12 mb-0">Admin</p>
                                     </div>
                                     <img src="images/profile/17.jpg" width="20" alt=""/>
@@ -104,16 +104,19 @@
 				<ul class="metismenu" id="menu">
                     <li><a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
 							<i class="flaticon-381-networking"></i>
-							<span class="nav-text">eventos</span>
+							<span class="nav-text">Eventos</span>
 						</a>
                         <ul aria-expanded="false">
-							<li><a onclick="window.location.href='<?= base_url('Eventos/') ?>'">crear evento </a></li>
+							<li><a onclick="window.location.href='<?= base_url('Eventos/') ?>'">Crear evento </a></li>
+						</ul>
+                        <ul aria-expanded="false">
+							<li><a onclick="window.location.href='<?= base_url('Mapa/') ?>'">Plano </a></li>
 						</ul>
                     </li>
                    
 				<div class="copyright">
-					<p><strong>Mophy Payment Admin Dashboard</strong> © 2022 All Rights Reserved</p>
-					<p>Made with <span class="heart"></span> by DexignZone</p>
+					<p><strong>SERVICIOS INTEGRALES DE EXPOSICIONES SA DE CV.</strong> más de 30 años de experiencia en el mercado.</p>
+					<p>Made with <span class="heart"></span> by Lu</p>
 				</div>
 			</div>
         </div>

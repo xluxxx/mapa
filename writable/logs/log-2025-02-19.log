@@ -1,0 +1,70 @@
+CRITICAL - 2025-02-19 15:31:42 --> ErrorException: Undefined variable $newName
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 89.
+ 1 APPPATH\Controllers\Eventos.php(89): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $newName', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 89)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-19 15:38:28 --> ErrorException: Undefined variable $fileName
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 90.
+ 1 APPPATH\Controllers\Eventos.php(90): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $fileName', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 90)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-19 15:44:32 --> ErrorException: Undefined variable $data
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 94.
+ 1 APPPATH\Controllers\Eventos.php(94): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $data', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 94)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-19 15:44:42 --> ErrorException: Undefined variable $data
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 94.
+ 1 APPPATH\Controllers\Eventos.php(94): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $data', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 94)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-19 15:51:56 --> ErrorException: Undefined variable $fileName
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 93.
+ 1 APPPATH\Controllers\Eventos.php(93): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $fileName', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 93)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-19 15:52:26 --> ErrorException: Undefined variable $fileName
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 93.
+ 1 APPPATH\Controllers\Eventos.php(93): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $fileName', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 93)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-19 16:10:32 --> ErrorException: Undefined variable $file
+[Method: POST, Route: eventos/save]
+in APPPATH\Controllers\Eventos.php on line 65.
+ 1 APPPATH\Controllers\Eventos.php(65): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $file', 'C:\\laragon\\www\\mapa\\app\\Controllers\\Eventos.php', 65)
+ 2 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->save()
+ 3 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 4 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
