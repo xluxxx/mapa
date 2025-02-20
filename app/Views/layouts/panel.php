@@ -298,6 +298,30 @@ $(document).ready(function() {
 
 const plano = (id) => {
     console.log(id)
+    var url_ = "obtenerEvento";
+                $.ajax({
+                    url: "<?= base_url('eventos/obtenerEvento') ?>",
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(response) {
+                        console.log(response)
+                    },
+                    error: function(xhr, status, error) {
+                        // Cerrar el SweetAlert de "Eliminando..."
+                        Swal.close();
+
+                        // Mostrar un mensaje de error
+                        Swal.fire(
+                            'Error',
+                            'No se pudo eliminar el registro.',
+                            'error'
+                        );
+                    },
+                    complete: function() {
+                        // Reactivar el botón una vez que la solicitud ha finalizado
+                        $button.prop('disabled', false);
+                    }
+                });
 
 }
 </script>

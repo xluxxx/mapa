@@ -176,4 +176,17 @@ class Eventos extends BaseController
             return $this->response->setStatusCode(404)->setJSON(['error' => 'Evento no encontrado']);
         }
     }
+
+    public function obtenerEvento(){
+
+        $id = $this->request->getPost('id');
+        if (!$id) {
+            return $this->response->setStatusCode(400, 'ID requerido');
+        }
+        $model = new EventModel();
+        $evento = $model->find($id);
+
+        return $this->response->setJSON(['message' => $evento]);
+
+    }
 }
