@@ -124,7 +124,7 @@ class Eventos extends BaseController
                 "event_place" => $evento['event_place'],
                 "plano" => '<center>
                                 <button type="button" class="btn btn-primary btn-rounded" 
-                                    onclick="plano(' . $evento['id'] . ')">
+                                    onclick="window.location.href='<?= base_url('Eventos/obtenerEvento/' . esc($evento['id'], 'url')) ?>'">
                                     Plano
                                 </button>
                             </center>',
