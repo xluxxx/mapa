@@ -124,11 +124,10 @@ class Eventos extends BaseController
                 "event_place" => $evento['event_place'],
                 "plano" => '<center>
                                 <button type="button" class="btn btn-primary btn-rounded" 
-                                    onclick="window.location.href='<?= base_url('Eventos/obtenerEvento/' . esc($evento['id'], 'url')) ?>'">
+                                    onclick="window.location.href=\'' . base_url('Eventos/obtenerEvento/' . esc($evento['id'], 'url')) . '\'">
                                     Plano
                                 </button>
                             </center>',
-
                 "acciones" => '<center>
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary btn-editar" data-id="' . $evento['id'] . '">Editar</button>
@@ -177,16 +176,17 @@ class Eventos extends BaseController
         }
     }
 
-    public function obtenerEvento(){
-
-        $id = $this->request->getPost('id');
+    public function obtenerEvento($id){
+        
         if (!$id) {
             return $this->response->setStatusCode(400, 'ID requerido');
         }
         $model = new EventModel();
         $evento = $model->find($id);
+        $data['evento']= $evento;
 
-        return $this->response->setJSON(['message' => $evento]);
+        return view('layouts/mapa', $data);
+
 
     }
 }

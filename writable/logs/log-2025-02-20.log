@@ -1,0 +1,70 @@
+CRITICAL - 2025-02-20 18:22:25 --> ErrorException: Undefined variable $file
+[Method: GET, Route: Eventos/obtenerEvento/47]
+in APPPATH\Views\layouts\mapa.php on line 6.
+ 1 APPPATH\Views\layouts\mapa.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $file', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php', 6)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/mapa', [], true)
+ 5 APPPATH\Controllers\Eventos.php(188): view('layouts/mapa', [...])
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->obtenerEvento('47')
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-20 18:24:51 --> ErrorException: Undefined variable $array
+[Method: GET, Route: Eventos/obtenerEvento/47]
+in APPPATH\Views\layouts\mapa.php on line 6.
+ 1 APPPATH\Views\layouts\mapa.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $array', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php', 6)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/mapa', [], true)
+ 5 APPPATH\Controllers\Eventos.php(188): view('layouts/mapa', [...])
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->obtenerEvento('47')
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-20 18:26:51 --> ErrorException: Trying to access array offset on value of type null
+[Method: GET, Route: Eventos/obtenerEvento/images/profile/17.jpg]
+in APPPATH\Views\layouts\mapa.php on line 6.
+ 1 APPPATH\Views\layouts\mapa.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php', 6)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/mapa', [], true)
+ 5 APPPATH\Controllers\Eventos.php(188): view('layouts/mapa', [...])
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->obtenerEvento('images', 'profile', '17.jpg')
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-20 18:30:10 --> ErrorException: Trying to access array offset on value of type null
+[Method: GET, Route: Eventos/obtenerEvento/images/profile/17.jpg]
+in APPPATH\Views\layouts\mapa.php on line 6.
+ 1 APPPATH\Views\layouts\mapa.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php', 6)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/mapa', [], true)
+ 5 APPPATH\Controllers\Eventos.php(188): view('layouts/mapa', [...])
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->obtenerEvento('images', 'profile', '17.jpg')
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-02-20 18:38:42 --> ErrorException: Trying to access array offset on value of type null
+[Method: GET, Route: Eventos/obtenerEvento/images/profile/17.jpg]
+in APPPATH\Views\layouts\mapa.php on line 6.
+ 1 APPPATH\Views\layouts\mapa.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php', 6)
+ 2 FCPATH\vendor\codeigniter4\framework\system\View\View.php(224): include('C:\\laragon\\www\\mapa\\app\\Views\\layouts\\mapa.php')
+ 3 FCPATH\vendor\codeigniter4\framework\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('layouts/mapa', [], true)
+ 5 APPPATH\Controllers\Eventos.php(188): view('layouts/mapa', [...])
+ 6 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\Eventos->obtenerEvento('images', 'profile', '17.jpg')
+ 7 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Eventos))
+ 8 FCPATH\vendor\codeigniter4\framework\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
