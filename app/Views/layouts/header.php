@@ -109,9 +109,7 @@
                         <ul aria-expanded="false">
 							<li><a onclick="window.location.href='<?= base_url('Eventos/') ?>'">Crear evento </a></li>
 						</ul>
-                        <ul aria-expanded="false">
-							<li><a onclick="window.location.href='<?= base_url('Mapa/') ?>'">Plano </a></li>
-						</ul>
+
                     </li>
                    
 				<div class="copyright">
