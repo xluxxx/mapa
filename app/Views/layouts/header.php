@@ -24,6 +24,8 @@
     <link href="<?= base_url('assets/mophy/css/style.css')?>" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+
 </head>
 <body>
     <!--************
@@ -138,8 +140,7 @@
 	<script src="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/js/bootstrap-select.min.js')?>"></script>
 	<script src="<?= base_url('assets/mophy/vendor/chart.js/Chart.bundle.min.js')?>"></script>
     <script src="<?= base_url('assets/mophy/js/custom.min.js')?>"></script>
-	<script src="<?= base_url('assets/mophy/js/deznav-init.js')?>"></script>
-    
+
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 <!-- DataTables JS -->
@@ -148,4 +149,3 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  	<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 
-	

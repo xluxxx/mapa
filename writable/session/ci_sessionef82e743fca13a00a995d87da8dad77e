@@ -1,6 +1,0 @@
-__ci_last_regenerate|i:1738188611;_ci_previous_url|s:17:"http://mapa.test/";message|s:90:"	<div class="errors" role="alert">
-		<ul>
-					<li>Incorrect Login</li>
-				</ul>
-	</div>
-";__ci_vars|a:2:{s:7:"message";s:3:"old";s:13:"_ci_old_input";s:3:"old";}_ci_old_input|a:2:{s:3:"get";a:0:{}s:4:"post";a:3:{s:8:"identity";s:18:"gurrutia@gmail.com";s:8:"password";s:8:"11234567";s:6:"submit";s:5:"Login";}}
