@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konva Dashboard con Iconos y Nombres</title>
     <!-- Incluir FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -40,20 +41,18 @@
 
         /* Estilos base para los iconos */
         #dashboard .icon {
-            padding: 15px;
+            padding: 10px 20px;
             border: none;
             border-radius: 10px; /* Bordes redondeados */
             background-color: #ffffff; /* Fondo blanco */
             color: #333; /* Color del icono */
-            font-size: 24px;
+            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
+            gap: 10px; /* Espacio entre el icono y el texto */
         }
 
         /* Efecto hover (al pasar el mouse) */
@@ -92,19 +91,19 @@
     <?= $this->extend('layouts/header') ?>
     <?= $this->section('content') ?>
 
-    <!-- Dashboard de figuras con iconos -->
+    <!-- Dashboard de figuras con iconos y nombres -->
     <div id="dashboard">
         <div class="icon rectangle" onclick="addRectangle()">
-            <i class="fas fa-square"></i> <!-- Icono de rectángulo -->
+            <i class="fas fa-square"></i> Rectángulo
         </div>
         <div class="icon circle" onclick="addCircle()">
-            <i class="fas fa-circle"></i> <!-- Icono de círculo -->
+            <i class="fas fa-circle"></i> Círculo
         </div>
         <div class="icon triangle" onclick="addTriangle()">
-            <i class="fas fa-play"></i> <!-- Icono de triángulo (rotado) -->
+            <i class="fas fa-play"></i> Triángulo
         </div>
         <div class="icon delete" onclick="deleteSelectedShape()">
-            <i class="fas fa-trash"></i> <!-- Icono de eliminar -->
+            <i class="fas fa-trash"></i> Eliminar
         </div>
     </div>
 
@@ -300,9 +299,16 @@
 
         // Funciones para agregar figuras desde el dashboard
         function addRectangle() {
+            var pos = stage.getPointerPosition(); // Obtener la posición actual del puntero
+            if (!pos) return; // Si no hay posición, salir
+
+            // Ajustar las coordenadas teniendo en cuenta la escala y el desplazamiento
+            var x = (pos.x - stage.x()) / scale;
+            var y = (pos.y - stage.y()) / scale;
+
             var rect = new Konva.Rect({
-                x: 50,
-                y: 50,
+                x: x,
+                y: y,
                 width: 100,
                 height: 50,
                 fill: 'rgba(255, 0, 0, 0.5)',
@@ -316,9 +322,16 @@
         }
 
         function addCircle() {
+            var pos = stage.getPointerPosition(); // Obtener la posición actual del puntero
+            if (!pos) return; // Si no hay posición, salir
+
+            // Ajustar las coordenadas teniendo en cuenta la escala y el desplazamiento
+            var x = (pos.x - stage.x()) / scale;
+            var y = (pos.y - stage.y()) / scale;
+
             var circle = new Konva.Circle({
-                x: 100,
-                y: 100,
+                x: x,
+                y: y,
                 radius: 50,
                 fill: 'rgba(0, 255, 0, 0.5)',
                 stroke: 'green',
@@ -331,9 +344,16 @@
         }
 
         function addTriangle() {
+            var pos = stage.getPointerPosition(); // Obtener la posición actual del puntero
+            if (!pos) return; // Si no hay posición, salir
+
+            // Ajustar las coordenadas teniendo en cuenta la escala y el desplazamiento
+            var x = (pos.x - stage.x()) / scale;
+            var y = (pos.y - stage.y()) / scale;
+
             var triangle = new Konva.RegularPolygon({
-                x: 150,
-                y: 150,
+                x: x,
+                y: y,
                 sides: 3,
                 radius: 50,
                 fill: 'rgba(0, 0, 255, 0.5)',
@@ -356,6 +376,13 @@
             }
         }
 
+        // Evento para eliminar la figura seleccionada con la tecla "Delete" o "Supr"
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Delete' || e.key === 'Supr') { // Verificar si se presionó la tecla "Delete" o "Supr"
+                e.preventDefault(); // Evitar el comportamiento predeterminado
+                deleteSelectedShape(); // Eliminar la figura seleccionada
+            }
+        });
 
         // Seleccionar figuras
         stage.on('click tap', function (e) {
