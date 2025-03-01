@@ -99,16 +99,17 @@
         <div class="icon circle" onclick="addCircle()">
             <i class="fas fa-circle"></i> Círculo
         </div>
-        <div class="icon triangle" onclick="addTriangle()">
-            <i class="fas fa-play"></i> Triángulo
-        </div>
         <div class="icon delete" onclick="deleteSelectedShape()">
             <i class="fas fa-trash"></i> Eliminar
         </div>
+        <div class="icon save" onclick="guardarFiguras()">
+            <i class="fas fa-trash"></i> Guardar Mapa
+        </div>
+        
     </div>
 
     <!-- Contenedor del lienzo -->
-    <div id="container" style="border-style: solid; width: 100%; height: 500px;"></div>
+    <div id="container" style="border-style: solid; width: 100%; height: 85vh;"></div>
 
     <script>
         // Inicializar el escenario y las capas
@@ -139,6 +140,8 @@
         var isDrawing = false;
         var rect;
         var startX, startY;
+
+        let shapes = [];
 
         // Crear un Transformer para ajustar los rectángulos
         var tr = new Konva.Transformer({
@@ -299,14 +302,13 @@
 
         // Funciones para agregar figuras desde el dashboard
         function addRectangle() {
-            var pos = stage.getPointerPosition(); // Obtener la posición actual del puntero
-            if (!pos) return; // Si no hay posición, salir
+            const pos = stage.getPointerPosition();
+            if (!pos) return;
 
-            // Ajustar las coordenadas teniendo en cuenta la escala y el desplazamiento
-            var x = (pos.x - stage.x()) / scale;
-            var y = (pos.y - stage.y()) / scale;
+            const x = (pos.x - stage.x()) / scale;
+            const y = (pos.y - stage.y()) / scale;
 
-            var rect = new Konva.Rect({
+            const rect = new Konva.Rect({
                 x: x,
                 y: y,
                 width: 100,
@@ -316,20 +318,40 @@
                 strokeWidth: 2,
                 draggable: true
             });
+
+            rect.on('click', function () {
+                const fill = this.fill() == 'yellow' ? '#00D2FF' : 'yellow';
+                this.fill(fill);
+            });
+
             layer.add(rect);
             tr.nodes([rect]);
             layer.batchDraw();
+
+            // Añadir la forma al array shapes
+            shapes.push({
+                type: rect.getClassName(),
+                x: rect.x(),
+                y: rect.y(),
+                width: rect.width(),
+                height: rect.height(),
+                fill: rect.fill(),
+                stroke: rect.stroke(),
+                stroke_width: rect.strokeWidth(),
+                shape: rect, // Referencia a la forma
+                shapeIndex: rect.index,
+                info: null
+            });
         }
 
         function addCircle() {
-            var pos = stage.getPointerPosition(); // Obtener la posición actual del puntero
-            if (!pos) return; // Si no hay posición, salir
+            let pos = stage.getPointerPosition();
+            if (!pos) return;
 
-            // Ajustar las coordenadas teniendo en cuenta la escala y el desplazamiento
-            var x = (pos.x - stage.x()) / scale;
-            var y = (pos.y - stage.y()) / scale;
+            let x = (pos.x - stage.x()) / scale;
+            let y = (pos.y - stage.y()) / scale;
 
-            var circle = new Konva.Circle({
+            let circle = new Konva.Circle({
                 x: x,
                 y: y,
                 radius: 50,
@@ -338,32 +360,26 @@
                 strokeWidth: 2,
                 draggable: true
             });
+
             layer.add(circle);
             tr.nodes([circle]);
             layer.batchDraw();
-        }
 
-        function addTriangle() {
-            var pos = stage.getPointerPosition(); // Obtener la posición actual del puntero
-            if (!pos) return; // Si no hay posición, salir
+            console.log(circle.index)
 
-            // Ajustar las coordenadas teniendo en cuenta la escala y el desplazamiento
-            var x = (pos.x - stage.x()) / scale;
-            var y = (pos.y - stage.y()) / scale;
-
-            var triangle = new Konva.RegularPolygon({
-                x: x,
-                y: y,
-                sides: 3,
-                radius: 50,
-                fill: 'rgba(0, 0, 255, 0.5)',
-                stroke: 'blue',
-                strokeWidth: 2,
-                draggable: true
+            // Añadir la forma al array shapes
+            shapes.push({
+                type: circle.getClassName(),
+                x: circle.x(),
+                y: circle.y(),
+                radius: circle.radius(),
+                fill: circle.fill(),
+                stroke: circle.stroke(),
+                stroke_width: circle.strokeWidth(),
+                shape: circle, // Referencia a la forma
+                shapeIndex: circle.index,
+                info: null
             });
-            layer.add(triangle);
-            tr.nodes([triangle]);
-            layer.batchDraw();
         }
 
         // Función para eliminar la figura seleccionada
@@ -394,6 +410,107 @@
                 layer.batchDraw();
             }
         });
+
+        //Formulario de datos del espacio
+        const abrirFormulario = (shape) => {
+            Swal.fire({
+                title: "Registrar Stand",
+                html: `
+                    <input id="stand" class="swal2-input" placeholder="Número de Stand" required>
+                    <input id="empresa" class="swal2-input" placeholder="Nombre de la Empresa" required>
+                    <input id="paginaweb" class="swal2-input" placeholder="Página Web" required>
+                    <input type="file" id="logo" class="swal2-file">
+                `,
+                showCancelButton: true,
+                confirmButtonText: "Guardar",
+                preConfirm: () => {
+                    const stand = document.getElementById("stand").value;
+                    const empresa = document.getElementById("empresa").value;
+                    const paginaweb = document.getElementById("paginaweb").value;
+                    const logoInput = document.getElementById("logo");
+
+                    if (!stand || !empresa || !paginaweb) {
+                        Swal.showValidationMessage("Todos los campos son obligatorios");
+                        return false;
+                    }
+
+                    const logoFile = logoInput.files[0];
+                    let logoURL = "";
+                    if (logoFile) {
+                        logoURL = URL.createObjectURL(logoFile);
+                    }
+
+                    return { stand, empresa, paginaweb, logoURL, shape};
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    const { stand, empresa, paginaweb, logoURL, shape} = result.value;
+
+                    console.log(result.value)
+                    const fig = shapes.find((fig) => fig.shapeIndex == 7)
+                    console.log(fig)
+                    console.log(shapes)
+                    return;
+
+                    // Actualizar el mapa con la nueva info del stand
+                    mapaData[index].info = JSON.stringify(result.value, null, 2);
+                    console.log("Mapa actualizado:", mapaData);
+                    Swal.fire("Guardado", "La información se ha guardado correctamente", "success");
+                }
+            });
+        }
+
+        layer.on('dblclick dbltap', function (e) {
+            var shape = e.target;
+            if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
+                console.log('Doble clic en:', shape);
+                
+                abrirFormulario(shape)
+            }
+        });
+
+        function updateShapeInfo(shape) {
+            const index = shapes.findIndex(s => s.shape === shape);
+            if (index !== -1) {
+                shapes[index] = {
+                    ...shapes[index],
+                    x: shape.x(),
+                    y: shape.y(),
+                    width: shape.width ? shape.width() : null,
+                    height: shape.height ? shape.height() : null,
+                    radius: shape.radius ? shape.radius() : null,
+                    fill: shape.fill(),
+                    stroke: shape.stroke(),
+                    stroke_width: shape.strokeWidth()
+                };
+            }
+        }
+
+        // Escuchar eventos de cambio en las formas
+        layer.on('dragmove transform transformend', function (e) {
+            const shape = e.target;
+            if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
+                updateShapeInfo(shape);
+            }
+        });
+
+        // Función para guardar las figuras
+        const guardarFiguras = () => {
+            console.log(shapes);
+            return;
+
+            fetch('/guardar-formas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ shapes })
+            })
+            .then(response => response.json())
+            .then(data => console.log("Guardado en BD:", data))
+            .catch(error => console.error("Error al guardar:", error));
+        };
     </script>
 
     <?= $this->endSection() ?>
