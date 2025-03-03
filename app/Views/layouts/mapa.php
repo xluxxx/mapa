@@ -6,6 +6,8 @@
     <title>Konva Dashboard con Iconos y Nombres</title>
     <!-- Incluir FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="<?= base_url('assets/mophy//vendor/toastr/css/toastr.min.css')?>" rel="stylesheet">
+
     <style>
         /* Estilos para el menú contextual */
         #contextMenu {
@@ -111,7 +113,9 @@
     <!-- Contenedor del lienzo -->
     <div id="container" style="border-style: solid; width: 100%; height: 85vh;"></div>
 
+    <script src="<?= base_url('assets/mophy/vendor/toastr/js/toastr.min.js')?>"></script>
     <script>
+        const id_evento = Number("<?php echo $evento['id'] ?>");
         // Inicializar el escenario y las capas
         var container = document.getElementById('container');
         var stage = new Konva.Stage({
@@ -195,44 +199,97 @@
             stage.batchDraw(); // Redibujar el escenario
         });
 
+        // Funciones para agregar figuras desde el dashboard
+        function addRectangle() {
+            const pos = stage.getPointerPosition();
+
+            // Verificar si el clic ocurre dentro de una figura existente
+            const shape = stage.getIntersection(pos);
+            if (shape && (shape instanceof Konva.Rect || shape instanceof Konva.Circle || shape instanceof Konva.RegularPolygon)) {
+                // Si el clic ocurre dentro de una figura, no crear una nueva
+                return;
+            }
+
+            isDrawing = true;
+
+            startX = (pos.x - stage.x()) / scale;
+            startY = (pos.y - stage.y()) / scale;
+
+            // Crear un nuevo rectángulo
+            rect = new Konva.Rect({
+                x: startX,
+                y: startY,
+                width: 50,
+                height: 50,
+                fill: 'rgba(255, 0, 0, 0.5)', // Color semitransparente
+                stroke: 'red',
+                strokeWidth: 2,
+                draggable: true // Permitir que el rectángulo sea arrastrable
+            });
+
+            layer.add(rect);
+            tr.nodes([rect]);
+            layer.batchDraw();
+
+            // Añadir la forma al array shapes
+            shapes.push({
+                type: rect.getClassName(),
+                x: rect.x(),
+                y: rect.y(),
+                width: rect.width(),
+                height: rect.height(),
+                fill: rect.fill(),
+                stroke: rect.stroke(),
+                stroke_width: rect.strokeWidth(),
+                shape: rect, // Referencia a la forma
+                shapeIndex: rect.index,
+                info: null
+            });
+        }
+
+        function addCircle() {
+            let pos = stage.getPointerPosition();
+            if (!pos) return;
+
+            let x = (pos.x - stage.x()) / scale;
+            let y = (pos.y - stage.y()) / scale;
+
+            let circle = new Konva.Circle({
+                x: x,
+                y: y,
+                radius: 50,
+                fill: 'rgba(0, 255, 0, 0.5)',
+                stroke: 'green',
+                strokeWidth: 2,
+                draggable: true
+            });
+
+            layer.add(circle);
+            tr.nodes([circle]);
+            layer.batchDraw();
+
+            console.log(circle.index)
+
+            // Añadir la forma al array shapes
+            shapes.push({
+                type: circle.getClassName(),
+                x: circle.x(),
+                y: circle.y(),
+                radius: circle.radius(),
+                fill: circle.fill(),
+                stroke: circle.stroke(),
+                stroke_width: circle.strokeWidth(),
+                shape: circle, // Referencia a la forma
+                shapeIndex: circle.index,
+                info: null
+            });
+        }
+
         // Eventos para el movimiento (pan) con el botón izquierdo del mouse
         stage.on('mousedown', function (e) {
             if (e.evt.button === 0 && e.target === stage) { // Botón izquierdo y clic en el escenario (no en un objeto)
                 isDragging = true;
                 lastPointerPosition = stage.getPointerPosition();
-            } else if (e.evt.button === 0) { // Botón izquierdo para dibujar
-                var pos = stage.getPointerPosition();
-
-                // Verificar si el clic ocurre dentro de una figura existente
-                var shape = stage.getIntersection(pos);
-                if (shape && (shape instanceof Konva.Rect || shape instanceof Konva.Circle || shape instanceof Konva.RegularPolygon)) {
-                    // Si el clic ocurre dentro de una figura, no crear una nueva
-                    return;
-                }
-
-                isDrawing = true;
-                // Ajustar las coordenadas iniciales teniendo en cuenta la escala y la posición del escenario
-                startX = (pos.x - stage.x()) / scale;
-                startY = (pos.y - stage.y()) / scale;
-
-                // Crear un nuevo rectángulo
-                rect = new Konva.Rect({
-                    x: startX,
-                    y: startY,
-                    width: 0,
-                    height: 0,
-                    fill: 'rgba(255, 0, 0, 0.5)', // Color semitransparente
-                    stroke: 'red',
-                    strokeWidth: 2,
-                    draggable: true // Permitir que el rectángulo sea arrastrable
-                });
-
-                // Añadir el rectángulo a la capa
-                layer.add(rect);
-
-                // Asociar el Transformer al nuevo rectángulo
-                tr.nodes([rect]);
-                layer.batchDraw();
             }
         });
 
@@ -300,88 +357,6 @@
             backgroundLayer.draw();
         };
 
-        // Funciones para agregar figuras desde el dashboard
-        function addRectangle() {
-            const pos = stage.getPointerPosition();
-            if (!pos) return;
-
-            const x = (pos.x - stage.x()) / scale;
-            const y = (pos.y - stage.y()) / scale;
-
-            const rect = new Konva.Rect({
-                x: x,
-                y: y,
-                width: 100,
-                height: 50,
-                fill: 'rgba(255, 0, 0, 0.5)',
-                stroke: 'red',
-                strokeWidth: 2,
-                draggable: true
-            });
-
-            rect.on('click', function () {
-                const fill = this.fill() == 'yellow' ? '#00D2FF' : 'yellow';
-                this.fill(fill);
-            });
-
-            layer.add(rect);
-            tr.nodes([rect]);
-            layer.batchDraw();
-
-            // Añadir la forma al array shapes
-            shapes.push({
-                type: rect.getClassName(),
-                x: rect.x(),
-                y: rect.y(),
-                width: rect.width(),
-                height: rect.height(),
-                fill: rect.fill(),
-                stroke: rect.stroke(),
-                stroke_width: rect.strokeWidth(),
-                shape: rect, // Referencia a la forma
-                shapeIndex: rect.index,
-                info: null
-            });
-        }
-
-        function addCircle() {
-            let pos = stage.getPointerPosition();
-            if (!pos) return;
-
-            let x = (pos.x - stage.x()) / scale;
-            let y = (pos.y - stage.y()) / scale;
-
-            let circle = new Konva.Circle({
-                x: x,
-                y: y,
-                radius: 50,
-                fill: 'rgba(0, 255, 0, 0.5)',
-                stroke: 'green',
-                strokeWidth: 2,
-                draggable: true
-            });
-
-            layer.add(circle);
-            tr.nodes([circle]);
-            layer.batchDraw();
-
-            console.log(circle.index)
-
-            // Añadir la forma al array shapes
-            shapes.push({
-                type: circle.getClassName(),
-                x: circle.x(),
-                y: circle.y(),
-                radius: circle.radius(),
-                fill: circle.fill(),
-                stroke: circle.stroke(),
-                stroke_width: circle.strokeWidth(),
-                shape: circle, // Referencia a la forma
-                shapeIndex: circle.index,
-                info: null
-            });
-        }
-
         // Función para eliminar la figura seleccionada
         function deleteSelectedShape() {
             var selectedNode = tr.nodes()[0]; // Obtener la figura seleccionada
@@ -419,6 +394,7 @@
                     <input id="stand" class="swal2-input" placeholder="Número de Stand" required>
                     <input id="empresa" class="swal2-input" placeholder="Nombre de la Empresa" required>
                     <input id="paginaweb" class="swal2-input" placeholder="Página Web" required>
+
                     <input type="file" id="logo" class="swal2-file">
                 `,
                 showCancelButton: true,
@@ -428,6 +404,8 @@
                     const empresa = document.getElementById("empresa").value;
                     const paginaweb = document.getElementById("paginaweb").value;
                     const logoInput = document.getElementById("logo");
+
+                    console.log(document.getElementById("id_evento").value);
 
                     if (!stand || !empresa || !paginaweb) {
                         Swal.showValidationMessage("Todos los campos son obligatorios");
@@ -440,23 +418,30 @@
                         logoURL = URL.createObjectURL(logoFile);
                     }
 
-                    return { stand, empresa, paginaweb, logoURL, shape};
+                    return { stand, empresa, paginaweb, logoURL, shape, idEvento};
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
 
                     const { stand, empresa, paginaweb, logoURL, shape} = result.value;
 
-                    console.log(result.value)
-                    const fig = shapes.find((fig) => fig.shapeIndex == 7)
-                    console.log(fig)
-                    console.log(shapes)
-                    return;
+                    const data = {
+                        stand, empresa, paginaweb, logoURL, idEvento
+                    }
 
-                    // Actualizar el mapa con la nueva info del stand
-                    mapaData[index].info = JSON.stringify(result.value, null, 2);
-                    console.log("Mapa actualizado:", mapaData);
-                    Swal.fire("Guardado", "La información se ha guardado correctamente", "success");
+                    console.log(shapes)
+
+                    const fig = shapes.find((fig) => fig.shapeIndex == shape.index)
+                    console.log(fig)
+                    
+                    if(fig){
+                        fig.info = data;
+                    }
+
+                    console.log(shapes)
+                    toastr.success('Have fun storming the castle!', 'Miracle Max Says');
+
+                    return;
                 }
             });
         }
@@ -498,9 +483,8 @@
         // Función para guardar las figuras
         const guardarFiguras = () => {
             console.log(shapes);
-            return;
 
-            fetch('/guardar-formas', {
+            fetch("<?= base_url('Mapa/guardar_posiciones/')?>" + id_evento, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
