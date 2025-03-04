@@ -210,15 +210,13 @@
                 return;
             }
 
-            isDrawing = true;
-
             startX = (pos.x - stage.x()) / scale;
             startY = (pos.y - stage.y()) / scale;
 
             // Crear un nuevo rectángulo
             rect = new Konva.Rect({
-                x: startX,
-                y: startY,
+                x: 0,
+                y: 0,
                 width: 50,
                 height: 50,
                 fill: 'rgba(255, 0, 0, 0.5)', // Color semitransparente
@@ -405,8 +403,6 @@
                     const paginaweb = document.getElementById("paginaweb").value;
                     const logoInput = document.getElementById("logo");
 
-                    console.log(document.getElementById("id_evento").value);
-
                     if (!stand || !empresa || !paginaweb) {
                         Swal.showValidationMessage("Todos los campos son obligatorios");
                         return false;
@@ -418,7 +414,7 @@
                         logoURL = URL.createObjectURL(logoFile);
                     }
 
-                    return { stand, empresa, paginaweb, logoURL, shape, idEvento};
+                    return { stand, empresa, paginaweb, logoURL, shape };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -426,28 +422,30 @@
                     const { stand, empresa, paginaweb, logoURL, shape} = result.value;
 
                     const data = {
-                        stand, empresa, paginaweb, logoURL, idEvento
+                        stand, empresa, paginaweb, logoURL
                     }
-
-                    console.log(shapes)
 
                     const fig = shapes.find((fig) => fig.shapeIndex == shape.index)
                     console.log(fig)
-                    
+
+                    console.log(fig)
+
                     if(fig){
                         fig.info = data;
+                        fig.fill = 'rgba(23, 148, 55, 0.5)';
                     }
 
-                    console.log(shapes)
                     toastr.success('Have fun storming the castle!', 'Miracle Max Says');
-
-                    return;
                 }
             });
         }
 
         layer.on('dblclick dbltap', function (e) {
-            var shape = e.target;
+
+            let stage = e.target.getStage(); // Asegurar que tenemos el stage
+            stage.setPointersPositions(e); // Registrar manualmente la posición del puntero
+
+            let shape = e.target;
             if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
                 console.log('Doble clic en:', shape);
                 
@@ -482,7 +480,7 @@
 
         // Función para guardar las figuras
         const guardarFiguras = () => {
-            console.log(shapes);
+            console.log(id_evento);
 
             fetch("<?= base_url('Mapa/guardar_posiciones/')?>" + id_evento, {
                 method: 'POST',
