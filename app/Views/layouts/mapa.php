@@ -202,27 +202,22 @@
         // Funciones para agregar figuras desde el dashboard
         function addRectangle() {
             const pos = stage.getPointerPosition();
+            if (!pos) return; // Verificar si hay una posición válida
 
-            // Verificar si el clic ocurre dentro de una figura existente
-            const shape = stage.getIntersection(pos);
-            if (shape && (shape instanceof Konva.Rect || shape instanceof Konva.Circle || shape instanceof Konva.RegularPolygon)) {
-                // Si el clic ocurre dentro de una figura, no crear una nueva
-                return;
-            }
-
-            startX = (pos.x - stage.x()) / scale;
-            startY = (pos.y - stage.y()) / scale;
+            // Ajustar las coordenadas al zoom y desplazamiento
+            const x = (pos.x - stage.x()) / scale;
+            const y = (pos.y - stage.y()) / scale;
 
             // Crear un nuevo rectángulo
-            rect = new Konva.Rect({
-                x: 0,
-                y: 0,
+            const rect = new Konva.Rect({
+                x: x,
+                y: y,
                 width: 50,
                 height: 50,
-                fill: 'rgba(255, 0, 0, 0.5)', // Color semitransparente
+                fill: 'rgba(255, 0, 0, 0.5)',
                 stroke: 'red',
                 strokeWidth: 2,
-                draggable: true // Permitir que el rectángulo sea arrastrable
+                draggable: true
             });
 
             layer.add(rect);
@@ -239,20 +234,22 @@
                 fill: rect.fill(),
                 stroke: rect.stroke(),
                 stroke_width: rect.strokeWidth(),
-                shape: rect, // Referencia a la forma
+                shape: rect,
                 shapeIndex: rect.index,
                 info: null
             });
         }
 
         function addCircle() {
-            let pos = stage.getPointerPosition();
-            if (!pos) return;
+            const pos = stage.getPointerPosition();
+            if (!pos) return; // Verificar si hay una posición válida
 
-            let x = (pos.x - stage.x()) / scale;
-            let y = (pos.y - stage.y()) / scale;
+            // Ajustar las coordenadas al zoom y desplazamiento
+            const x = (pos.x - stage.x()) / scale;
+            const y = (pos.y - stage.y()) / scale;
 
-            let circle = new Konva.Circle({
+            // Crear un nuevo círculo
+            const circle = new Konva.Circle({
                 x: x,
                 y: y,
                 radius: 50,
@@ -266,8 +263,6 @@
             tr.nodes([circle]);
             layer.batchDraw();
 
-            console.log(circle.index)
-
             // Añadir la forma al array shapes
             shapes.push({
                 type: circle.getClassName(),
@@ -277,7 +272,7 @@
                 fill: circle.fill(),
                 stroke: circle.stroke(),
                 stroke_width: circle.strokeWidth(),
-                shape: circle, // Referencia a la forma
+                shape: circle,
                 shapeIndex: circle.index,
                 info: null
             });
@@ -418,38 +413,28 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
+                    const { stand, empresa, paginaweb, logoURL, shape } = result.value;
+                    const data = { stand, empresa, paginaweb, logoURL };
+                    const fig = shapes.find((fig) => fig.shapeIndex == shape.index);
 
-                    const { stand, empresa, paginaweb, logoURL, shape} = result.value;
-
-                    const data = {
-                        stand, empresa, paginaweb, logoURL
-                    }
-
-                    const fig = shapes.find((fig) => fig.shapeIndex == shape.index)
-                    console.log(fig)
-
-                    console.log(fig)
-
-                    if(fig){
+                    if (fig) {
                         fig.info = data;
                         fig.fill = 'rgba(23, 148, 55, 0.5)';
                     }
 
-                    toastr.success('Have fun storming the castle!', 'Miracle Max Says');
+                    toastr.success('Información guardada correctamente', 'Éxito');
                 }
             });
         }
 
         layer.on('dblclick dbltap', function (e) {
-
             let stage = e.target.getStage(); // Asegurar que tenemos el stage
             stage.setPointersPositions(e); // Registrar manualmente la posición del puntero
 
             let shape = e.target;
             if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
                 console.log('Doble clic en:', shape);
-                
-                abrirFormulario(shape)
+                abrirFormulario(shape);
             }
         });
 
