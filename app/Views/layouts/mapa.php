@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konva Dashboard con Iconos y Nombres</title>
     <!-- Incluir FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="<?= base_url('assets/mophy//vendor/toastr/css/toastr.min.css')?>" rel="stylesheet">
@@ -105,7 +104,7 @@
             <i class="fas fa-trash"></i> Eliminar
         </div>
         <div class="icon save" onclick="guardarFiguras()">
-            <i class="fas fa-trash"></i> Guardar Mapa
+            <i class="fas fa-save"></i> Guardar Mapa
         </div>
         
     </div>
@@ -359,14 +358,6 @@
                 layer.batchDraw(); // Redibujar la capa
             }
         }
-
-        // Evento para eliminar la figura seleccionada con la tecla "Delete" o "Supr"
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Delete' || e.key === 'Supr') { // Verificar si se presionó la tecla "Delete" o "Supr"
-                e.preventDefault(); // Evitar el comportamiento predeterminado
-                deleteSelectedShape(); // Eliminar la figura seleccionada
-            }
-        });
 
         // Seleccionar figuras
         stage.on('click tap', function (e) {

@@ -1,10 +1,8 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\EventModel; // Importar el modelo de eventos
-use App\Models\FigurasModel; // Importar el modelo de eventos
-use App\Models\InfoFiguraModel; // Importar el modelo de eventos
 
+use App\Models\StandsModel; // Importar el modelo de stands
 use CodeIgniter\API\ResponseTrait;
 
 class Mapa extends BaseController
@@ -15,9 +13,9 @@ class Mapa extends BaseController
     {
         return view('layouts/mapa');
     }
-    
-    public function guardar_posiciones($id_evento){
 
+    public function guardar_posiciones($id_evento)
+    {
         // Obtener los datos enviados desde el frontend
         $json = $this->request->getJSON(); // Obtener el cuerpo de la solicitud como JSON
         $shapes = $json->shapes; // Acceder al array de shapes
@@ -29,51 +27,41 @@ class Mapa extends BaseController
                 'message' => 'No se recibieron figuras para guardar.'
             ]);
         }
-        
-        return $this->respond([
-            'success' => true,
-            'message' => $shapes
-        ]);
+
+        // Cargar el modelo de stands
+        $standsModel = new StandsModel();
 
         // Procesar y guardar cada figura en la base de datos
         foreach ($shapes as $shape) {
-            // Aquí puedes validar y guardar cada figura en la base de datos
-            $dataFigura = [
+            // Preparar los datos para la tabla de stands
+            $dataStand = [
                 'type' => $shape->type,
                 'x' => $shape->x,
                 'y' => $shape->y,
                 'width' => $shape->width,
-                'heigth' => $shape->height,
-                'radius' => $shape->radius,
+                'height' => $shape->height, // Corregido: 'heigth' -> 'height'
+                'radius' => $shape->radius ?? null, // Solo para círculos
                 'stroke_width' => $shape->stroke_width,
                 'id_evento' => $id_evento,
+                'nombre' => $shape->info->stand ?? null, // Información adicional
+                'numero' => $shape->info->stand ?? null,
+                'estatus' => 1, // Estatus por defecto
+                'contacto' => $shape->info->stand ?? null,
             ];
 
-            // $figurasModel->insert($data);
-
-            $info = $shape->info;
-
-            $data = [
-                'nombre'   => $info->stand,
-                'numero'   => $info->stand,
-                'estatus'  => 1,
-                'contacto' => $info->stand,
-                'id_figura' => 1,
-            ];
-            
-            // $figurasModel->insert($data);
-
+            // Insertar el stand en la base de datos
+            $standsModel->insert($dataStand);
         }
-        
 
         // Responder con un mensaje de éxito
         return $this->respond([
             'success' => true,
-            'message' => "cool"
+            'message' => 'Stands guardados correctamente.'
         ]);
     }
 
-    public function generar_mapa(){
-
+    public function generar_mapa()
+    {
+        // Lógica para generar el mapa
     }
 }
