@@ -1,3 +1,9 @@
+<? if (strlen($evento['name_file']) <=0 || $evento['name_file'] == null): ?>
+		<div class="alert alert-danger" role="alert">
+				No se ha cargado el plano del evento
+		</div>
+<? endif;  ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

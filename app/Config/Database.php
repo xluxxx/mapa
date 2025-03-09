@@ -27,9 +27,9 @@ class Database extends Config
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'root',
-        'password'     => '',
-        'database'     => 'configurador_mapas',
+        'username'     => 'sistemaderegistr_min24sa',
+        'password'     => 'er,i+Db0^Rlh',
+        'database'     => 'sistemaderegistr_karte',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
