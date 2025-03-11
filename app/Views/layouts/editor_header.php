@@ -1,36 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="keywords" content="admin, dashboard" />
-	<meta name="author" content="DexignZone" />
-	<meta name="robots" content="index, follow" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="MOPHY : Payment Admin Dashboard  Bootstrap 5 Template" />
-	<meta property="og:title" content="MOPHY : Payment Admin Dashboard  Bootstrap 5 Template" />
-	<meta property="og:description" content="MOPHY : Payment Admin Dashboard  Bootstrap 5 Template" />
-	<meta property="og:image" content="https://mophy.dexignzone.com/xhtml/social-image.png"/>
-	<meta name="format-detection" content="telephone=no">
-	<title> SISTEMA CONFIGURADOR DE MAPAS INTERACTIVOS</title>
-	<!-- Favicon icon -->
-	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/mophy/images/logod.png')?>">
-	<link href="<?= base_url('assets/mophy/vendor/jqvmap/css/jqvmap.min.css')?>" rel="stylesheet">
-	<link rel="stylesheet" href="<?= base_url('assets/mophy/vendor/chartist/css/chartist.min.css')?>">
-	<link href="<?= base_url('assets/mophy/vendor/datatables/css/jquery.dataTables.min.css')?>" rel="stylesheet">
-	<link href="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/css/bootstrap-select.min.css')?>" rel="stylesheet">
-	<link href="<?= base_url('assets/mophy/css/style.css')?>" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://unpkg.com/konva@9/konva.min.js"></script>
-
-</head>
-<body>
-    <!--************
-        Main wrapper start
-    *************-->
-    <div id="main-wrapper">
-
         <!--************
             Nav header start
         *************-->
@@ -198,49 +165,101 @@
         *************-->
         <div class="deznav">
             <div class="deznav-scroll">
-							<ul class="metismenu" id="menu">
-									<li>
-										<a class="has-arrow ai-icon" href="javascript:void(0)" aria-expanded="false">
-											<i class="flaticon-381-networking"></i>
-											<span class="nav-text">Eventos</span>
-										</a>
-										<ul aria-expanded="false">
-											<li><a onclick="window.location.href='<?= base_url('Eventos/') ?>'">Crear evento </a></li>
-										</ul>
-									</li>
-							</ul>
-                   
-							<div class="copyright">
-								<p><strong>SERVICIOS INTEGRALES DE EXPOSICIONES SA DE CV.</strong> más de 30 años de experiencia en el mercado.</p>
-								<p>Made with <span class="heart"></span> by Lu</p>
+							<div id="stand-form" class="card">
+
+									<div class="card-header bg-primary text-white">
+											<h3>Stand Information</h3>
+									</div>
+									<div class="card-body">
+											<form id="_sts_standForm">
+													<div class="row mb-3">
+															<div class="col-md-6">
+																	<label for="_sts_id" class="form-label">ID</label>
+																	<input type="number" class="form-control" id="_sts_id" name="_sts_id" value="-1" min="-1" step="1" required>
+																	<div class="invalid-feedback">Please enter a valid integer number.</div>
+															</div>
+															<div class="col-md-6">
+																	<label for="_sts_type" class="form-label">Type</label>
+																	<select class="form-select" id="_sts_type" name="_sts_type" required>
+																			<!-- Options will be populated by JavaScript -->
+																	</select>
+																	<div class="invalid-feedback">Please select a type.</div>
+															</div>
+													</div>
+
+													<div class="row mb-3">
+															<div class="col-md-6">
+																	<label for="_sts_x" class="form-label">X Position</label>
+																	<input type="number" class="form-control" id="_sts_x" name="_sts_x" min="0" step="0.01" required>
+																	<div class="invalid-feedback">Please enter a valid number greater than or equal to 0.</div>
+															</div>
+															<div class="col-md-6">
+																	<label for="_sts_y" class="form-label">Y Position</label>
+																	<input type="number" class="form-control" id="_sts_y" name="_sts_y" min="0" step="0.01" required>
+																	<div class="invalid-feedback">Please enter a valid number greater than or equal to 0.</div>
+															</div>
+													</div>
+
+													<div class="row mb-3">
+															<div class="col-md-4">
+																	<label for="_sts_width" class="form-label">Width</label>
+																	<input type="number" class="form-control" id="_sts_width" name="_sts_width" min="0" max="999" step="1" required>
+																	<div class="invalid-feedback">Please enter a valid integer between 0 and 999.</div>
+															</div>
+															<div class="col-md-4">
+																	<label for="_sts_height" class="form-label">Height</label>
+																	<input type="number" class="form-control" id="_sts_height" name="_sts_height" min="0" max="999" step="1" required>
+																	<div class="invalid-feedback">Please enter a valid integer between 0 and 999.</div>
+															</div>
+															<div class="col-md-4">
+																	<label for="_sts_radius" class="form-label">Radius</label>
+																	<input type="number" class="form-control" id="_sts_radius" name="_sts_radius" min="0" max="999" step="1">
+																	<div class="invalid-feedback">Please enter a valid integer between 0 and 999.</div>
+															</div>
+													</div>
+
+													<div class="row mb-3">
+															<div class="col-md-6">
+																	<label for="_sts_stroke_width" class="form-label">Stroke Width</label>
+																	<input type="number" class="form-control" id="_sts_stroke_width" name="_sts_stroke_width" min="0" max="100" step="1" required>
+																	<div class="invalid-feedback">Please enter a valid integer between 0 and 100.</div>
+															</div>
+															<div class="col-md-6">
+																	<label for="_sts_numero" class="form-label">Number</label>
+																	<input type="text" class="form-control" id="_sts_numero" name="_sts_numero" maxlength="200" required>
+																	<div class="invalid-feedback">This field is required (max 200 characters).</div>
+															</div>
+													</div>
+
+													<div class="mb-3">
+															<label for="_sts_nombre" class="form-label">Name</label>
+															<input type="text" class="form-control" id="_sts_nombre" name="_sts_nombre" maxlength="200" required>
+															<div class="invalid-feedback">This field is required (max 200 characters).</div>
+													</div>
+
+													<div class="mb-3">
+															<label for="_sts_contacto" class="form-label">Contact</label>
+															<input type="text" class="form-control" id="_sts_contacto" name="_sts_contacto" maxlength="300">
+															<div class="form-text">Optional, max 300 characters.</div>
+													</div>
+
+													<div class="mb-3 form-check">
+															<input type="checkbox" class="form-check-input" id="_sts_status" name="_sts_status">
+															<label class="form-check-label" for="_sts_status">Active Status</label>
+													</div>
+
+													<input type="hidden" id="_sts_id_evento" name="_sts_id_evento" value="-1">
+
+													<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+															<button type="button" class="btn btn-secondary me-md-2" id="_sts_resetBtn">Reset</button>
+															<button type="button" class="btn btn-primary" id="_sts_submitBtn">Submit</button>
+													</div>
+											</form>
+									</div>
+
 							</div>
 						</div>
         </div>
         <!--************
             Sidebar end
         *************-->
-
-        <div class="content-body">
-					<?= $this->renderSection('content'); ?>	
-					<!-- row 
-					<div class="container-fluid">
-					</div>-->
-        </div>
-
-    </div>
-    <!--************
-        Main wrapper end
-    *************-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-		<script src="<?= base_url('assets/mophy/vendor/global/global.min.js')?>"></script>
-		<script src="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/js/bootstrap-select.min.js')?>"></script>
-		<script src="<?= base_url('assets/mophy/vendor/chart.js/Chart.bundle.min.js')?>"></script>
-		<script src="<?= base_url('assets/mophy/js/custom.min.js')?>"></script>
-
-		<!-- DataTables CSS -->
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-		<!-- DataTables JS -->
-		<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" 
-			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
