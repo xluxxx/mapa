@@ -1,0 +1,13 @@
+{
+    "name": "Sistemaderegistro",
+    "host": "68.178.200.94",
+    "protocol": "sftp",
+    "port": 22,
+    "username": "sistemaderegistr",
+    "remotePath": "/home/sistemaderegistr/public_html/mineria24",
+    "uploadOnSave": true,
+    "useTempFile": false,
+    "privateKeyPath": "E:/Docs/Documents/Proyectos/ssh/id_rsa",
+    "passphrase": "~3C[E{Tay%,4",
+    "ignore": [".vscode", ".git", ".DS_Store", "spark", "LICENSE", ".gitignore", "notas", "sql", "notas", "sql"]
+}

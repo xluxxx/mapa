@@ -1,0 +1,27 @@
+{
+	"name": "Sistemaderegistro",
+	"host": "68.178.200.94",
+	"protocol": "sftp",
+	"port": 22,
+	"username": "sistemaderegistr",
+    "remotePath": "/home/sistemaderegistr/public_html/mineria",
+	"uploadOnSave": true,
+	"useTempFile": false,
+	"privateKeyPath": "C:/Users/Catarsys-Ibero03/Documents/Stdx/Proyectos/ssh/id_rsa",
+	"passphrase": "~3C[E{Tay%,4",
+	"ignore": [".vscode", ".git", ".DS_Store", "spark", "LICENSE", ".gitignore", "notas", "sql", "notas", "sql"]
+}
+
+{
+	"name": "Sistemaderegistro",
+	"host": "68.178.200.94",
+	"protocol": "sftp",
+	"port": 22,
+	"username": "sistemaderegistr",
+    "remotePath": "/home/sistemaderegistr/public_html/mineriatest.sistemaderegistro.com",
+	"uploadOnSave": true,
+	"useTempFile": false,
+	"privateKeyPath": "C:/Users/Catarsys-Ibero03/Documents/Stdx/Proyectos/ssh/id_rsa",
+	"passphrase": "~3C[E{Tay%,4",
+	"ignore": [".vscode", ".git", ".DS_Store", "spark", "LICENSE", ".gitignore", "notas", "sql", "notas", "sql"]
+}

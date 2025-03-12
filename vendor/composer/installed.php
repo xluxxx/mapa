@@ -3,7 +3,7 @@
         'name' => 'gurru/mapa',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '92e48c01c37de19dbf465d0c79203c0df1766a73',
+        'reference' => '9f30eb06279ff3dd77b313cb09581b220c825283',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'gurru/mapa' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '92e48c01c37de19dbf465d0c79203c0df1766a73',
+            'reference' => '9f30eb06279ff3dd77b313cb09581b220c825283',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
