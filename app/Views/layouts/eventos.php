@@ -126,7 +126,7 @@ document.querySelector("form").addEventListener("submit", function(event) {
                 text: data.message || "El evento se ha guardado correctamente.",
                 icon: "success"
             }).then(() => {
-                location.reload(); // Recargar la página si es necesario
+                window.location.href = "<?= base_url('panel/Home') ?>"; // Recargar la página si es necesario
             });
         } else {
             Swal.fire({
