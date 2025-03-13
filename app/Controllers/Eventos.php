@@ -21,31 +21,31 @@ class Eventos extends BaseController
         // Definir reglas de validación para los campos del formulario
         $rules = [
             'event_name' => [
-                'label'  => 'event_name',
-                'rules'  => 'required|min_length[3]',
+                'label' => 'event_name',
+                'rules' => 'required|min_length[3]',
                 'errors' => [
                     'required' => 'El campo {field} es requerido',
                     'min_length' => 'El campo {field} debe tener más de 3 caracteres',
                 ],
             ],
             'description' => [
-                'label'  => 'description',
-                'rules'  => 'required|min_length[5]',
+                'label' => 'description',
+                'rules' => 'required|min_length[5]',
                 'errors' => [
                     'required' => 'El campo {field} es requerido',
                     'min_length' => 'El campo {field} debe tener más de 5 caracteres',
                 ],
             ],
             'event_date' => [
-                'label'  => 'event_date',
-                'rules'  => 'required',
+                'label' => 'event_date',
+                'rules' => 'required',
                 'errors' => [
                     'required' => 'El campo {field} es requerido',
                 ],
             ],
             'event_place' => [
-                'label'  => 'event_place',
-                'rules'  => 'required',
+                'label' => 'event_place',
+                'rules' => 'required',
                 'errors' => [
                     'required' => 'El campo {field} es requerido',
                 ],
@@ -100,14 +100,14 @@ class Eventos extends BaseController
 
         // Retornar una respuesta dependiendo del resultado de la inserción
         if ($guardar) {
-            return $this->response->setJSON([ 
-                "result"    => "Evento guardado correctamente.",
-                "success"   => true,
+            return $this->response->setJSON([
+                "result" => "Evento guardado correctamente.",
+                "success" => true,
                 "file_path" => isset($guardar),
             ]);
         } else {
             return $this->response->setJSON([ // Si hay un error al guardar el evento
-                "result"  => "Error al guardar el evento.",
+                "result" => "Error al guardar el evento.",
                 "success" => false
             ]);
         }
