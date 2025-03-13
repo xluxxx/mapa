@@ -19,12 +19,8 @@
     <link href="<?= base_url('assets/mophy/vendor/jqvmap/css/jqvmap.min.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('assets/mophy/vendor/chartist/css/chartist.min.css') ?>">
     <link href="<?= base_url('assets/mophy/vendor/datatables/css/jquery.dataTables.min.css') ?>" rel="stylesheet">
-<<<<<<< HEAD
     <link href="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') ?>"
         rel="stylesheet">
-=======
-    <link href="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') ?>" rel="stylesheet">
->>>>>>> 966e21bf98d27cda502757408d683fe197e19f04
     <link href="<?= base_url('assets/mophy/css/style.css') ?>" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -85,13 +81,9 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a href="<?= site_url('auth/logout') ?>" class="dropdown-item ai-icon">
-<<<<<<< HEAD
                                     <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger"
                                         width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-=======
-                                    <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
->>>>>>> 966e21bf98d27cda502757408d683fe197e19f04
                                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                                         <polyline points="16 17 21 12 16 7"></polyline>
                                         <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -130,12 +122,8 @@
                 </ul>
 
                 <div class="copyright">
-<<<<<<< HEAD
                     <p><strong>SERVICIOS INTEGRALES DE EXPOSICIONES SA DE CV.</strong> más de 30 años de experiencia en
                         el mercado.</p>
-=======
-                    <p><strong>SERVICIOS INTEGRALES DE EXPOSICIONES SA DE CV.</strong> más de 30 años de experiencia en el mercado.</p>
->>>>>>> 966e21bf98d27cda502757408d683fe197e19f04
                     <p>Made with <span class="heart"></span> by Lu</p>
                 </div>
             </div>
@@ -148,13 +136,8 @@
         <div class="content-body">
             <?= $this->renderSection('content'); ?>
             <!-- row 
-<<<<<<< HEAD
                     <div class="container-fluid">
                     </div>-->
-=======
-					<div class="container-fluid">
-					</div>-->
->>>>>>> 966e21bf98d27cda502757408d683fe197e19f04
         </div>
 
     </div>
@@ -167,20 +150,13 @@
     <script src="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/js/bootstrap-select.min.js') ?>"></script>
     <script src="<?= base_url('assets/mophy/vendor/chart.js/Chart.bundle.min.js') ?>"></script>
     <script src="<?= base_url('assets/mophy/js/custom.min.js') ?>"></script>
-<<<<<<< HEAD
-=======
     <script src="<?= base_url('assets/mophy/js/deznav-init.js'); ?>"></script>
->>>>>>> 966e21bf98d27cda502757408d683fe197e19f04
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<<<<<<< HEAD
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js"
         integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A=="
-=======
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A=="
->>>>>>> 966e21bf98d27cda502757408d683fe197e19f04
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
