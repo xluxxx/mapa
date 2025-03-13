@@ -24,6 +24,31 @@ $group = array('1'); // Sets user to admin.
 $this->ionAuth->register($username, $password, $email, $additional_data, $group);
 	}
 
+	public function agregarAdmin()
+{
+    // Datos del nuevo usuario administrador
+    $username = 'standex';
+    $password = '12345678';
+    $email = 'standex@gmail.com';
+    $additional_data = array(
+        'first_name' => 'grupo',
+        'last_name' => 'standex',
+    );
+    $group = array('1'); // '1' es el ID del grupo de administradores
+
+    // Registrar el nuevo usuario
+    $user_id = $this->ionAuth->register($username, $password, $email, $additional_data, $group);
+
+    if ($user_id) {
+        // Usuario creado exitosamente
+        return redirect()->to('/auth')->with('message', 'Nuevo administrador creado exitosamente.');
+    } else {
+        // Error al crear el usuario
+        $errors = $this->ionAuth->errors();
+        return redirect()->back()->withInput()->with('errors', $errors);
+    }
+}
+
 	function creategroup(){
 		// pass the right arguments and it's done
 $group = $this->ionAuth->createGroup('admin', 'This is a test description');

@@ -26,6 +26,7 @@ $routes->get('/eventos', 'Eventos::index'); // Mostrar formulario
 $routes->post('/eventos/save', 'Eventos::save'); // Guardar los datos del formulario
 $routes->post('/eliminarEvento', 'Eventos::eliminarEvento'); // Guardar los datos del formulario
 $routes->post('/actualizarEvento', 'Eventos::actualizarEvento'); // Guardar los datos del formulario
+$routes->get('auth/agregar-admin', 'Auth::agregarAdmin');
 
 
 

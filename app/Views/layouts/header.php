@@ -23,7 +23,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://unpkg.com/konva@9/konva.min.js"></script>
-	
 
 </head>
 <body>
@@ -67,7 +66,7 @@
 															</div>
 														</div>
 												</div>
-									
+												
 													<li class="nav-item dropdown header-profile">
 															<a class="nav-link" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
 																<div class="header-info">
@@ -75,6 +74,7 @@
 																		<span class="text-black">Hola,<strong><?= session()->get('user'); ?></strong></span>
 																		<p class="fs-12 mb-0">Admin</p>
 																</div>
+
 															</a>
 															<div class="dropdown-menu dropdown-menu-end">
 																	<a href="<?= site_url('auth/logout') ?>" class="dropdown-item ai-icon">
@@ -100,7 +100,7 @@
         <ul class="metismenu" id="menu">
             <li>
                 <a onclick="window.location.href='<?= base_url('Eventos/') ?>'">
-                    <i class="flaticon-381-controls-3"></i>
+                    <i class="flaticon-381-notepad"></i>
                     <span class="nav-text">Crear evento</span>
                 </a>
             </li>
@@ -147,3 +147,4 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" 
 			crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+		
