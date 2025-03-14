@@ -5,7 +5,7 @@
     <div class="page-titles form-head d-flex flex-wrap justify-content-between align-items-center mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2 class="text-black font-w600 mb-0 me-3">Todos los eventos</h2>
-            <button type="button" class="btn btn-primary btn-rounded"
+            <button type="button" class="btn btn-success"
                 onclick="window.location.href='<?= base_url('Eventos/') ?>'">
                 Nuevo evento
             </button>

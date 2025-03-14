@@ -27255,7 +27255,7 @@ table.dataTable thead .sorting {
       font-size: 14px; } }
 
 .authincation-content {
-  background: #fff;
+  background-color: white;
   box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
   border-radius: 5px; }
   [data-theme-version="dark"] .authincation-content {
@@ -27311,6 +27311,7 @@ table.dataTable thead .sorting {
           padding: 0px 7px; }
 
 .auth-form {
+  background-color: white;
   padding: 50px 50px; }
   .auth-form .btn {
     height: 50px;

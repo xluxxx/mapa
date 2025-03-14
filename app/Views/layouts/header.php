@@ -21,6 +21,7 @@
     <link href="<?= base_url('assets/mophy/vendor/datatables/css/jquery.dataTables.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') ?>"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="<?= base_url('assets/mophy/css/style.css') ?>" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -109,15 +110,21 @@
                 <ul class="metismenu" id="menu">
                     <li>
                         <a onclick="window.location.href='<?= base_url('Eventos/') ?>'">
-                            <i class="flaticon-381-notepad"></i>
+                            <i class="fa-solid fa-plus"></i>
                             <span class="nav-text">Crear evento</span>
                         </a>
                     </li>
                     <li>
                         <a onclick="window.location.href='<?= base_url('Home/') ?>'">
-                            <i class="flaticon-381-television"></i>
+                            <i class="fa-solid fa-table"></i>
                             <span class="nav-text">Ver eventos</span>
                         </a>
+                    </li>
+                    <li>
+                    <a onclick="window.location.href='<?= base_url('auth/logout') ?>'">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="nav-text">Cerrar sesión</span>
+                    </a>
                     </li>
                 </ul>
 

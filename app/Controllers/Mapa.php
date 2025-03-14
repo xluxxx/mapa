@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use IonAuth\Libraries\IonAuth;
 use App\Models\StandsModel; // Importar el modelo de stands
 use CodeIgniter\API\ResponseTrait;
 
@@ -9,13 +10,31 @@ class Mapa extends BaseController
 {
     use ResponseTrait;
 
+    protected $ionAuth;
+
+    public function __construct()
+    {
+        $this->ionAuth = new IonAuth(); // Instancia de IonAuth
+    }
+
     public function index(): string
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
+        // Cargar la vista del mapa
         return view('layouts/mapa');
     }
 
     public function guardar_posiciones($id_evento)
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         // Obtener los datos enviados desde el frontend
         $json = $this->request->getJSON(); // Obtener el cuerpo de la solicitud como JSON
         $shapes = $json->shapes; // Acceder al array de shapes
@@ -62,6 +81,11 @@ class Mapa extends BaseController
 
     public function generar_mapa()
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         // Lógica para generar el mapa
     }
 }

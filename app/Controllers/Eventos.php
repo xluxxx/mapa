@@ -3,18 +3,36 @@
 namespace App\Controllers;
 
 use App\Models\EventModel; // Importar el modelo de eventos
+use IonAuth\Libraries\IonAuth;
 
 class Eventos extends BaseController
 {
+    protected $ionAuth;
+
+    public function __construct()
+    {
+        $this->ionAuth = new IonAuth(); // Instancia de IonAuth
+    }
+
     // Función que carga la vista principal del formulario
     public function index()
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         return view('layouts/eventos'); // Cargar la vista del formulario
     }
 
     // Función para guardar un nuevo evento
     public function save()
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         // Cargar el modelo de eventos para interactuar con la base de datos
         $eventModel = new EventModel();
 
@@ -116,6 +134,11 @@ class Eventos extends BaseController
     // Función para obtener todos los eventos
     public function getEventos()
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         $eventModel = new EventModel();
         $eventos = $eventModel->findAll(); // Obtener todos los eventos
 
@@ -136,8 +159,8 @@ class Eventos extends BaseController
                             </center>',
                 "acciones" => '<center>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary btn-editar" data-id="' . $evento['id'] . '">Editar</button>
-                        <button type="button" class="btn btn-primary btn-eliminar" data-id="' . $evento['id'] . '">Eliminar</button>
+                        <button type="button" class="btn btn-snapchat btn-editar" data-id="' . $evento['id'] . '">Editar</button>
+                        <button type="button" class="btn btn-danger btn-eliminar" data-id="' . $evento['id'] . '">Eliminar</button>
                     </div>
                 </center>'
             ];
@@ -150,6 +173,11 @@ class Eventos extends BaseController
     // Función para eliminar un evento
     public function eliminarEvento()
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         $id = $this->request->getPost('id');
         if (!$id) {
             return $this->response->setStatusCode(400, 'ID requerido'); // Verificar si el ID fue proporcionado
@@ -166,6 +194,11 @@ class Eventos extends BaseController
     // Función para actualizar los datos de un evento
     public function actualizarEvento()
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         $request = $this->request->getJSON(); // Obtener los datos JSON enviados
         $model = new EventModel();
         $evento = $model->find($request->id); // Buscar el evento por su ID
@@ -188,6 +221,11 @@ class Eventos extends BaseController
     // Función para obtener los detalles de un evento específico
     public function obtenerEvento($id)
     {
+        // Verifica si el usuario está logueado
+        if (!is_logged_in()) {
+            return redirect()->to('auth/login');
+        }
+
         if (!$id) {
             return $this->response->setStatusCode(400, 'ID requerido'); // Verificar si el ID fue proporcionado
         }

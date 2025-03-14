@@ -148,13 +148,16 @@ class Auth extends \IonAuth\Controllers\Auth
 	}
 
 	public function logout()
-	{
-		// Llamamos a IonAuth para cerrar la sesión
-		$this->ionAuth->logout();
+{
+    // Llamamos a IonAuth para cerrar la sesión
+    $this->ionAuth->logout();
 
-		// Redirigimos al usuario a la página de login 
-		return redirect()->to('auth/login');
-	}
+    // Destruir la sesión manualmente (por si acaso)
+    session()->destroy();
+
+    // Redirigimos al usuario a la página de login
+    return redirect()->to('auth/login')->with('message', 'Has cerrado sesión correctamente.');
+}
 
 
 }

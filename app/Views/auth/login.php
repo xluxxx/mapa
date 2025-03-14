@@ -22,13 +22,14 @@
                     <div class="authincation-content">
                         <div class="row no-gutters">
                             <div class="col-xl-12">
-                                <div class="auth-form">
-                                    <div class="text-center mb-3">
-                                        <a href="<?= base_url(); ?>"><img
-                                                src="<?= base_url('assets/mophy/images/logocompleto.png'); ?>"
-                                                alt=""></a>
+                                <div class="auth-form"style="background-color: white;">
+                                    <div class="text-center mb-2">
+                                        <a href="<?= base_url(); ?>">
+                                            <img src="<?= base_url('assets/mophy/images/logocompleto.png'); ?>" alt="Logo" class="img-fluid">
+                                        </a>
                                     </div>
-                                    <h4 class="text-center mb-4 text-white">Ingrese su usuario y contraseña</h4>
+                                    <h1 class="text-center mb-2 text-black fs-3 fw-bold">SISTEMA CONFIGURADOR DE MAPAS INTERACTIVOS</h1>
+                                    <h4 class="text-center mb-4 text-black">Ingrese su usuario y contraseña</h4>
 
                                     <!-- Mensajes de error -->
                                     <?php if (isset($message)): ?>
@@ -51,7 +52,7 @@
 
                                     </div>
                                     <div class="text-center">
-                                        <?= form_submit('submit', 'Iniciar sesión', 'class="btn bg-white text-primary btn-block"'); ?>
+                                        <?= form_submit('submit', 'Iniciar sesión', 'class="btn btn-primary btn-rounded"'); ?>
                                     </div>
                                     <?= form_close(); ?>
 
