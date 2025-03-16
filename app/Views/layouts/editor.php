@@ -49,5 +49,6 @@
 		<script src="<?= base_url('assets/mophy/vendor/toastr/js/toastr.min.js')?>"></script>
 
 		<?= $this->renderSection('customJS')?>
+		
 </body>
 </html>
