@@ -38,11 +38,11 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Nombre del evento</label>
-                            <input type="text" name="event_name" class="form-control" placeholder="nombre del evento" value="<?= old('event_name') ?>">
+                            <input type="text" name="event_name" class="form-control" placeholder="Nombre del evento" value="<?= old('event_name') ?>">
                         </div>
                         <div class="mb-3 col-md-6">
                             <label class="form-label">Descripción</label>
-                            <input type="text" name="description" class="form-control" placeholder="agrega una pequeña descripcion" value="<?= old('description') ?>">
+                            <input type="text" name="description" class="form-control" placeholder="Agrega una pequeña descripcion" value="<?= old('description') ?>">
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Fecha</label>
@@ -54,7 +54,7 @@
                         <div class="mb-3 col-md-4">
                             <label class="form-label">Lugar</label>
                             <select name="event_place" id="inputState" class="default-select form-control wide">
-                                <option selected>Choose...</option>
+                                <option selected>Elegir estado...</option>
                                 <option value="Aguascalientes" <?= old('event_place') == 'Aguascalientes' ? 'selected' : '' ?>>Aguascalientes</option>
                                 <option value="Baja California" <?= old('event_place') == 'Baja California' ? 'selected' : '' ?>>Baja California</option>
                                 <option value="Baja California Sur" <?= old('event_place') == 'Baja California Sur' ? 'selected' : '' ?>>Baja California Sur</option>
@@ -126,7 +126,7 @@ document.querySelector("form").addEventListener("submit", function(event) {
                 text: data.message || "El evento se ha guardado correctamente.",
                 icon: "success"
             }).then(() => {
-                location.reload(); // Recargar la página si es necesario
+                window.location.href = "<?= base_url('panel/Home') ?>"; // Recargar la página si es necesario
             });
         } else {
             Swal.fire({

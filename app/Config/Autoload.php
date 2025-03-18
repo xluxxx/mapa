@@ -91,5 +91,8 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = [];
+    public $helpers = [
+        'auth', // Carga el helper auth_helper.php
+
+    ];
 }

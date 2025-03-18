@@ -1,1 +1,6 @@
-
+/.vs
+/app/Config/Database.php
+/app/Config/App.php
+/writable/debugbar
+/writable
+/app/Config/App.php
