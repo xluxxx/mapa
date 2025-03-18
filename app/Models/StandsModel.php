@@ -10,6 +10,6 @@ class StandsModel extends Model
     protected $primaryKey = 'id'; // Clave primaria
     protected $allowedFields = [
         'type', 'x', 'y', 'width', 'height', 'radius', 'stroke_width', 
-        'id_evento', 'nombre', 'numero', 'estatus', 'contacto'
+        'id_evento', 'nombre', 'numero', 'estatus', 'contacto', 'id_konva'
     ]; // Campos permitidos para inserción
 }

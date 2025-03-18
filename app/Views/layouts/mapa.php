@@ -5,11 +5,63 @@
 <? endif;  ?>
 		<?= $this->extend('layouts/editor'); ?>
 
+		<?= $this->section('customCSS'); ?>
+			<style>
+					#dashboard {
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							padding: 10px;
+							background-color: #f8f9fa;
+					}
+
+					.rectangle,
+					.circle,
+					.delete,
+					.save {
+							cursor: pointer;
+							margin: 0 10px;
+					}
+
+					body.nuevo_rectangulo {
+						#container {
+							opacity: 0.5;
+						}
+						.input_cont {
+							display: none;
+						}
+						/* todo: dejar que los inputs deseados se vean, como el de nombre del stand */
+
+
+					}
+				#stand-form {
+					display: none;
+					font-size: 10px;
+					font-weight: 400;
+					height: fit-content;
+					.form-control {
+						padding: 0.3rem 0.5rem;
+						border-radius: 0.2px;
+					}
+					.form-select {
+							padding: 0.8rem 2rem 0.8rem 1rem;
+							font-size: 10px;
+							text-align: left;
+							border-radius: 0.2px;
+					}
+				}
+				#stand-form.shown {
+					display: block;
+				}
+				
+		</style>	
+		<?= $this->endSection(); ?>
+
 		<?= $this->section('content'); ?>
 
 			<!-- Dashboard de figuras con iconos y nombres -->
 			<div id="dashboard">
-					<div class="rectangle btn btn-xs btn-info" onclick="addRectangle()">
+					<div class="rectangle btn btn-xs btn-info" onclick="agregarRectangulo()">
 							<i class="fas fa-square"></i> Rectángulo
 					</div>
 					<div class="circle btn btn-xs btn-info" onclick="addCircle()">
@@ -24,526 +76,118 @@
 			</div>
 
 			<!-- Contenedor del lienzo -->
-			<div id="container" style="border-style: solid; width: 100%; height: 85vh;">
+			<div id="container" style="border-style: solid; width: 100%; height: 85vh; min-height: 800px;">
 
 			</div>
 		<?= $this->endSection(); ?>
 
 		<?= $this->section('customJS'); ?>
-			<script>
-					const id_evento = Number("<?php echo $evento['id'] ?>");
-					// Inicializar el escenario y las capas
-					var container = document.getElementById('container');
+		<script src="<?= base_url('assets/js/mapa_editor.js'); ?>" 
+				evento="<?= $evento['id']; ?>" 
+				imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
+				url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"
+				url_carga="<?= base_url('Mapa/buscar_stands/'); ?>"
+				defer ></script>
+		<script>
+				// evento de domcontentloaded 
+				document.addEventListener('DOMContentLoaded', function () {
+					let sidebar = document.querySelector('.deznav .deznav-scroll');
+					standForm = document.getElementById('stand-form');
+					sidebar.appendChild(standForm);
 
-					// History stack for undo/redo
-					var historial = [];
-					var historialStep = -1;
-					var maxHistorialSteps = 50; // Maximum number of steps to store
+					fnIniciarForm();
+					sts_mostrarForm();
+				});
+		</script>
 
-					var stage = new Konva.Stage({
-							container: container,
-							width: container.offsetWidth,
-							height: container.offsetHeight
-					});
+		<div id="stand-form" class="card">
+			<div class="card-header bg-primary text-white p-3">
+					<h3 class="m-0">Stand Information</h3>
+			</div>
+			<div class="card-body p-3">
+					<form id="_sts_standForm">
+							<div class="row mb-3">
+									<div class="col-md-6 mb-3 input_cont cont_id">
+											<label for="_sts_id" class="form-label">ID</label>
+											<input type="number" class="form-control" id="_sts_id" name="_sts_id" value="-1" min="-1" step="1" required>
+											<div class="invalid-feedback">Please enter a valid integer number.</div>
+									</div>
+									<div class="col-md-12  mb-3 input_cont cont_tipo_stand">
+											<label for="_sts_type" class="form-label">Type</label>
+											<select class="form-select" id="_sts_type" name="_sts_type" required>
+													<!-- Options will be populated by JavaScript -->
+											</select>
+											<div class="invalid-feedback">Please select a type.</div>
+									</div>
 
-					// Crear una capa para el fondo
-					var backgroundLayer = new Konva.Layer();
-					stage.add(backgroundLayer);
+									<div class="col-md-6 mb-3 input_cont cont_posX">
+											<label for="_sts_x" class="form-label">X Position</label>
+											<input type="number" class="form-control" id="_sts_x" name="_sts_x" min="0" step="0.01" required>
+											<div class="invalid-feedback">Please enter a valid number greater than or equal to 0.</div>
+									</div>
+									<div class="col-md-6 mb-3 input_cont cont_posY">
+											<label for="_sts_y" class="form-label">Y Position</label>
+											<input type="number" class="form-control" id="_sts_y" name="_sts_y" min="0" step="0.01" required>
+											<div class="invalid-feedback">Please enter a valid number greater than or equal to 0.</div>
+									</div>
 
-					// Crear una capa para los elementos (rectángulos, círculos, etc.)
-					var layer = new Konva.Layer();
-					stage.add(layer);
+									<div class="col-md-6 mb-3 input_cont cont_width">
+											<label for="_sts_width" class="form-label">Width</label>
+											<input type="number" class="form-control" id="_sts_width" name="_sts_width" min="0" max="999" step="1" required>
+											<div class="invalid-feedback">Please enter a valid integer between 0 and 999.</div>
+									</div>
 
-					// Variables para el zoom
-					var scaleBy = 1.1; // Factor de escala (10% de zoom)
-					var scale = 1; // Escala actual
+									<div class="col-md-6 mb-3 input_cont cont_height">
+											<label for="_sts_height" class="form-label">Height</label>
+											<input type="number" class="form-control" id="_sts_height" name="_sts_height" min="0" max="999" step="1" required>
+											<div class="invalid-feedback">Please enter a valid integer between 0 and 999.</div>
+									</div>
 
-					// Variables para el movimiento (pan)
-					var isDragging = false;
-					var lastPointerPosition;
+									<div class="col-md-6 mb-3 input_cont cont_radius">
+											<label for="_sts_radius" class="form-label">Radius</label>
+											<input type="number" class="form-control" id="_sts_radius" name="_sts_radius" min="0" max="999" step="1">
+											<div class="invalid-feedback">Please enter a valid integer between 0 and 999.</div>
+									</div>
 
-					// Variables para dibujar rectángulos
-					var isDrawing = false;
-					var rect;
-					var startX, startY;
-
-					let shapes = [];
-
-					// Crear un Transformer para ajustar los rectángulos
-					var tr = new Konva.Transformer({
-							nodes: [], // Inicialmente sin nodos asociados
-							boundBoxFunc: (oldBox, newBox) => {
-									// Limitar el tamaño de la figura para que no se salga del escenario
-									const box = newBox;
-									const isOut =
-											box.x < 0 ||
-											box.y < 0 ||
-											box.x + box.width > stage.width() ||
-											box.y + box.height > stage.height();
-
-									if (isOut) {
-											return oldBox; // Mantener el tamaño anterior si se sale del escenario
-									}
-									return newBox;
-							},
-					});
-					layer.add(tr); // Añadir el Transformer a la capa
-
-					// Evento para hacer zoom con la rueda del mouse
-					container.addEventListener('wheel', function (e) {
-							e.preventDefault(); // Evitar el comportamiento predeterminado del scroll
-
-							var oldScale = scale; // Guardar la escala actual
-							var pointer = stage.getPointerPosition(); // Obtener la posición del mouse
-
-							// Calcular la nueva escala
-							if (e.deltaY < 0) {
-									// Zoom in (acercar)
-									scale = scale * scaleBy;
-							} else {
-									// Zoom out (alejar)
-									scale = scale / scaleBy;
-							}
-
-							// Limitar el zoom mínimo y máximo (opcional)
-							scale = Math.max(0.5, Math.min(scale, 3)); // Límites: 0.5x a 3x
-
-							// Aplicar la nueva escala al escenario
-							stage.scale({ x: scale, y: scale });
-
-							// Ajustar la posición del escenario para que el zoom se centre en el puntero del mouse
-							var newPos = {
-									x: pointer.x - (pointer.x - stage.x()) * (scale / oldScale),
-									y: pointer.y - (pointer.y - stage.y()) * (scale / oldScale)
-							};
-
-							stage.position(newPos);
-							stage.batchDraw(); // Redibujar el escenario
-					});
-
-					// Funciones para agregar figuras desde el dashboard
-					function addRectangle() {
-							const pos = stage.getPointerPosition();
-							if (!pos) return; // Verificar si hay una posición válida
-
-							// Ajustar las coordenadas al zoom y desplazamiento
-							const x = (pos.x - stage.x()) / scale;
-							const y = (pos.y - stage.y()) / scale;
-
-							// Crear un nuevo rectángulo
-							const rect = new Konva.Rect({
-									x: x,
-									y: y,
-									width: 50,
-									height: 50,
-									fill: 'rgba(255, 0, 0, 0.5)',
-									stroke: 'red',
-									strokeWidth: 2,
-									strokeScaleEnabled: false, // Evitar que el borde se escale con el rectángulo	
-									draggable: true
-							});
-
-							layer.add(rect);
-							tr.nodes([rect]);
-							layer.batchDraw();
-
-							// Añadir la forma al array shapes
-							shapes.push({
-									type: rect.getClassName(),
-									x: rect.x(),
-									y: rect.y(),
-									width: rect.width(),
-									height: rect.height(),
-									fill: rect.fill(),
-									stroke: rect.stroke(),
-									stroke_width: rect.strokeWidth(),
-									shape: rect,
-									shapeIndex: rect.index,
-									info: null
-							});
+									<div class="col-md-6 mb-3 input_cont cont_stroke_width">	
+											<label for="_sts_stroke_width" class="form-label">Stroke Width</label>
+											<input type="number" class="form-control" id="_sts_stroke_width" name="_sts_stroke_width" min="0" max="100" step="1" required>
+											<div class="invalid-feedback">Please enter a valid integer between 0 and 100.</div>
+									</div>
+							</div>
 							
-							// Save state for undo/redo
-							saveState();
-					}
+							<div class="col-md-12 mb-3 input_cont cont_numStand">
+									<label for="_sts_numero" class="form-label">Número de Stand</label>
+									<input type="text" class="form-control" id="_sts_numero" name="_sts_numero" maxlength="200" required>
+									<div class="invalid-feedback">This field is required (max 200 characters).</div>
+							</div>
 
-					function addCircle() {
-							const pos = stage.getPointerPosition();
-							if (!pos) return; // Verificar si hay una posición válida
+							<div class="mb-3 input_cont cont_nombre">
+									<label for="_sts_nombre" class="form-label">Name</label>
+									<input type="text" class="form-control" id="_sts_nombre" name="_sts_nombre" maxlength="200" required>
+									<div class="invalid-feedback">This field is required (max 200 characters).</div>
+							</div>
 
-							// Ajustar las coordenadas al zoom y desplazamiento
-							const x = (pos.x - stage.x()) / scale;
-							const y = (pos.y - stage.y()) / scale;
+							<div class="mb-3 input_cont cont_contacto">
+									<label for="_sts_contacto" class="form-label">Contact</label>
+									<input type="text" class="form-control" id="_sts_contacto" name="_sts_contacto" maxlength="300">
+									<div class="form-text">Optional, max 300 characters.</div>
+							</div>
 
-							// Crear un nuevo círculo
-							const circle = new Konva.Circle({
-									x: x,
-									y: y,
-									radius: 50,
-									fill: 'rgba(0, 255, 0, 0.5)',
-									stroke: 'green',
-									strokeWidth: 2,
-									strokeScaleEnabled: false, // Evitar que el borde se escale con el círculo
-									draggable: true
-							});
+							<div class="mb-3 form-check input_cont cont_status">
+									<input type="checkbox" class="form-check-input" id="_sts_status" name="_sts_status">
+									<label class="form-check-label" for="_sts_status">Active Status</label>
+							</div>
 
-							layer.add(circle);
-							tr.nodes([circle]);
-							layer.batchDraw();
+							<input type="hidden" id="_sts_id_evento" name="_sts_id_evento" value="-1">
 
-							// Añadir la forma al array shapes
-							shapes.push({
-									type: circle.getClassName(),
-									x: circle.x(),
-									y: circle.y(),
-									radius: circle.radius(),
-									fill: circle.fill(),
-									stroke: circle.stroke(),
-									stroke_width: circle.strokeWidth(),
-									shape: circle,
-									shapeIndex: circle.index,
-									info: null
-							});
-							
-							// Save state for undo/redo
-							saveState();
-					}
-
-					// Cargar la imagen de fondo
-					var image = new Image();
-					image.src = "<?= base_url('public/uploads/planos/' . $evento['name_file']) ?>"; // Ruta de la imagen
-					image.onload = function () {
-							// Escalar la imagen para que se ajuste al contenedor
-							var scaleFactor = Math.min(
-									stage.width() / image.width,
-									stage.height() / image.height
-							);
-
-							var width = image.width * scaleFactor;
-							var height = image.height * scaleFactor;
-
-							// Crear un objeto Konva.Image con la imagen cargada
-							var konvaImage = new Konva.Image({
-									x: (stage.width() - width) / 2, // Centrar la imagen horizontalmente
-									y: (stage.height() - height) / 2, // Centrar la imagen verticalmente
-									image: image, // Imagen cargada
-									width: width, // Ancho escalado
-									height: height, // Alto escalado
-									name: 'background-image', // Add a name to identify it
-									listening: false // Disable interactions with the background image
-							});
-
-							// Añadir la imagen a la capa de fondo
-							backgroundLayer.add(konvaImage);
-
-							// Dibujar la capa de fondo
-							backgroundLayer.draw();
-							
-							// Save state for undo/redo
-							saveState();
-					};
-
-					// Función para eliminar la figura seleccionada
-					function deleteSelectedShape() {
-							var selectedNode = tr.nodes()[0]; // Obtener la figura seleccionada
-							if (selectedNode) {
-									// Find and remove the shape from the shapes array
-									const index = shapes.findIndex(s => s.shape === selectedNode);
-									if (index !== -1) {
-											shapes.splice(index, 1);
-									}
-									
-									selectedNode.destroy(); // Eliminar la figura
-									tr.nodes([]); // Deseleccionar el Transformer
-									layer.batchDraw(); // Redibujar la capa
-									
-									// Save state for undo/redo
-									saveState();
-							}
-					}
-
-					//Formulario de datos del espacio
-					const abrirFormulario = (shape) => {
-							Swal.fire({
-									title: "Registrar Stand",
-									html: `
-											<input id="stand" class="swal2-input" placeholder="Número de Stand" required>
-											<input id="empresa" class="swal2-input" placeholder="Nombre de la Empresa" required>
-											<input id="paginaweb" class="swal2-input" placeholder="Página Web" required>
-
-											<input type="file" id="logo" class="swal2-file">
-									`,
-									showCancelButton: true,
-									confirmButtonText: "Guardar",
-									preConfirm: () => {
-											const stand = document.getElementById("stand").value;
-											const empresa = document.getElementById("empresa").value;
-											const paginaweb = document.getElementById("paginaweb").value;
-											const logoInput = document.getElementById("logo");
-
-											if (!stand || !empresa || !paginaweb) {
-													Swal.showValidationMessage("Todos los campos son obligatorios");
-													return false;
-											}
-
-											const logoFile = logoInput.files[0];
-											let logoURL = "";
-											if (logoFile) {
-													logoURL = URL.createObjectURL(logoFile);
-											}
-
-											return { stand, empresa, paginaweb, logoURL, shape };
-									}
-							}).then((result) => {
-									if (result.isConfirmed) {
-											const { stand, empresa, paginaweb, logoURL, shape } = result.value;
-											const data = { stand, empresa, paginaweb, logoURL };
-											const fig = shapes.find((fig) => fig.shapeIndex == shape.index);
-
-											if (fig) {
-													fig.info = data;
-													fig.fill = 'rgba(23, 148, 55, 0.5)';
-											}
-
-											toastr.success('Información guardada correctamente', 'Éxito');
-									}
-							});
-					}
-
-					function updateShapeInfo(shape) {
-							const index = shapes.findIndex(s => s.shape === shape);
-							if (index !== -1) {
-									shapes[index] = {
-											...shapes[index],
-											x: shape.x(),
-											y: shape.y(),
-											width: shape.width ? shape.width() : null,
-											height: shape.height ? shape.height() : null,
-											radius: shape.radius ? shape.radius() : null,
-											fill: shape.fill(),
-											stroke: shape.stroke(),
-											stroke_width: shape.strokeWidth()
-									};
-							}
-					}
-
-					// Función para guardar las figuras
-					const guardarFiguras = () => {
-							console.log(id_evento);
-
-							fetch("<?= base_url('Mapa/guardar_posiciones/')?>" + id_evento, {
-									method: 'POST',
-									headers: {
-											'Content-Type': 'application/json'
-									},
-									body: JSON.stringify({ shapes })
-							})
-							.then(response => response.json())
-							.then(data => console.log("Guardado en BD:", data))
-							.catch(error => console.error("Error al guardar:", error));
-					};
-
-					function saveState() {
-							// Remove any future states if we're in the middle of the historial
-							if (historialStep < historial.length - 1) {
-									historial = historial.slice(0, historialStep + 1);
-							}
-							
-							// Create a deep copy of the shapes array
-							const shapesClone = shapes.map(shape => {
-									// Create a new object without the shape reference (which can't be serialized)
-									const { shape: shapeRef, ...rest } = shape;
-									return { ...rest };
-							});
-							
-							// Add the current state to historial
-							historial.push(shapesClone);
-							
-							// Limit the historial size
-							if (historial.length > maxHistorialSteps) {
-									historial.shift();
-							} else {
-									historialStep++;
-							}
-							
-							// Update button states
-							updateUndoRedoButtons();	
-					}
-
-					// Function to update the undo/redo button states
-					function updateUndoRedoButtons() {
-							const undoButton = document.querySelector('.icon.undo');
-							const redoButton = document.querySelector('.icon.redo');
-							
-							if (undoButton && redoButton) {
-									undoButton.style.opacity = historialStep >= 0 ? '1' : '0.5';
-									undoButton.style.pointerEvents = historialStep >= 0 ? 'auto' : 'none';
-									
-									redoButton.style.opacity = historialStep < historial.length - 1 ? '1' : '0.5';
-									redoButton.style.pointerEvents = historialStep < historial.length - 1 ? 'auto' : 'none';
-							}
-					}
-
-					// Function to restore a state from historial
-					function restoreState(state) {
-							// Clear the current shapes from the layer
-							layer.destroyChildren();
-							layer.add(tr); // Add back the transformer
-							
-							// Clear the shapes array
-							shapes = [];
-							
-							// Recreate shapes from the saved state
-							state.forEach(shapeData => {
-									let shape;
-									
-									if (shapeData.type === 'Rect') {
-											shape = new Konva.Rect({
-													x: shapeData.x,
-													y: shapeData.y,
-													width: shapeData.width,
-													height: shapeData.height,
-													fill: shapeData.fill,
-													stroke: shapeData.stroke,
-													strokeWidth: shapeData.stroke_width,
-													draggable: true
-											});
-									} else if (shapeData.type === 'Circle') {
-											shape = new Konva.Circle({
-													x: shapeData.x,
-													y: shapeData.y,
-													radius: shapeData.radius,
-													fill: shapeData.fill,
-													stroke: shapeData.stroke,
-													strokeWidth: shapeData.stroke_width,
-													draggable: true
-											});
-									}
-									
-									if (shape) {
-											layer.add(shape);
-											
-											// Add the shape to the shapes array
-											shapes.push({
-													type: shapeData.type,
-													x: shapeData.x,
-													y: shapeData.y,
-													width: shapeData.width,
-													height: shapeData.height,
-													radius: shapeData.radius,
-													fill: shapeData.fill,
-													stroke: shapeData.stroke,
-													stroke_width: shapeData.stroke_width,
-													shape: shape,
-													shapeIndex: shape.index,
-													info: shapeData.info
-											});
-									}
-							});
-							
-							// Clear the transformer selection
-							tr.nodes([]);
-							
-							// Redraw the layer
-							layer.batchDraw();
-					}
-
-					// Undo function
-					function undo() {
-							if (historialStep > 0) {
-									historialStep--;
-									restoreState(historial[historialStep]);
-									updateUndoRedoButtons();
-							}
-					}
-
-					// Redo function
-					function redo() {
-							if (historialStep < historial.length - 1) {
-									historialStep++;
-									restoreState(historial[historialStep]);
-									updateUndoRedoButtons();
-							}
-					}
-
-					// Escuchar eventos de cambio en las formas
-					layer.on('dragmove transform transformend', function (e) {
-							const shape = e.target;
-							if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
-									updateShapeInfo(shape);
-							}
-					});
-
-					layer.on('dblclick dbltap', function (e) {
-							let stage = e.target.getStage(); // Asegurar que tenemos el stage
-							stage.setPointersPositions(e); // Registrar manualmente la posición del puntero
-
-							let shape = e.target;
-							if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
-									console.log('Doble clic en:', shape);
-									abrirFormulario(shape);
-							}
-					});
-
-					// Seleccionar figuras
-					stage.on('click tap', function (e) {
-							// Ignore clicks on the background image
-							if (e.target.name() === 'background-image') {
-									console.log('Click en la imagen de fondo');
-									return;
-							}
-							if (e.target === stage) {
-									tr.nodes([]);
-									layer.batchDraw();
-							} else {
-									tr.nodes([e.target]);
-									layer.batchDraw();
-							}
-					});
-
-					// Eventos para el movimiento (pan) con el botón izquierdo del mouse
-					stage.on('mousedown', function (e) {
-							if (e.evt.button === 0 && e.target === stage) { // Botón izquierdo y clic en el escenario (no en un objeto)
-									isDragging = true;
-									lastPointerPosition = stage.getPointerPosition();
-							}
-					});
-
-					stage.on('mousemove', function (e) {
-							if (isDragging) {
-									var pos = stage.getPointerPosition();
-									var dx = pos.x - lastPointerPosition.x;
-									var dy = pos.y - lastPointerPosition.y;
-
-									// Mover el escenario
-									stage.x(stage.x() + dx);
-									stage.y(stage.y() + dy);
-
-									// Actualizar la última posición
-									lastPointerPosition = pos;
-
-									// Redibujar el escenario
-									stage.batchDraw();
-							} else if (isDrawing) {
-									var pos = stage.getPointerPosition();
-									// Ajustar las coordenadas actuales teniendo en cuenta la escala y la posición del escenario
-									var currentX = (pos.x - stage.x()) / scale;
-									var currentY = (pos.y - stage.y()) / scale;
-
-									// Ajustar el tamaño del rectángulo
-									rect.width(currentX - startX);
-									rect.height(currentY - startY);
-
-									// Redibujar la capa
-									layer.batchDraw();
-							}
-					});
-
-					stage.on('mouseup', function (e) {
-							isDragging = false;
-							isDrawing = false;
-					});
-
-			</script>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button type="button" class="btn btn-secondary me-md-2" id="_sts_resetBtn">Reset</button>
+									<button type="button" class="btn btn-primary" id="_sts_submitBtn">Submit</button>
+							</div>
+					</form>
+			</div>
+		</div>
 		<?= $this->endSection(); ?>
 
 </body>
