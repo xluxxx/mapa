@@ -3,7 +3,7 @@
         *************-->
         <div class="nav-header">
             <a onclick="window.location.href='<?= base_url('Home/') ?>'" class="brand-logo">
-                <img class="logo-abbr" src="<?= base_url('assets/mophy/images/sta.jpg')?>" alt="">
+                <!-- <img class="logo-abbr" src="<?= base_url('assets/mophy/images/sta.jpg')?>" alt=""> -->
                 <img class="logo-compact" src="<?= base_url('assets/mophy/images/logocompleto.png')?>" alt="">
                 <img class="brand-title" src="<?= base_url('assets/mophy/images/logocompleto.png')?>" alt="">
             </a>
@@ -165,7 +165,7 @@
         *************-->
         <div class="deznav">
             <div class="deznav-scroll">
-							
+
 						</div>
         </div>
         <!--************

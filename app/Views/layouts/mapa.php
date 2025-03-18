@@ -31,52 +31,9 @@
 							display: none;
 						}
 						/* todo: dejar que los inputs deseados se vean, como el de nombre del stand */
-						
+
 
 					}
-
-			</style>
-		<?= $this->endSection(); ?>
-
-		<?= $this->section('content'); ?>
-
-			<!-- Dashboard de figuras con iconos y nombres -->
-			<div id="dashboard">
-					<div class="rectangle btn btn-xs btn-info" onclick="agregarRectangulo()">
-							<i class="fas fa-square"></i> Rectángulo
-					</div>
-					<div class="circle btn btn-xs btn-info" onclick="addCircle()">
-							<i class="fas fa-circle"></i> Círculo
-					</div>
-					<div class="delete btn btn-xs btn-info" onclick="deleteSelectedShape()">
-							<i class="fas fa-trash"></i> Eliminar
-					</div>
-					<div class="save btn btn-xs btn-info" onclick="guardarFiguras()">
-							<i class="fas fa-save"></i> Guardar Mapa
-					</div>
-			</div>
-
-			<!-- Contenedor del lienzo -->
-			<div id="container" style="border-style: solid; width: 100%; height: fit-content;">
-
-			</div>
-		<?= $this->endSection(); ?>
-
-		<?= $this->section('customJS'); ?>
-			<script src="<?= base_url('assets/js/mapa_editor.js'); ?>"></script>
-			<script>
-					// evento de domcontentloaded 
-					document.addEventListener('DOMContentLoaded', function () {
-						let sidebar = document.querySelector('.deznav .deznav-scroll');
-						standForm = document.getElementById('stand-form');
-						sidebar.appendChild(standForm);
-
-						fnIniciarForm();
-						sts_mostrarForm();
-					});
-			</script>
-			
-		<style>
 				#stand-form {
 					display: none;
 					font-size: 10px;
@@ -98,6 +55,50 @@
 				}
 				
 		</style>	
+		<?= $this->endSection(); ?>
+
+		<?= $this->section('content'); ?>
+
+			<!-- Dashboard de figuras con iconos y nombres -->
+			<div id="dashboard">
+					<div class="rectangle btn btn-xs btn-info" onclick="agregarRectangulo()">
+							<i class="fas fa-square"></i> Rectángulo
+					</div>
+					<div class="circle btn btn-xs btn-info" onclick="addCircle()">
+							<i class="fas fa-circle"></i> Círculo
+					</div>
+					<div class="delete btn btn-xs btn-info" onclick="deleteSelectedShape()">
+							<i class="fas fa-trash"></i> Eliminar
+					</div>
+					<div class="save btn btn-xs btn-info" onclick="guardarFiguras()">
+							<i class="fas fa-save"></i> Guardar Mapa
+					</div>
+			</div>
+
+			<!-- Contenedor del lienzo -->
+			<div id="container" style="border-style: solid; width: 100%; height: 85vh; min-height: 800px;">
+
+			</div>
+		<?= $this->endSection(); ?>
+
+		<?= $this->section('customJS'); ?>
+		<script src="<?= base_url('assets/js/mapa_editor.js'); ?>" 
+				evento="<?= $evento['id']; ?>" 
+				imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
+				url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"
+				url_carga="<?= base_url('Mapa/buscar_stands/'); ?>"
+				defer ></script>
+		<script>
+				// evento de domcontentloaded 
+				document.addEventListener('DOMContentLoaded', function () {
+					let sidebar = document.querySelector('.deznav .deznav-scroll');
+					standForm = document.getElementById('stand-form');
+					sidebar.appendChild(standForm);
+
+					fnIniciarForm();
+					sts_mostrarForm();
+				});
+		</script>
 
 		<div id="stand-form" class="card">
 			<div class="card-header bg-primary text-white p-3">

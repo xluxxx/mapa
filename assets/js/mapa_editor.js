@@ -1,98 +1,361 @@
-	const id_evento = Number("<?php echo $evento['id'] ?>");
-	// Inicializar el escenario y las capas
-	var container = document.getElementById('container');
-	const formulario_edicion = 1;
-	const formulario_nuevo = 2;
-	var estilo_form;
+let limagen = document.currentScript.getAttribute('imagen');
+let lid_evento = document.currentScript.getAttribute('evento');
+let lurl_guardado = document.currentScript.getAttribute('url_guardado');
+let lurl_carga = document.currentScript.getAttribute('url_carga');
+var konva_stage;
+var konva_layer_bg;
+var konva_layer_elem;
+let stdx_shapes = [];
+var konva_transformer;
 
-	// History stack for undo/redo
-	var historial = [];
-	var historialStep = -1;
-	var maxHistorialSteps = 50; // Maximum number of steps to store
+// Variables para el zoom
+var scaleBy = 1.1; // Factor de escala (10% de zoom)
+var scale = 1; // Escala actual
 
-	let standForm = null;
-	let _sts_typeSelect = null;
+// Variables para el movimiento (pan)
+var isDragging = false;
+var lastPointerPosition;
 
-	var stage = new Konva.Stage({
-			container: container,
-			width: container.offsetWidth,
-			height: container.offsetHeight
-	});
+// Variables para dibujar rectángulos
+var isDrawing = false;
+var rect;
+var startX, startY;
 
-	// Crear una capa para el fondo
-	var backgroundLayer = new Konva.Layer();
-	stage.add(backgroundLayer);
+const id_evento = Number(lid_evento);
+// Inicializar el escenario y las capas
+var lcontainer = document.getElementById('container');
+const formulario_edicion = 1;
+const formulario_nuevo = 2;
+var estilo_form;
 
-	// Crear una capa para los elementos (rectángulos, círculos, etc.)
-	var layer = new Konva.Layer();
-	stage.add(layer);
+// History stack for undo/redo
+var historial = [];
+var historialStep = -1;
+var maxHistorialSteps = 50; // Maximum number of steps to store
 
-	// Variables para el zoom
-	var scaleBy = 1.1; // Factor de escala (10% de zoom)
-	var scale = 1; // Escala actual
+let standForm = null;
+let _sts_typeSelect = null;
 
-	// Variables para el movimiento (pan)
-	var isDragging = false;
-	var lastPointerPosition;
+document.addEventListener('DOMContentLoaded', function () {
+	// inicializarKonva();
+	inicializarKonva(cargarFiguras);
+	// cargarFiguras();
+});
 
-	// Variables para dibujar rectángulos
-	var isDrawing = false;
-	var rect;
-	var startX, startY;
+	function inicializarKonva(afnCallback) {
 
-	let shapes = [];
+		konva_stage = new Konva.Stage({
+				container: lcontainer,
+				width: lcontainer.offsetWidth,
+				height: lcontainer.offsetHeight
+		});
 
-	// Crear un Transformer para ajustar los rectángulos
-	var tr = new Konva.Transformer({
-			nodes: [], // Inicialmente sin nodos asociados
-			boundBoxFunc: (oldBox, newBox) => {
-					// Limitar el tamaño de la figura para que no se salga del escenario
-					const box = newBox;
-					const isOut =
-							box.x < 0 ||
-							box.y < 0 ||
-							box.x + box.width > stage.width() ||
-							box.y + box.height > stage.height();
+		// Crear una capa para el fondo
+		konva_layer_bg = new Konva.Layer();
+		konva_stage.add(konva_layer_bg);
 
-					if (isOut) {
-							return oldBox; // Mantener el tamaño anterior si se sale del escenario
-					}
-					return newBox;
-			},
-	});
-	layer.add(tr); // Añadir el Transformer a la capa
+		// Crear una capa para los elementos (rectángulos, círculos, etc.)
+		konva_layer_elem = new Konva.Layer();
+		konva_stage.add(konva_layer_elem);
 
-	// Evento para hacer zoom con la rueda del mouse
-	container.addEventListener('wheel', function (e) {
-			e.preventDefault(); // Evitar el comportamiento predeterminado del scroll
+		// Crear un Transformer para ajustar los rectángulos
+		konva_transformer = new Konva.Transformer({
+				nodes: [], // Inicialmente sin nodos asociados
+				boundBoxFunc: (oldBox, newBox) => {
+						// Limitar el tamaño de la figura para que no se salga del escenario
+						const box = newBox;
+						const isOut =
+								box.x < 0 ||
+								box.y < 0 ||
+								box.x + box.width > konva_stage.width() ||
+								box.y + box.height > konva_stage.height();
 
-			var oldScale = scale; // Guardar la escala actual
-			var pointer = stage.getPointerPosition(); // Obtener la posición del mouse
+						if (isOut) {
+								return oldBox; // Mantener el tamaño anterior si se sale del escenario
+						}
+						return newBox;
+				},
+		});
 
-			// Calcular la nueva escala
-			if (e.deltaY < 0) {
-					// Zoom in (acercar)
-					scale = scale * scaleBy;
-			} else {
-					// Zoom out (alejar)
-					scale = scale / scaleBy;
+		konva_layer_elem.add(konva_transformer); // Añadir el Transformer a la capa
+
+		// Evento para hacer zoom con la rueda del mouse
+		lcontainer.addEventListener('wheel', function (e) {
+				e.preventDefault(); // Evitar el comportamiento predeterminado del scroll
+
+				var oldScale = scale; // Guardar la escala actual
+				var pointer = konva_stage.getPointerPosition(); // Obtener la posición del mouse
+				// console.log('oldScale:', oldScale);
+				// Calcular la nueva escala
+				if (e.deltaY < 0) {
+						// Zoom in (acercar)
+						scale = scale * scaleBy;
+				} else {
+						// Zoom out (alejar)
+						scale = scale / scaleBy;
+				}
+
+				// Limitar el zoom mínimo y máximo (opcional)
+				scale = Math.max(0.75, Math.min(scale, 5)); // Límites: 0.2x a 3x
+
+				// Aplicar la nueva escala al escenario
+				konva_stage.scale({ x: scale, y: scale });
+
+				// Ajustar la posición del escenario para que el zoom se centre en el puntero del mouse
+				var newPos = {
+						x: pointer.x - (pointer.x - konva_stage.x()) * (scale / oldScale),
+						y: pointer.y - (pointer.y - konva_stage.y()) * (scale / oldScale)
+				};
+
+				konva_stage.position(newPos);
+				konva_stage.batchDraw(); // Redibujar el escenario
+		});
+
+		// Cargar la imagen de fondo
+		var image = new Image();
+		image.src = limagen; // Ruta de la imagen
+		image.onload = function () {
+				// Escalar la imagen para que se ajuste al contenedor
+				var scaleFactor = Math.min(
+						konva_stage.width() / image.width,
+						konva_stage.height() / image.height
+				);
+
+				var width = image.width * scaleFactor;
+				var height = image.height * scaleFactor;
+
+				// Crear un objeto Konva.Image con la imagen cargada
+				var konvaImage = new Konva.Image({
+						x: (konva_stage.width() - width) / 2, // Centrar la imagen horizontalmente
+						y: (konva_stage.height() - height) / 2, // Centrar la imagen verticalmente
+						image: image, // Imagen cargada
+						width: width, // Ancho escalado
+						height: height, // Alto escalado
+						name: 'background-image', // Add a name to identify it
+						listening: false // Disable interactions with the background image
+				});
+
+				// Añadir la imagen a la capa de fondo
+				konva_layer_bg.add(konvaImage);
+
+				// Dibujar la capa de fondo
+				konva_layer_bg.draw();
+				
+				// Save state for undo/redo
+				saveState();
+		};
+		
+		// Escuchar eventos de cambio en las formas
+		konva_layer_elem.on('dragmove transform transformend', function (e) {
+			const shape = e.target;
+			if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
+					updateShapeInfo(shape);
 			}
+		});
 
-			// Limitar el zoom mínimo y máximo (opcional)
-			scale = Math.max(0.5, Math.min(scale, 3)); // Límites: 0.5x a 3x
+		konva_layer_elem.on('dblclick dbltap', function (e) {
+				let lstage = e.target.getStage(); // Asegurar que tenemos el stage
+				lstage.setPointersPositions(e); // Registrar manualmente la posición del puntero
 
-			// Aplicar la nueva escala al escenario
-			stage.scale({ x: scale, y: scale });
+				let shape = e.target;
+				console.log('Doble clic en:', shape);
+				if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
+						console.log('Doble clic en:', shape);
+						abrirFormulario(shape);
+				}
+		});
 
-			// Ajustar la posición del escenario para que el zoom se centre en el puntero del mouse
-			var newPos = {
-					x: pointer.x - (pointer.x - stage.x()) * (scale / oldScale),
-					y: pointer.y - (pointer.y - stage.y()) * (scale / oldScale)
-			};
+		// Seleccionar figuras
+		konva_stage.on('click tap', function (e) {
+				// Ignore clicks on the background image
+				if (e.target.name() === 'background-image') {
+						console.log('Click en la imagen de fondo');
+						return;
+				}
+				console.log(e.target);
+				if (e.target === konva_stage) {
+						konva_transformer.nodes([]);
+						konva_layer_elem.batchDraw();
+				} else {
+						konva_transformer.nodes([e.target]);
+						konva_layer_elem.batchDraw();
+				}
+		});
 
-			stage.position(newPos);
-			stage.batchDraw(); // Redibujar el escenario
-	});
+		// Eventos para el movimiento (pan) con el botón izquierdo del mouse
+		konva_stage.on('mousedown', function (e) {
+				if (e.evt.button === 0 && e.target === konva_stage) { // Botón izquierdo y clic en el escenario (no en un objeto)
+						isDragging = true;
+						lastPointerPosition = konva_stage.getPointerPosition();
+				}
+		});
+
+		konva_stage.on('mousemove', function (e) {
+				if (isDragging) {
+						var pos = konva_stage.getPointerPosition();
+						var dx = pos.x - lastPointerPosition.x;
+						var dy = pos.y - lastPointerPosition.y;
+
+						// Mover el escenario
+						konva_stage.x(konva_stage.x() + dx);
+						konva_stage.y(konva_stage.y() + dy);
+
+						// Actualizar la última posición
+						lastPointerPosition = pos;
+
+						// Redibujar el escenario
+						konva_stage.batchDraw();
+				} else if (isDrawing) {
+						var pos = konva_stage.getPointerPosition();
+						// Ajustar las coordenadas actuales teniendo en cuenta la escala y la posición del escenario
+						var currentX = (pos.x - konva_stage.x()) / scale;
+						var currentY = (pos.y - konva_stage.y()) / scale;
+
+						// Ajustar el tamaño del rectángulo
+						rect.width(currentX - startX);
+						rect.height(currentY - startY);
+
+						// Redibujar la capa
+						konva_layer_elem.batchDraw();
+				}
+		});
+
+		konva_stage.on('mouseup', function (e) {
+				isDragging = false;
+				isDrawing = false;
+		});
+
+		setTimeout(() => {
+			if(afnCallback) {
+				console.log('enviando a cargar las figuras de bd');
+				afnCallback();
+			} else {
+				console.log('no hay callback');
+			}
+		}, 250);
+	}
+
+	/**
+	 * Funcion para cargar las figuras desde la base de datos
+	 * y dibujarlas en el escenario konva
+	 * @param {Array} shapes - Arreglo de figuras a cargar
+	 */
+	function cargarFigurasKonva(arg_shapes) {
+		console.log('Cargando figuras:', arg_shapes);
+		// return;
+
+		let lsigue_buscando = true;
+		while (lsigue_buscando) {
+			// if (konva_stage.getPointerPosition() == null) {
+			// 	konva_stage.setPointersPositions();
+			// }
+			// const pos = konva_stage.getPointerPosition();
+			// if (pos) {
+
+				// recorriendo el arreglo de objetos arg_shapes
+				arg_shapes.forEach(shape => {
+
+					let newShape = {
+						type: shape.type,
+						id: shape.id_konva,
+						id_konva: (shape.id_konva == null) ? "shape" + (stdx_shapes.length + 1) : shape.id_konva,
+						x: parseFloat(shape.x),
+						y: parseFloat(shape.y),
+						width: parseInt(shape.width),
+						height: parseInt(shape.height),
+						color: "rgba(0, 0, 255, 0.3)",
+						fill: "rgba(0, 0, 255, 0.3)",
+						stroke: "blue",
+						stroke_width: 2,
+						shape: null,
+						shapeIndex: null,
+						info: null
+						// title: "New Shape",
+						// subtitle: "Added Shape",
+						// url: "https://example.com/new",
+					}
+					let lrect = fnDibujarNuevoRectangulo(newShape);
+
+					newShape.shape = lrect;
+					newShape.shapeIndex = lrect.index;
+					newShape.info = null;
+			
+					stdx_shapes.push(newShape)
+
+
+					// Crear un nuevo rectángulo
+					// Ajustar las coordenadas al zoom y desplazamiento
+					// const x = (shape.x - konva_stage.x()) / scale;
+					// const y = (shape.y - konva_stage.y()) / scale;
+					
+					// const rect = new Konva.Rect({
+					// 	x: 	x,
+					// 	y: y,
+					// 	width: shape.width,
+					// 	height: shape.height,
+					// 	fill: 'rgba(255, 0, 0, 0.5)',
+					// 	stroke: 'red',
+					// 	strokeWidth: 2,
+					// 	strokeScaleEnabled: false, // Evitar que el borde se escale con el rectángulo	
+					// 	draggable: true
+					// });
+						
+					// konva_layer_elem.add(rect);
+					// konva_transformer.nodes([rect]);
+					// konva_layer_elem.batchDraw();
+
+					// // Añadir la forma al array stdx_shapes
+					// stdx_shapes.push({
+					// 		type: rect.getClassName(),
+					// 		x: rect.x(),
+					// 		y: rect.y(),
+					// 		width: rect.width(),
+					// 		height: rect.height(),
+					// 		fill: rect.fill(),
+					// 		stroke: rect.stroke(),
+					// 		stroke_width: rect.strokeWidth(),
+					// 		shape: rect,
+					// 		shapeIndex: rect.index,
+					// 		info: null
+					// });
+
+					// saveState();
+					
+				});
+
+				saveState();
+
+
+				lsigue_buscando = false;
+
+
+			// } else{
+			// 	console.log('No hay posición válida aún');
+			// }
+		}
+
+		// const pos = konva_stage.getPointerPosition();
+		// if (!pos) {
+		// 	console.log('No hay posición válida');
+		// 	return; // Verificar si hay una posición válida
+		// }
+
+		
+
+
+		
+			
+		// Save state for undo/redo
+
+	}
+
+
+	// funcion para que konvajs resetee el scale a x: 1 y y: 1
+	function resetScale() {	
+		konva_stage.scale({ x: 1, y: 1 });
+		konva_stage.position({ x: 0, y: 0 });
+		konva_stage.batchDraw();
+	}
 
 	// Funciones para agregar figuras desde el dashboard
 	function preAgregarRectangulo() {
@@ -101,14 +364,16 @@
 	}
 
 	function agregarRectangulo() {
+		agregarNuevoRectangulo();
+		return;
 		// validar si se tiene la información necesaria antes de agregar un rectángulo
 
-			const pos = stage.getPointerPosition();
+			const pos = konva_stage.getPointerPosition();
 			if (!pos) return; // Verificar si hay una posición válida
 
 			// Ajustar las coordenadas al zoom y desplazamiento
-			const x = (pos.x - stage.x()) / scale;
-			const y = (pos.y - stage.y()) / scale;
+			const x = (pos.x - konva_stage.x()) / scale;
+			const y = (pos.y - konva_stage.y()) / scale;
 
 			// Crear un nuevo rectángulo
 			const rect = new Konva.Rect({
@@ -123,12 +388,12 @@
 					draggable: true
 			});
 
-			layer.add(rect);
-			tr.nodes([rect]);
-			layer.batchDraw();
+			konva_layer_elem.add(rect);
+			konva_transformer.nodes([rect]);
+			konva_layer_elem.batchDraw();
 
-			// Añadir la forma al array shapes
-			shapes.push({
+			// Añadir la forma al array stdx_shapes
+			stdx_shapes.push({
 					type: rect.getClassName(),
 					x: rect.x(),
 					y: rect.y(),
@@ -146,13 +411,87 @@
 			saveState();
 	}
 
+	function agregarNuevoRectangulo() {
+		// todo: guardar las figuras /stdx_shapes
+		let newShape = {
+			type: "Rect",
+			id: "-1",
+			id_konva: "shape" + (stdx_shapes.length + 1),
+			x: Math.random() * konva_stage.width(),
+			y: Math.random() * konva_stage.height(),
+			width: 100,
+			height: 100,
+			color: "rgba(0, 0, 255, 0.3)",
+			fill: "rgba(0, 0, 255, 0.3)",
+			stroke: "blue",
+			stroke_width: 2,
+			shape: null,
+			shapeIndex: null,
+			info: null
+			// title: "New Shape",
+			// subtitle: "Added Shape",
+			// url: "https://example.com/new",
+		}
+		let lrect = fnDibujarNuevoRectangulo(newShape);
+		newShape.shape = lrect;
+		newShape.shapeIndex = lrect.index;
+		newShape.info = null;
+
+		stdx_shapes.push(newShape)
+		// Save state for undo/redo
+		saveState();
+
+	}
+
+	function fnDibujarNuevoRectangulo(info) {
+		const pos = konva_stage.getPointerPosition();
+		let localx, localy;
+		if (!pos) {
+			localx = (info.x - konva_stage.x()) / scale;
+			localy = (info.y - konva_stage.y()) / scale;
+			// localx = info.x;
+			// localy = info.y;
+			// return; // Verificar si hay una posición válida
+		} else {
+			// Ajustar las coordenadas al zoom y desplazamiento
+			localx = (pos.x - konva_stage.x()) / scale;
+			localy = (pos.y - konva_stage.y()) / scale;
+		}
+
+		// Ajustar las coordenadas al zoom y desplazamiento
+		// const x = (pos.x - konva_stage.x()) / scale;
+		// const y = (pos.y - konva_stage.y()) / scale;
+
+		// Crear un nuevo rectángulo
+		const rect = new Konva.Rect({
+				x: localx,
+				y: localy,
+				width: info.width,
+				height: info.height,
+				color: info.color,
+				fill: info.fill,
+				stroke: info.stroke,
+				strokeWidth: info.stroke_width,
+				strokeScaleEnabled: false, // Evitar que el borde se escale con el rectángulo	
+				draggable: true,
+				id: info.id
+		});
+
+		konva_layer_elem.add(rect);
+		konva_transformer.nodes([rect]);
+		konva_layer_elem.batchDraw();
+
+		return rect;
+
+	}
+
 	function addCircle() {
-			const pos = stage.getPointerPosition();
+			const pos = konva_stage.getPointerPosition();
 			if (!pos) return; // Verificar si hay una posición válida
 
 			// Ajustar las coordenadas al zoom y desplazamiento
-			const x = (pos.x - stage.x()) / scale;
-			const y = (pos.y - stage.y()) / scale;
+			const x = (pos.x - konva_stage.x()) / scale;
+			const y = (pos.y - konva_stage.y()) / scale;
 
 			// Crear un nuevo círculo
 			const circle = new Konva.Circle({
@@ -166,12 +505,12 @@
 					draggable: true
 			});
 
-			layer.add(circle);
-			tr.nodes([circle]);
-			layer.batchDraw();
+			konva_layer_elem.add(circle);
+			konva_transformer.nodes([circle]);
+			konva_layer_elem.batchDraw();
 
-			// Añadir la forma al array shapes
-			shapes.push({
+			// Añadir la forma al array stdx_shapes
+			stdx_shapes.push({
 					type: circle.getClassName(),
 					x: circle.x(),
 					y: circle.y(),
@@ -188,53 +527,20 @@
 			saveState();
 	}
 
-	// Cargar la imagen de fondo
-	var image = new Image();
-	image.src = "<?= base_url('public/uploads/planos/' . $evento['name_file']) ?>"; // Ruta de la imagen
-	image.onload = function () {
-			// Escalar la imagen para que se ajuste al contenedor
-			var scaleFactor = Math.min(
-					stage.width() / image.width,
-					stage.height() / image.height
-			);
-
-			var width = image.width * scaleFactor;
-			var height = image.height * scaleFactor;
-
-			// Crear un objeto Konva.Image con la imagen cargada
-			var konvaImage = new Konva.Image({
-					x: (stage.width() - width) / 2, // Centrar la imagen horizontalmente
-					y: (stage.height() - height) / 2, // Centrar la imagen verticalmente
-					image: image, // Imagen cargada
-					width: width, // Ancho escalado
-					height: height, // Alto escalado
-					name: 'background-image', // Add a name to identify it
-					listening: false // Disable interactions with the background image
-			});
-
-			// Añadir la imagen a la capa de fondo
-			backgroundLayer.add(konvaImage);
-
-			// Dibujar la capa de fondo
-			backgroundLayer.draw();
-			
-			// Save state for undo/redo
-			saveState();
-	};
 
 	// Función para eliminar la figura seleccionada
 	function deleteSelectedShape() {
-			var selectedNode = tr.nodes()[0]; // Obtener la figura seleccionada
+			var selectedNode = konva_transformer.nodes()[0]; // Obtener la figura seleccionada
 			if (selectedNode) {
-					// Find and remove the shape from the shapes array
-					const index = shapes.findIndex(s => s.shape === selectedNode);
+					// Find and remove the shape from the stdx_shapes array
+					const index = stdx_shapes.findIndex(s => s.shape === selectedNode);
 					if (index !== -1) {
-							shapes.splice(index, 1);
+							stdx_shapes.splice(index, 1);
 					}
 					
 					selectedNode.destroy(); // Eliminar la figura
-					tr.nodes([]); // Deseleccionar el Transformer
-					layer.batchDraw(); // Redibujar la capa
+					konva_transformer.nodes([]); // Deseleccionar el Transformer
+					konva_layer_elem.batchDraw(); // Redibujar la capa
 					
 					// Save state for undo/redo
 					saveState();
@@ -277,7 +583,7 @@
 					if (result.isConfirmed) {
 							const { stand, empresa, paginaweb, logoURL, shape } = result.value;
 							const data = { stand, empresa, paginaweb, logoURL };
-							const fig = shapes.find((fig) => fig.shapeIndex == shape.index);
+							const fig = stdx_shapes.find((fig) => fig.shapeIndex == shape.index);
 
 							if (fig) {
 									fig.info = data;
@@ -290,10 +596,10 @@
 	}
 
 	function updateShapeInfo(shape) {
-			const index = shapes.findIndex(s => s.shape === shape);
+			const index = stdx_shapes.findIndex(s => s.shape === shape);
 			if (index !== -1) {
-					shapes[index] = {
-							...shapes[index],
+					stdx_shapes[index] = {
+							...stdx_shapes[index],
 							x: shape.x(),
 							y: shape.y(),
 							width: shape.width ? shape.width() : null,
@@ -308,18 +614,32 @@
 
 	// Función para guardar las figuras
 	const guardarFiguras = () => {
-			console.log(id_evento);
-
-			fetch("<?= base_url('Mapa/guardar_posiciones/')?>" + id_evento, {
+			fetch(lurl_guardado + id_evento, {
 					method: 'POST',
 					headers: {
 							'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ shapes })
+					body: JSON.stringify({ stdx_shapes })
 			})
 			.then(response => response.json())
 			.then(data => console.log("Guardado en BD:", data))
 			.catch(error => console.error("Error al guardar:", error));
+	};
+
+	const cargarFiguras = () => {	
+		fetch(lurl_carga + id_evento, {
+			method: 'POST',
+			headers: {
+
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(response => response.json())
+		.then(data => { 
+			cargarFigurasKonva(data);
+			console.log("Cargado de BD:", data) 
+		})
+		.catch(error => console.error("Error al cargar los stands:  ", error));
 	};
 
 	function saveState() {
@@ -328,8 +648,8 @@
 					historial = historial.slice(0, historialStep + 1);
 			}
 			
-			// Create a deep copy of the shapes array
-			const shapesClone = shapes.map(shape => {
+			// Create a deep copy of the stdx_shapes array
+			const shapesClone = stdx_shapes.map(shape => {
 					// Create a new object without the shape reference (which can't be serialized)
 					const { shape: shapeRef, ...rest } = shape;
 					return { ...rest };
@@ -365,9 +685,9 @@
 
 	// Function to restore a state from historial
 	function restoreState(state) {
-			// Clear the current shapes from the layer
-			layer.destroyChildren();
-			layer.add(tr); // Add back the transformer
+			// Clear the current stdx_shapes from the konva_layer_elem
+			konva_layer_elem.destroyChildren();
+			konva_layer_elem.add(konva_transformer); // Add back the transformer
 			
 			// Clear the shapes array
 			shapes = [];
@@ -400,10 +720,10 @@
 					}
 					
 					if (shape) {
-							layer.add(shape);
+							konva_layer_elem.add(shape);
 							
 							// Add the shape to the shapes array
-							shapes.push({
+							stdx_shapes.push({
 									type: shapeData.type,
 									x: shapeData.x,
 									y: shapeData.y,
@@ -421,10 +741,10 @@
 			});
 			
 			// Clear the transformer selection
-			tr.nodes([]);
+			konva_transformer.nodes([]);
 			
-			// Redraw the layer
-			layer.batchDraw();
+			// Redraw the konva_layer_elem
+			konva_layer_elem.batchDraw();
 	}
 
 	// Undo function
@@ -445,83 +765,6 @@
 			}
 	}
 
-	// Escuchar eventos de cambio en las formas
-	layer.on('dragmove transform transformend', function (e) {
-			const shape = e.target;
-			if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
-					updateShapeInfo(shape);
-			}
-	});
-
-	layer.on('dblclick dbltap', function (e) {
-			let stage = e.target.getStage(); // Asegurar que tenemos el stage
-			stage.setPointersPositions(e); // Registrar manualmente la posición del puntero
-
-			let shape = e.target;
-			if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
-					console.log('Doble clic en:', shape);
-					abrirFormulario(shape);
-			}
-	});
-
-	// Seleccionar figuras
-	stage.on('click tap', function (e) {
-			// Ignore clicks on the background image
-			if (e.target.name() === 'background-image') {
-					console.log('Click en la imagen de fondo');
-					return;
-			}
-			if (e.target === stage) {
-					tr.nodes([]);
-					layer.batchDraw();
-			} else {
-					tr.nodes([e.target]);
-					layer.batchDraw();
-			}
-	});
-
-	// Eventos para el movimiento (pan) con el botón izquierdo del mouse
-	stage.on('mousedown', function (e) {
-			if (e.evt.button === 0 && e.target === stage) { // Botón izquierdo y clic en el escenario (no en un objeto)
-					isDragging = true;
-					lastPointerPosition = stage.getPointerPosition();
-			}
-	});
-
-	stage.on('mousemove', function (e) {
-			if (isDragging) {
-					var pos = stage.getPointerPosition();
-					var dx = pos.x - lastPointerPosition.x;
-					var dy = pos.y - lastPointerPosition.y;
-
-					// Mover el escenario
-					stage.x(stage.x() + dx);
-					stage.y(stage.y() + dy);
-
-					// Actualizar la última posición
-					lastPointerPosition = pos;
-
-					// Redibujar el escenario
-					stage.batchDraw();
-			} else if (isDrawing) {
-					var pos = stage.getPointerPosition();
-					// Ajustar las coordenadas actuales teniendo en cuenta la escala y la posición del escenario
-					var currentX = (pos.x - stage.x()) / scale;
-					var currentY = (pos.y - stage.y()) / scale;
-
-					// Ajustar el tamaño del rectángulo
-					rect.width(currentX - startX);
-					rect.height(currentY - startY);
-
-					// Redibujar la capa
-					layer.batchDraw();
-			}
-	});
-
-	stage.on('mouseup', function (e) {
-			isDragging = false;
-			isDrawing = false;
-	});
 
 		// JSON variable for type dropdown
 	let _sts_typeOptions = [
