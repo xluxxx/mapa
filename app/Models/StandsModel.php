@@ -9,7 +9,9 @@ class StandsModel extends Model
     protected $table = 'stands'; // Nombre de la tabla
     protected $primaryKey = 'id'; // Clave primaria
     protected $allowedFields = [
-        'type', 'x', 'y', 'width', 'height', 'radius', 'stroke_width', 
-        'id_evento', 'nombre', 'numero', 'estatus', 'contacto', 'id_konva'
-    ]; // Campos permitidos para inserción
+        'id', 'type', 'x', 'y', 'width', 'height', 'radius', 'stroke_width',
+        'id_evento', 'id_konva', 'numero', 'map_id', 'stand_id', 'nombreEmpresa',
+        'status', 'description', 'correo', 'paginaweb', 'tel', 'nombreRepresentante'
+    ];
+    
 }

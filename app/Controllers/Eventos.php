@@ -4,16 +4,108 @@ namespace App\Controllers;
 
 use App\Models\EventModel; // Importar el modelo de eventos
 use IonAuth\Libraries\IonAuth;
-
+use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\API\ResponseTrait;
 class Eventos extends BaseController
 {
     protected $ionAuth;
+    use ResponseTrait; // Agregar esta línea para poder usar failValidationErrors()
 
     public function __construct()
     {
         $this->ionAuth = new IonAuth(); // Instancia de IonAuth
     }
-
+    public function guardarInformacionStand()
+    {
+        $validation = \Config\Services::validation();
+    
+        $rules = [
+            'stand'     => 'required|numeric',
+            'empresa'   => 'required|string',
+            'pagina' => 'required|valid_url',
+            'correo'    => 'required|valid_email',
+            'tel'       => 'required|numeric',
+            'nombre'    => 'required|string',
+            'id_evento' => 'required|numeric',
+            'id_konva'  => 'required|string',
+            'logo'      => 'is_image[logo]|max_size[logo,2048]'
+        ];
+    
+        if (!$this->validate($rules)) {
+            return $this->failValidationErrors($validation->getErrors());
+        }
+    
+        // Obtener los datos
+        $stand     = $this->request->getPost('stand');
+        $empresa   = $this->request->getPost('empresa');
+        $paginaweb = $this->request->getPost('pagina');
+        $correo    = $this->request->getPost('correo');
+        $tel       = $this->request->getPost('tel');
+        $nombre    = $this->request->getPost('nombre');
+        $id_evento = $this->request->getPost('id_evento');
+        $id_konva  = $this->request->getPost('id_konva');
+    
+        // Manejo de archivo (opcional)
+        $logoURL = null;
+        $logo = $this->request->getFile('logo');
+        if ($logo && $logo->isValid() && !$logo->hasMoved()) {
+            $newName = $logo->getRandomName();
+            $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newName);
+            $logoURL = base_url('uploads/logosEmpresasExpositoras/' . $newName);
+        }
+    
+        // Cargar el modelo
+        $standModel = new \App\Models\StandsModel();
+    
+        // Verificar si el stand ya existe en el evento
+        $standExistente = $standModel->where('id_konva', $id_konva)
+                                     ->where('id_evento', $id_evento)
+                                     ->first();
+    
+        if ($standExistente) {
+            // Actualizar el registro existente
+            $dataUpdate = [
+                'numero'     => $stand,
+                'nombreEmpresa'   => $empresa,
+                'paginaweb' => $paginaweb,
+                'correo'    => $correo,
+                'tel'       => $tel,
+                'nombreRepresentante' => $nombre,
+                'id_konva'  => $id_konva,
+                'status' => 3
+            ];
+    
+            if ($logoURL) {
+                $dataUpdate['logo'] = $logoURL;
+            }
+    
+            $standModel->update($standExistente['id'], $dataUpdate);
+    
+            return $this->respond(['message' => 'Registro actualizado con éxito', 'logoURL' => $logoURL], 200);
+        } else {
+            // Insertar nuevo registro
+            $dataInsert = [
+                'numero'     => $stand,
+                'nombreEmpresa'  => $empresa,
+                'paginaweb' => $paginaweb,
+                'correo'    => $correo,
+                'tel'       => $tel,
+                'nombreRepresentante' => $nombre,
+                'id_evento' => $id_evento,
+                'id_konva'  => $id_konva,
+                'status' => 2
+            ];
+    
+            if ($logoURL) {
+                $dataInsert['logo'] = $logoURL;
+            }
+    
+            $standModel->insert($dataInsert);
+    
+            return $this->respond(['message' => 'Nuevo registro guardado con éxito', 'logoURL' => $logoURL], 201);
+        }
+    }
+    
     // Función que carga la vista principal del formulario
     public function index()
     {

@@ -64,9 +64,9 @@
 					<div class="rectangle btn btn-xs btn-info" onclick="agregarRectangulo()">
 							<i class="fas fa-square"></i> Rectángulo
 					</div>
-					<div class="circle btn btn-xs btn-info" onclick="addCircle()">
+					<!--<div class="circle btn btn-xs btn-info" onclick="addCircle()">
 							<i class="fas fa-circle"></i> Círculo
-					</div>
+					</div>-->
 					<div class="delete btn btn-xs btn-info" onclick="deleteSelectedShape()">
 							<i class="fas fa-trash"></i> Eliminar
 					</div>
@@ -76,13 +76,12 @@
 			</div>
 
 			<!-- Contenedor del lienzo -->
-			<div id="container" style="border-style: solid; width: 100%; height: 85vh; min-height: 800px;">
+			<div id="container" style="border: solid 1px black; width: 1200px; height: 800px;"></div>
 
-			</div>
 		<?= $this->endSection(); ?>
 
 		<?= $this->section('customJS'); ?>
-		<script src="<?= base_url('assets/js/mapa_editor.js'); ?>" 
+		<script src="<?= base_url('assets/js/mapa_editor.js?v=1.8'); ?>" 
 				evento="<?= $evento['id']; ?>" 
 				imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
 				url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"
@@ -98,6 +97,7 @@
 					fnIniciarForm();
 					sts_mostrarForm();
 				});
+				
 		</script>
 
 		<div id="stand-form" class="card">

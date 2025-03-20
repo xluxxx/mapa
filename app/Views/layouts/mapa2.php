@@ -8,6 +8,7 @@
 
 		<!-- Dashboard de figuras con iconos y nombres -->
 		<div id="dashboard">
+				<button id="downloadSVG">Descargar SVG</button>
 				<div class="icon rectangle btn btn-sm" onclick="addRectangle()">
 						<i class="fas fa-square"></i> Rectángulo
 				</div>
@@ -568,6 +569,21 @@
 				});
 
 				updateUndoRedoButtons();
+				  // Función para descargar el lienzo como SVG
+			function descargarSVG() {
+				const svgString = stage.toSVG(); // Genera SVG del lienzo
+
+				// Crear un enlace de descarga
+				const blob = new Blob([svgString], { type: "image/svg+xml" });
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement("a");
+				a.href = url;
+				a.download = "dibujo.svg";
+				document.body.appendChild(a);
+				a.click();
+				document.body.removeChild(a);
+				URL.revokeObjectURL(url);
+			}
 		</script>
 
 		<?= $this->endSection() ?>

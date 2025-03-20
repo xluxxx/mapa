@@ -148,10 +148,17 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Escuchar eventos de cambio en las formas
 		konva_layer_elem.on('dragmove transform transformend', function (e) {
 			const shape = e.target;
+
 			if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
-					updateShapeInfo(shape);
+        // Obtener el tamaño actual con escala aplicada
+        const newWidth = shape.width() * shape.scaleX();
+        const newHeight = shape.height() * shape.scaleY();
+
+        //console.log("Nueva dimensión - Ancho:", newWidth, "Alto:", newHeight);
+				updateShapeInfo(shape); // Llamar la función de actualización (si existe)
 			}
 		});
+
 
 		konva_layer_elem.on('dblclick dbltap', function (e) {
 				let lstage = e.target.getStage(); // Asegurar que tenemos el stage
@@ -168,11 +175,21 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Seleccionar figuras
 		konva_stage.on('click tap', function (e) {
 				// Ignore clicks on the background image
+				const shape = e.target;
+
+				if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
+				// Obtener el tamaño actual con escala aplicada
+				const newWidth = shape.width() * shape.scaleX();
+				const newHeight = shape.height() * shape.scaleY();
+		
+				console.log("Nueva dimensión - Ancho:", newWidth, "Alto:", newHeight);
+					updateShapeInfo(shape); // Llamar la función de actualización (si existe)
+				}
 				if (e.target.name() === 'background-image') {
 						console.log('Click en la imagen de fondo');
 						return;
 				}
-				console.log(e.target);
+				console.log('click sobre la figura', e.target);
 				if (e.target === konva_stage) {
 						konva_transformer.nodes([]);
 						konva_layer_elem.batchDraw();
@@ -245,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		// return;
 
 		let lsigue_buscando = true;
+		codeRGB = false;
 		while (lsigue_buscando) {
 			// if (konva_stage.getPointerPosition() == null) {
 			// 	konva_stage.setPointersPositions();
@@ -255,6 +273,15 @@ document.addEventListener('DOMContentLoaded', function () {
 				// recorriendo el arreglo de objetos arg_shapes
 				arg_shapes.forEach(shape => {
 
+					if (shape.status == 'reserved') {
+						codeRGB = "rgba(236, 112, 99)"
+					}
+					if(shape.status == 'available'){
+						codeRGB = "rgba(125, 206, 160)"
+					}
+					if(shape.status == 'occupied'){
+						codeRGB = "rgba(236, 112, 99)"
+					}
 					let newShape = {
 						type: shape.type,
 						id: shape.id_konva,
@@ -263,8 +290,8 @@ document.addEventListener('DOMContentLoaded', function () {
 						y: parseFloat(shape.y),
 						width: parseInt(shape.width),
 						height: parseInt(shape.height),
-						color: "rgba(0, 0, 255, 0.3)",
-						fill: "rgba(0, 0, 255, 0.3)",
+						color: codeRGB,
+						fill: codeRGB,
 						stroke: "blue",
 						stroke_width: 2,
 						shape: null,
@@ -348,7 +375,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		// Save state for undo/redo
 
 	}
-
 
 	// funcion para que konvajs resetee el scale a x: 1 y y: 1
 	function resetScale() {	
@@ -527,7 +553,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			saveState();
 	}
 
-
 	// Función para eliminar la figura seleccionada
 	function deleteSelectedShape() {
 			var selectedNode = konva_transformer.nodes()[0]; // Obtener la figura seleccionada
@@ -547,63 +572,113 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 	}
 
-	//Formulario de datos del espacio
 	const abrirFormulario = (shape) => {
-			Swal.fire({
-					title: "Registrar Stand",
-					html: `
-							<input id="stand" class="swal2-input" placeholder="Número de Stand" required>
-							<input id="empresa" class="swal2-input" placeholder="Nombre de la Empresa" required>
-							<input id="paginaweb" class="swal2-input" placeholder="Página Web" required>
 
-							<input type="file" id="logo" class="swal2-file">
-					`,
-					showCancelButton: true,
-					confirmButtonText: "Guardar",
-					preConfirm: () => {
-							const stand = document.getElementById("stand").value;
-							const empresa = document.getElementById("empresa").value;
-							const paginaweb = document.getElementById("paginaweb").value;
-							const logoInput = document.getElementById("logo");
+		Swal.fire({
+			title: "Registrar Stand",
+			html: `
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Nombre de la empresa</label>
+						<input type="text" id="empresa" class="form-control">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Correo de contacto</label>
+						<input type="email" id="correo" class="form-control">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Numero de stand</label>
+						<input type="number" id="stand" class="form-control">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Nombre completo del representante</label>
+						<input type="text" id="nombre" class="form-control">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Telefóno</label>
+						<input type="number" id="tel" class="form-control">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Pagina Web</label>
+						<input type="text" id="pagina" class="form-control">
+					</div>
+					<input type="file" id="logo" class="swal2-file">
+			`,
+			showCancelButton: true,
+			confirmButtonText: "Guardar",
+			preConfirm: () => {
+				const stand = document.getElementById("stand").value;
+				const empresa = document.getElementById("empresa").value;
+				const pagina = document.getElementById("pagina").value;
+				const logo = document.getElementById("logo");
+				const correo = document.getElementById("correo").value;
+				const nombre = document.getElementById("nombre").value;
+				const tel = document.getElementById("tel").value;
 
-							if (!stand || !empresa || !paginaweb) {
-									Swal.showValidationMessage("Todos los campos son obligatorios");
-									return false;
-							}
+	
+				if (!stand || !empresa || !pagina) {
+					Swal.showValidationMessage("Todos los campos son obligatorios");
+					return false;
+				}
+	
+				const formData = new FormData();
+				formData.append("id_konva", shape.attrs.id);
+				formData.append("id_evento", id_evento);
+				formData.append("stand", stand);
+				formData.append("empresa", empresa);
+				formData.append("pagina", pagina);
+				formData.append("correo", correo);
+				formData.append("nombre", nombre);
+				formData.append("tel", tel);
 
-							const logoFile = logoInput.files[0];
-							let logoURL = "";
-							if (logoFile) {
-									logoURL = URL.createObjectURL(logoFile);
-							}
-
-							return { stand, empresa, paginaweb, logoURL, shape };
+				if (logo.files.length > 0) {
+					formData.append("logo", logo.files[0]);
+				}
+	
+				return fetch('../guardarInformacionStand', {
+					method: "POST",
+					body: formData
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.message) {
+						return data;
+					} else {
+						throw new Error("Error al guardar");
 					}
-			}).then((result) => {
-					if (result.isConfirmed) {
-							const { stand, empresa, paginaweb, logoURL, shape } = result.value;
-							const data = { stand, empresa, paginaweb, logoURL };
-							const fig = stdx_shapes.find((fig) => fig.shapeIndex == shape.index);
-
-							if (fig) {
-									fig.info = data;
-									fig.fill = 'rgba(23, 148, 55, 0.5)';
-							}
-
-							toastr.success('Información guardada correctamente', 'Éxito');
-					}
-			});
-	}
-
+				})
+				.catch(error => {
+					Swal.showValidationMessage(`Error: ${error.message}`);
+					return false;
+				});
+			}
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					icon: 'success',
+					title: 'Guardado exitoso',
+					text: 'Información guardada correctamente',
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true
+				});
+			}
+		});
+	};
+	
 	function updateShapeInfo(shape) {
+		const boundingBox = shape.getClientRect(); // Obtener tamaño real de la figura
+		console.log("Ancho:", boundingBox.width, "Alto:", boundingBox.height);
+
 			const index = stdx_shapes.findIndex(s => s.shape === shape);
 			if (index !== -1) {
 					stdx_shapes[index] = {
 							...stdx_shapes[index],
 							x: shape.x(),
 							y: shape.y(),
-							width: shape.width ? shape.width() : null,
-							height: shape.height ? shape.height() : null,
+							width: shape.width() * shape.scaleX(),
+							height: shape.height() * shape.scaleY(),
 							radius: shape.radius ? shape.radius() : null,
 							fill: shape.fill(),
 							stroke: shape.stroke(),
@@ -614,18 +689,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// Función para guardar las figuras
 	const guardarFiguras = () => {
-			fetch(lurl_guardado + id_evento, {
-					method: 'POST',
-					headers: {
-							'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ stdx_shapes })
-			})
-			.then(response => response.json())
-			.then(data => console.log("Guardado en BD:", data))
-			.catch(error => console.error("Error al guardar:", error));
+		console.log(stdx_shapes);
+		fetch(lurl_guardado + id_evento, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ stdx_shapes })
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log("Guardado en BD2:", data);
+			// Mostrar SweetAlert2 Toast de éxito
+			Swal.fire({
+				icon: 'success',
+				title: 'Guardado exitoso',
+				text: 'Las figuras se guardaron correctamente',
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true
+			});
+		})
+		.catch(error => {
+			console.error("Error al guardar:", error);
+			// Mostrar SweetAlert2 Toast de error
+			Swal.fire({
+				icon: 'error',
+				title: 'Error',
+				text: 'Hubo un problema al guardar las figuras',
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true
+			});
+		});
 	};
-
+	
 	const cargarFiguras = () => {	
 		fetch(lurl_carga + id_evento, {
 			method: 'POST',
@@ -803,7 +905,20 @@ document.addEventListener('DOMContentLoaded', function () {
 	function sts_ocultarForm() {
 		standForm.classList.remove('shown');
 	}
+	function descargarSVG() {
+		const svgString = stage.toSVG(); // Genera SVG del lienzo
 
+		// Crear un enlace de descarga
+		const blob = new Blob([svgString], { type: "image/svg+xml" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = "dibujo.svg";
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+		URL.revokeObjectURL(url);
+	}
 	// Function to toggle fields based on selected type
 	function _sts_toggleFieldsBasedOnType() {
 			const _sts_type = document.getElementById('_sts_type').value;
