@@ -17,6 +17,137 @@ class Mapa extends BaseController
         $this->ionAuth = new IonAuth(); // Instancia de IonAuth
     }
 
+    public function obtenerFiguraPorIdKonva($konva)
+    {
+        // Validar que el nombre no esté vacío
+        if (empty($konva)) {
+            return $this->response->setJSON(['error' => 'Id Konva no válido'], 400); // 400 Bad Request
+        }
+    
+        // Consultar si el nombre existe en la base de datos
+        $model = new StandsModel();
+        $figura = $model->where('id_konva', $konva)->first();  // Buscar por nombre en la base de datos
+    
+        if (!$figura) {
+            return $this->response->setJSON(['error' => 'Figura no encontrada'], 404); // 404 Not Found
+        }
+    
+        // Si la figura existe, devolver los datos
+        return $this->response->setJSON($figura);
+    }
+    public function verificarRegistro()
+    {
+        $idKonva = $this->request->getPost('id_konva'); // Obtener el ID Konva desde AJAX
+        
+        if (!$idKonva) {
+            return $this->response->setJSON(['success' => false, 'message' => 'ID Konva no recibido']);
+        }
+    
+        $standModel = new StandsModel();
+        $stand = $standModel->where('id_konva', $idKonva)->first(); // Buscar por id_konva en la BD
+    
+        if ($stand) {
+            // Verificar si el stand está registrado y tiene estado "activo"
+    
+            return $this->response->setJSON([
+                'success' => true,
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'registrado' => false,
+                'message' => 'Stand no encontrado'
+            ]);
+        }
+    }
+    
+    
+    public function obtenerEmpresa()
+    {
+        $id_konva = $this->request->getPost('id_konva');
+        $id_evento = $this->request->getPost('id_evento');
+
+        $model = new StandsModel();
+        
+        // Buscar el registro donde coincidan id_konva y id_evento
+        $empresa = $model->where('id_konva', $id_konva)
+                        ->where('id_evento', $id_evento)
+                        ->first();
+
+        if ($empresa) {
+            return $this->response->setJSON(['success' => true, 'data' => $empresa]);
+        } else {
+            return $this->response->setJSON(['success' => false, 'error' => 'Empresa no encontrada']);
+        }
+    }
+
+    public function actualizarFigura()
+    {
+        // Obtener los valores de los campos del formulario
+        $id_konva = $this->request->getPost('id_konva');
+        $id_evento = $this->request->getPost('id_evento');
+        $stand = $this->request->getPost('stand');
+        $empresa = $this->request->getPost('empresa');
+        $pagina = $this->request->getPost('pagina');
+        $correo = $this->request->getPost('correo');
+        $nombre = $this->request->getPost('nombre');
+        $tel = $this->request->getPost('tel');
+    
+        // Inicializar el modelo
+        $model = new StandsModel();
+    
+        // Verificar si el registro con id_konva e id_evento existe
+        $registroExistente = $model->where('id_konva', $id_konva)
+                                   ->where('id_evento', $id_evento)
+                                   ->first();
+    
+        if (!$registroExistente) {
+            return $this->response->setJSON([
+                'success' => false,
+                'error' => 'No se encontró un registro con el ID proporcionado.'
+            ]);
+        }
+    
+        // Obtener el archivo logo, si existe
+        $logo = $this->request->getFile('logo');
+    
+        // Comprobar si se ha subido un archivo logo
+        if ($logo && $logo->isValid()) {
+            // Mover el archivo logo a la carpeta uploads/logos
+            $newFileName = $logo->getRandomName();
+            $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newFileName);
+        }
+    
+        // Preparar los datos a actualizar
+        $data = [
+            'numero' => $stand,
+            'nombreEmpresa' => $empresa,
+            'paginaweb' => $pagina,
+            'correo' => $correo,
+            'nombreRepresentante' => $nombre,
+            'tel' => $tel,
+            'logo' => $newFileName,
+            'status' => 2
+              // Se actualiza el logo solo si se subió uno nuevo
+        ];
+    
+        // Realizar la actualización en la base de datos
+        $updated = $model->where('id_konva', $id_konva)
+                         ->where('id_evento', $id_evento)
+                         ->set($data)
+                         ->update();
+    
+        // Retornar la respuesta
+        if ($updated) {
+            return $this->response->setJSON(['success' => true]);
+        } else {
+            return $this->response->setJSON([
+                'success' => false,
+                'error' => 'No se pudo actualizar la figura.'
+            ]);
+        }
+    }
+    
     public function index(): string
     {
         // Verifica si el usuario está logueado
@@ -65,10 +196,9 @@ class Mapa extends BaseController
                 'stroke_width' => $shape->stroke_width,
                 'id_evento' => $id_evento,
 								'id_konva' => $shape->id_konva,
-                'nombre' => $shape->info->stand ?? null, // Información adicional
-                'numero' => $shape->info->stand ?? null,
+                //'nombre' => $shape->info->stand ?? null, // Información adicional
+                //'numero' => $shape->info->stand ?? null,
                 'estatus' => 1, // Estatus por defecto
-                'contacto' => $shape->info->stand ?? null,
             ];
 						// busca el objecto en la base de datos con el id_evento y el id_konva
 						$fshape = $standsModel->where('id_evento', $id_evento)
@@ -94,22 +224,22 @@ class Mapa extends BaseController
 							
     }
 
-		/**
-		 * Busca los stands de un evento
-		 * 		@param int $id_evento
-		 * 		@return array
-		 */
-		public function buscar_stands($id_evento)
-		{
-			// Cargar el modelo de stands
-			$standsModel = new StandsModel();
+    /**
+     * Busca los stands de un evento
+     * 		@param int $id_evento
+     * 		@return array
+     */
+    public function buscar_stands($id_evento)
+    {
+        // Cargar el modelo de stands
+        $standsModel = new StandsModel();
 
-			// Buscar los stands del evento
-			$stands = $standsModel->where('id_evento', $id_evento)->findAll();
+        // Buscar los stands del evento
+        $stands = $standsModel->where('id_evento', $id_evento)->findAll();
 
-			// Responder con los stands encontrados
-			return $this->respond($stands);
-		}
+        // Responder con los stands encontrados
+        return $this->respond($stands);
+    }
 			
 
     public function generar_mapa()

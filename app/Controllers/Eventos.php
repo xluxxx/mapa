@@ -72,7 +72,8 @@ class Eventos extends BaseController
                 'tel'       => $tel,
                 'nombreRepresentante' => $nombre,
                 'id_konva'  => $id_konva,
-                'status' => 3
+                'status' => 3,
+                'logo' => $newName
             ];
     
             if ($logoURL) {
@@ -93,7 +94,9 @@ class Eventos extends BaseController
                 'nombreRepresentante' => $nombre,
                 'id_evento' => $id_evento,
                 'id_konva'  => $id_konva,
-                'status' => 2
+                'status' => 2,
+                'logo' => $newName
+
             ];
     
             if ($logoURL) {

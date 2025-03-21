@@ -161,23 +161,48 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 		konva_layer_elem.on('dblclick dbltap', function (e) {
-				let lstage = e.target.getStage(); // Asegurar que tenemos el stage
-				lstage.setPointersPositions(e); // Registrar manualmente la posición del puntero
-
-				let shape = e.target;
-				console.log('Doble clic en:', shape);
-				if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
-						console.log('Doble clic en:', shape);
-						abrirFormulario(shape);
-				}
+			let lstage = e.target.getStage();
+			lstage.setPointersPositions(e);
+		
+			let shape = e.target;
+			console.log('Doble clic en:', shape);
+		
+			if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
+				let idkonva = shape.attrs.id; // Obtener ID del stand desde los atributos
+		
+				// Llamar a la función AJAX para verificar si el stand está registrado
+				verificarStandRegistrado(idkonva)
+					.then((registrado) => {
+						console.log(registrado);
+						if (registrado) {
+							verEmpresa(shape); // Abrir modal de empresa
+						} else {
+							abrirFormulario(shape); // Abrir formulario de registro
+						}
+					})
+					.catch((error) => {
+						console.error('Error verificando el stand:', error);
+					});
+			}
 		});
 
 		// Seleccionar figuras
 		konva_stage.on('click tap', function (e) {
 				// Ignore clicks on the background image
 				const shape = e.target;
+				const botonEdit = document.querySelector(".editFigura"); // Selecciona el primer botón con la clase 'save'
+				botonEdit.disabled = true; // Habilita el botón
+
+				const botonDelete = document.querySelector(".delete"); // Selecciona el primer botón con la clase 'save'
+				botonDelete.disabled = true; // Habilita el botón
 
 				if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
+				const botonEdit = document.querySelector(".editFigura"); // Selecciona el primer botón con la clase 'save'
+				botonEdit.disabled = false; // Habilita el botón
+
+				const botonDelete = document.querySelector(".delete"); // Selecciona el primer botón con la clase 'save'
+				botonDelete.disabled = false; // Habilita el botón
+	
 				// Obtener el tamaño actual con escala aplicada
 				const newWidth = shape.width() * shape.scaleX();
 				const newHeight = shape.height() * shape.scaleY();
@@ -252,130 +277,277 @@ document.addEventListener('DOMContentLoaded', function () {
 		}, 250);
 	}
 
+			
+	// Función para hacer la petición AJAX a CodeIgniter 4
+	function verificarStandRegistrado(idkonva) {
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				url: '../../Mapa/verificarRegistro',  // Ruta del controlador en CodeIgniter 4
+				type: 'POST',
+				data: { id_konva: idkonva },
+				dataType: 'json',
+				success: function (response) {
+					if (response.success) {
+						resolve(response.registrado); // Si está registrado, resuelve con `true`
+					} else {
+						resolve(false); // Si no está registrado, resuelve con `false`
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error('Error en la petición AJAX:', error);
+					reject(error);
+				}
+			});
+		});
+	}
+		
 	/**
 	 * Funcion para cargar las figuras desde la base de datos
 	 * y dibujarlas en el escenario konva
 	 * @param {Array} shapes - Arreglo de figuras a cargar
 	 */
-	function cargarFigurasKonva(arg_shapes) {
-		console.log('Cargando figuras:', arg_shapes);
-		// return;
+	const verEmpresa = (shape) => {
 
+		var id_konva = shape.attrs.id; // Obtener el ID de la figura seleccionada
+		var id_evento = lid_evento; // Asegúrate de definir esta variable con el evento actual
+
+		// Realizar una petición AJAX para obtener los datos de la empresa
+		$.ajax({
+			url: '../../Mapa/obtenerEmpresa', // Ruta en el backend
+			type: 'POST',
+			data: { id_konva: id_konva, id_evento: id_evento },
+			dataType: 'json',
+			success: function(response) {
+				if (response.success) {
+					// Rellenar los campos del modal con los datos obtenidos
+					$('#modalEmpresa #empresaNombre').text(response.data.nombreEmpresa);
+					$('#modalEmpresa #empresaCorreo').text(response.data.correo);
+					$('#modalEmpresa #empresaPagina').html('<a href="' + response.data.paginaweb + '" target="_blank">' + response.data.paginaweb + '</a>');
+					$('#modalEmpresa #empresaTel').text(response.data.tel);
+					$('#modalEmpresa #empresaStand').text(response.data.numero);
+					$('#modalEmpresa #empresaRepresentante').text(response.data.nombreRepresentante);
+	
+					// Si tiene un logo, mostrarlo
+					if (response.data.logo) {
+						$('#modalEmpresa #empresaLogo').attr('src', '/mapa/files/uploads/'+response.data.logo).show();
+					} else {
+						$('#modalEmpresa #empresaLogo').hide();
+					}
+	
+					// Abrir el modal
+					$('#modalEmpresa').modal('show');
+				} else {
+					Swal.fire('Error', 'No se encontraron datos de la empresa.', 'error');
+				}
+			},
+			error: function() {
+				Swal.fire('Error', 'No se pudo obtener la información.', 'error');
+			}
+		});
+	}
+	
+	function cargarFigurasKonva(arg_shapes) {
+		//console.log('Cargando figuras:', arg_shapes);
+	
 		let lsigue_buscando = true;
 		codeRGB = false;
+	
 		while (lsigue_buscando) {
-			// if (konva_stage.getPointerPosition() == null) {
-			// 	konva_stage.setPointersPositions();
-			// }
-			// const pos = konva_stage.getPointerPosition();
-			// if (pos) {
-
-				// recorriendo el arreglo de objetos arg_shapes
-				arg_shapes.forEach(shape => {
-
-					if (shape.status == 'reserved') {
-						codeRGB = "rgba(236, 112, 99)"
-					}
-					if(shape.status == 'available'){
-						codeRGB = "rgba(125, 206, 160)"
-					}
-					if(shape.status == 'occupied'){
-						codeRGB = "rgba(236, 112, 99)"
-					}
-					let newShape = {
-						type: shape.type,
-						id: shape.id_konva,
-						id_konva: (shape.id_konva == null) ? "shape" + (stdx_shapes.length + 1) : shape.id_konva,
-						x: parseFloat(shape.x),
-						y: parseFloat(shape.y),
-						width: parseInt(shape.width),
-						height: parseInt(shape.height),
-						color: codeRGB,
-						fill: codeRGB,
-						stroke: "blue",
-						stroke_width: 2,
-						shape: null,
-						shapeIndex: null,
-						info: null
-						// title: "New Shape",
-						// subtitle: "Added Shape",
-						// url: "https://example.com/new",
-					}
-					let lrect = fnDibujarNuevoRectangulo(newShape);
-
-					newShape.shape = lrect;
-					newShape.shapeIndex = lrect.index;
-					newShape.info = null;
-			
-					stdx_shapes.push(newShape)
-
-
-					// Crear un nuevo rectángulo
-					// Ajustar las coordenadas al zoom y desplazamiento
-					// const x = (shape.x - konva_stage.x()) / scale;
-					// const y = (shape.y - konva_stage.y()) / scale;
-					
-					// const rect = new Konva.Rect({
-					// 	x: 	x,
-					// 	y: y,
-					// 	width: shape.width,
-					// 	height: shape.height,
-					// 	fill: 'rgba(255, 0, 0, 0.5)',
-					// 	stroke: 'red',
-					// 	strokeWidth: 2,
-					// 	strokeScaleEnabled: false, // Evitar que el borde se escale con el rectángulo	
-					// 	draggable: true
-					// });
-						
-					// konva_layer_elem.add(rect);
-					// konva_transformer.nodes([rect]);
-					// konva_layer_elem.batchDraw();
-
-					// // Añadir la forma al array stdx_shapes
-					// stdx_shapes.push({
-					// 		type: rect.getClassName(),
-					// 		x: rect.x(),
-					// 		y: rect.y(),
-					// 		width: rect.width(),
-					// 		height: rect.height(),
-					// 		fill: rect.fill(),
-					// 		stroke: rect.stroke(),
-					// 		stroke_width: rect.strokeWidth(),
-					// 		shape: rect,
-					// 		shapeIndex: rect.index,
-					// 		info: null
-					// });
-
-					// saveState();
-					
+			arg_shapes.forEach(shape => {
+				// Definir color según el estado
+				if (shape.status === 'reserved') {
+					codeRGB = "rgba(255, 0, 0, 0.50)";
+				} else if (shape.status === 'available') {
+					codeRGB = "rgba(51, 255, 0, 0.50)";
+				} else if (shape.status === 'occupied') {
+					codeRGB = "rgba(255, 0, 0, 0.50)";
+				}
+	
+				let newShape = {
+					type: shape.type,
+					id: shape.id_konva,
+					id_konva: (shape.id_konva == null) ? "shape" + (stdx_shapes.length + 1) : shape.id_konva,
+					x: parseFloat(shape.x),
+					y: parseFloat(shape.y),
+					width: parseInt(shape.width),
+					height: parseInt(shape.height),
+					color: codeRGB,
+					fill: codeRGB,
+					stroke: "black",
+					stroke_width: 2,
+					shape: null,
+					shapeIndex: null,
+					info: null,
+					title: shape.title || "Figura " + (stdx_shapes.length + 1)  // Título predeterminado
+				};
+	
+				// Dibujar el rectángulo
+				let lrect = fnDibujarNuevoRectangulo(newShape);
+				newShape.shape = lrect;
+				newShape.shapeIndex = lrect.index;
+				newShape.info = null;
+	
+				// Añadir la forma al array
+				stdx_shapes.push(newShape);
+	
+				// Crear el texto
+				let titleText = new Konva.Text({
+					text: shape.numero,
+					fontSize: Math.max(10, newShape.height * 0.15),  // Ajustar tamaño del texto al 15% de la figura
+					fontFamily: 'Arial',
+					fill: 'white',
+					align: 'center'
 				});
+	
+				// Medir tamaño del texto
+				let textWidth = titleText.measureSize(shape.numero).width;
+				let textHeight = titleText.measureSize(shape.numero).height;
+	
+				// Centrar el texto en la figura
+				titleText.position({
+					x: newShape.x + (newShape.width / 2) - (textWidth / 2),
+					y: newShape.y + (newShape.height / 2) - (textHeight / 2) + (newShape.height * 0.10)  // Espacio para el logo arriba
+				});
+	
+				// Agregar la figura y el título al layer
+				konva_layer_elem.add(lrect);
+				konva_layer_elem.add(titleText);
+	
+				// Si la figura está reservada, agregar el logo
+				if (shape.status === 'reserved') {
+					let logoImage = new Image();
+					logoImage.src = "/mapa/files/uploads/" + shape.logo;
 
-				saveState();
-
-
-				lsigue_buscando = false;
-
-
-			// } else{
-			// 	console.log('No hay posición válida aún');
-			// }
+					logoImage.onload = function () {
+						// Calcular tamaño del logo proporcionalmente a la figura
+						let logoWidth = Math.max(20, newShape.width * 0.3);  // 30% del ancho de la figura, mínimo 20px
+						let logoHeight = Math.max(15, newShape.height * 0.2); // 20% de la altura de la figura, mínimo 15px
+	
+						let logo = new Konva.Image({
+							image: logoImage,
+							width: logoWidth,
+							height: logoHeight,
+							x: newShape.x + (newShape.width / 2) - (logoWidth / 2),  // Centrar en X
+							y: titleText.y() - logoHeight - 5  // Justo arriba del texto con 5px de margen
+						});
+	
+						konva_layer_elem.add(logo);
+						konva_layer_elem.batchDraw();  // Redibujar la capa
+					};
+				}
+			});
+	
+			saveState();
+			lsigue_buscando = false;
 		}
-
-		// const pos = konva_stage.getPointerPosition();
-		// if (!pos) {
-		// 	console.log('No hay posición válida');
-		// 	return; // Verificar si hay una posición válida
-		// }
-
-		
-
-
-		
-			
-		// Save state for undo/redo
-
 	}
+	
+	function editarFigura() {
+		var selectedNode = konva_transformer.nodes()[0]; // Obtener la figura seleccionada
+		var figuraId = selectedNode.attrs.id;
+		console.log("ID de la figura seleccionada:", figuraId);
+	
+		// Realizar la solicitud AJAX para obtener los datos de la figura
+		$.ajax({
+			url: '../../Mapa/obtenerFiguraPorIdKonva/' + figuraId,
+			type: 'GET',
+			dataType: 'json',
+			success: function(data) {
+				// Mostrar la información de la figura en un formulario de SweetAlert
+				Swal.fire({
+					title: 'Editar Figura',
+					html: `
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Nombre de la empresa</label>
+						<input type="text" id="editempresa" class="form-control" value="${data.nombreEmpresa}">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Correo de contacto</label>
+						<input type="email" id="editcorreo" class="form-control" value="${data.correo}">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Numero de stand</label>
+						<input type="number" id="editstand" class="form-control" value="${data.numero}">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Nombre completo del representante</label>
+						<input type="text" id="editnombre" class="form-control" value="${data.nombreRepresentante}">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Telefóno</label>
+						<input type="number" id="edittel" class="form-control" value="${data.tel}">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Pagina Web</label>
+						<input type="text" id="editpagina" class="form-control" value="${data.paginaweb}">
+					</div>
+					<input type="file" id="editlogo" class="swal2-file">
+					`,
+					showCancelButton: true,
+					confirmButtonText: 'Guardar',
+					cancelButtonText: 'Cancelar',
+					preConfirm: () => {
+						// Obtener los valores del formulario
+						var nombre = $('#editempresa').val();
+						var correo = $('#editcorreo').val();
+						var stand = $('#editstand').val();
+						var figuraNombre = $('#editnombre').val();
+						var tel = $('#edittel').val();
+						var pagina = $('#editpagina').val();
+						var editlogo = document.getElementById('editlogo'); // Suponiendo que el input de archivo tiene el id 'logo'
 
+						// Crear el objeto FormData
+						const formData = new FormData();
+						formData.append("id_konva", figuraId);  // Asumiendo que 'shape' es el objeto de Konva
+						formData.append("id_evento", id_evento);    // El id_evento debe estar disponible en el scope
+						formData.append("stand", stand);
+						formData.append("empresa", nombre);
+						formData.append("pagina", pagina);
+						formData.append("correo", correo);
+						formData.append("nombre", figuraNombre);
+						formData.append("tel", tel);
+
+						// Verificar si el logo ha sido seleccionado
+						if (editlogo.files.length > 0) {
+							formData.append("logo", editlogo.files[0]); // Agregar el archivo de logo al FormData
+						}
+
+						// Realizar la solicitud AJAX para actualizar la figura
+						$.ajax({
+							url: '../../Mapa/actualizarFigura/',  // URL del controlador para manejar la actualización
+							type: 'POST',
+							data: formData,
+							processData: false,  // Impide que jQuery intente procesar los datos
+							contentType: false,  // Permite enviar archivos sin necesidad de especificar el tipo de contenido
+							success: function(response) {
+								if (response.success) {
+									Swal.fire({
+										icon: 'success',
+										title: 'Guardado exitoso',
+										text: 'Información actualizada correctamente',
+										toast: true,
+										position: 'top-end',
+										showConfirmButton: false,
+										timer: 3000,
+										timerProgressBar: true
+									});
+								} else {
+									Swal.fire('Error', 'No se pudo actualizar la figura.', 'error');
+								}
+							},
+							error: function(xhr, status, error) {
+								Swal.fire('Error', 'Hubo un problema al actualizar la figura.', 'error');
+							}
+						});
+					}
+				});
+			},
+			error: function(xhr, status, error) {
+				console.error('Error al obtener los datos de la figura:', error);
+			}
+		});
+	}
+	
 	// funcion para que konvajs resetee el scale a x: 1 y y: 1
 	function resetScale() {	
 		konva_stage.scale({ x: 1, y: 1 });
@@ -711,6 +883,8 @@ document.addEventListener('DOMContentLoaded', function () {
 				timer: 3000,
 				timerProgressBar: true
 			});
+			        // Recargar las figuras en el lienzo después de guardar
+					//inicializarKonva();
 		})
 		.catch(error => {
 			console.error("Error al guardar:", error);
@@ -727,6 +901,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 		});
 	};
+	
 	
 	const cargarFiguras = () => {	
 		fetch(lurl_carga + id_evento, {

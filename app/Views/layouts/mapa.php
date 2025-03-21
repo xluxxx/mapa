@@ -61,27 +61,57 @@
 
 			<!-- Dashboard de figuras con iconos y nombres -->
 			<div id="dashboard">
-					<div class="rectangle btn btn-xs btn-info" onclick="agregarRectangulo()">
-							<i class="fas fa-square"></i> Rectángulo
+					<div class="rectangle btn btn-info" onclick="agregarRectangulo()">
+							<i class="fas fa-add"></i> Agregar Figura
 					</div>
 					<!--<div class="circle btn btn-xs btn-info" onclick="addCircle()">
 							<i class="fas fa-circle"></i> Círculo
 					</div>-->
-					<div class="delete btn btn-xs btn-info" onclick="deleteSelectedShape()">
-							<i class="fas fa-trash"></i> Eliminar
-					</div>
-					<div class="save btn btn-xs btn-info" onclick="guardarFiguras()">
+					<button type="button" class="delete btn btn-danger" onclick="deleteSelectedShape()" disabled="disabled">
+							<i class="fas fa-trash"></i> Eliminar Figura
+					</button>
+					<button type="button" class="editFigura btn btn-warning" onclick="editarFigura()" disabled="disabled">
+							<i class="fas fa-edit"></i> Editar Figura
+					</button>
+					<button type="button" class="save btn btn-success" onclick="guardarFiguras()">
 							<i class="fas fa-save"></i> Guardar Mapa
-					</div>
+					</button>
+
 			</div>
 
 			<!-- Contenedor del lienzo -->
 			<div id="container" style="border: solid 1px black; width: 1200px; height: 800px;"></div>
 
+			<!-- Modal de Empresa -->
+				<div class="modal fade" id="modalEmpresa" tabindex="-1" aria-labelledby="modalEmpresaLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalEmpresaLabel">Detalles de la Empresa</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="text-center">
+						<img id="empresaLogo" src="" alt="Logo de la Empresa" style="max-width: 150px; display: none;">
+						</div>
+						<p><strong>Nombre:</strong> <span id="empresaNombre"></span></p>
+						<p><strong>Correo:</strong> <span id="empresaCorreo"></span></p>
+						<p><strong>Página Web:</strong> <span id="empresaPagina"></span></p>
+						<p><strong>Teléfono:</strong> <span id="empresaTel"></span></p>
+						<p><strong>Stand:</strong> <span id="empresaStand"></span></p>
+						<p><strong>Representante:</strong> <span id="empresaRepresentante"></span></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+					</div>
+					</div>
+				</div>
+				</div>
+
 		<?= $this->endSection(); ?>
 
 		<?= $this->section('customJS'); ?>
-		<script src="<?= base_url('assets/js/mapa_editor.js?v=1.8'); ?>" 
+		<script src="<?= base_url('assets/js/mapa_editor.js?v=1.11'); ?>" 
 				evento="<?= $evento['id']; ?>" 
 				imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
 				url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"
