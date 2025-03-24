@@ -76,12 +76,23 @@
 					<button type="button" class="save btn btn-success" onclick="guardarFiguras()">
 							<i class="fas fa-save"></i> Guardar Mapa
 					</button>
-
 			</div>
 
 			<!-- Contenedor del lienzo -->
-			<div id="container" style="border: solid 1px black; width: 1200px; height: 800px;"></div>
-
+			 <div>
+			<div id="container" style="border: solid 1px black; width: 1200px; height: 800px; position: relative;"></div>
+			    <!-- Buscador y lista de stands -->
+				<div id="searchContainer" style="position: absolute; top: 20%; left: 18%; width: 250px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); z-index: 20;">
+					<input type="text" id="searchInput" placeholder="Buscar empresa, booth o categoría" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
+					<ul id="searchResults" style="list-style: none; padding: 0; margin: 10px 0; max-height: 300px; overflow-y: auto;"></ul>
+				</div>
+				<!-- Controles dentro del contenedor del lienzo -->
+				<div id="controls" style="position: absolute; top: 20%; right: 20%; display: flex; flex-direction: column; gap: 5px; z-index: 10;">
+					<button id="zoomIn" style="width: 40px; height: 40px; border-radius: 50%; background: white; border: 1px solid gray; cursor: pointer;">+</button>
+					<button id="zoomOut" style="width: 40px; height: 40px; border-radius: 50%; background: white; border: 1px solid gray; cursor: pointer;">-</button>
+					<button id="reset" style="width: 40px; height: 40px; border-radius: 50%; background: white; border: 1px solid gray; cursor: pointer;">🔄</button>
+				</div>
+				</div>
 			<!-- Modal de Empresa -->
 				<div class="modal fade" id="modalEmpresa" tabindex="-1" aria-labelledby="modalEmpresaLabel" aria-hidden="true">
 				<div class="modal-dialog">
@@ -111,7 +122,7 @@
 		<?= $this->endSection(); ?>
 
 		<?= $this->section('customJS'); ?>
-		<script src="<?= base_url('assets/js/mapa_editor.js?v=1.11'); ?>" 
+		<script src="<?= base_url('assets/js/mapa_editor.js?v=1.14'); ?>" 
 				evento="<?= $evento['id']; ?>" 
 				imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
 				url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"

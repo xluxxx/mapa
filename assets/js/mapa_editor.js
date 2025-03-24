@@ -42,6 +42,126 @@ document.addEventListener('DOMContentLoaded', function () {
 	// cargarFiguras();
 });
 
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const iframe = document.getElementById('mapFrame');
+	
+	console.log('stdx_shape', stdx_shapes);
+
+	// Evento para actualizar la lista de resultados en tiempo real
+	searchInput.addEventListener('input', function () {
+		const query = searchInput.value.toLowerCase();
+		searchResults.innerHTML = ''; // Limpiar resultados anteriores
+
+		// Filtrar stands según la búsqueda (usando stdx_shapes de la función cargarFigurasKonva)
+		const filteredStands = stdx_shapes.filter(stand => 
+			stand.empresa.toLowerCase().includes(query) // Buscar por nombre o título
+		);
+
+		// Generar la lista de resultados
+		filteredStands.forEach(stand => {
+			const li = document.createElement('li');
+			li.textContent = `${stand.empresa} (Stand: ${stand.numeroStand})`;
+			li.style.padding = "8px";
+			li.style.cursor = "pointer";
+			li.style.borderBottom = "1px solid #eee";
+			
+			// Evento al hacer clic en un resultado
+			li.addEventListener('click', function () {
+				seleccionarYResaltarFigura(stand.id_konva); // Resaltar y centrar en el mapa
+			});
+
+			searchResults.appendChild(li);
+		});
+	});
+
+
+    // Controles de zoom
+    document.getElementById('zoomIn').addEventListener('click', function () {
+        iframe.style.transform = `scale(${getNewScale(1.2)})`;
+    });
+
+    document.getElementById('zoomOut').addEventListener('click', function () {
+        iframe.style.transform = `scale(${getNewScale(1 / 1.2)})`;
+    });
+
+    document.getElementById('reset').addEventListener('click', function () {
+        iframe.style.transform = 'scale(1)';
+    });
+
+	
+   // Variable para almacenar la última figura seleccionada
+   let figuraSeleccionada = null;
+
+   // Función para actualizar la lista de búsqueda con eventos de selección
+   function actualizarListaBusqueda(data) {
+	   searchResults.innerHTML = ''; // Limpiar lista anterior
+	   console.log(data);
+
+	   data.forEach(stand => {
+		   let li = document.createElement('li');
+		   li.textContent = `${stand.nombreEmpresa} (Stand: ${stand.numero})`;
+		   li.style.padding = "8px";
+		   li.style.cursor = "pointer";
+		   li.style.borderBottom = "1px solid #eee";
+
+		   li.addEventListener('click', function () {
+			   seleccionarYResaltarFigura(stand.id_konva);
+		   });
+
+		   searchResults.appendChild(li);
+	   });
+   }
+
+   // Función para centrar y resaltar una figura en el mapa
+   function seleccionarYResaltarFigura(id_konva) {
+	   let stand = stdx_shapes.find(s => s.id_konva === id_konva);
+	   if (!stand) return;
+
+	   let stage = konva_layer_elem.getStage();
+
+	   // Si hay una figura seleccionada previamente, quitar el resaltado
+	   if (figuraSeleccionada) {
+		   figuraSeleccionada.shape.stroke('black');  // Restaurar borde negro
+		   figuraSeleccionada.shape.strokeWidth(2);
+	   }
+
+	   // Resaltar la nueva figura seleccionada
+	   stand.shape.stroke('blue');
+	   stand.shape.strokeWidth(4);
+	   figuraSeleccionada = stand;
+
+	   // Animación para centrar la vista en la figura seleccionada
+	   stage.to({
+		   x: -stand.x + stage.width() / 2 - stand.width / 2,
+		   y: -stand.y + stage.height() / 2 - stand.height / 2,
+		   scaleX: 1.5,
+		   scaleY: 1.5,
+		   duration: 0.5
+	   });
+
+	   konva_layer_elem.batchDraw();  // Redibujar la capa
+   }
+
+   // Modificación de cargarFiguras para actualizar la lista de búsqueda después de cargar
+   const cargarFiguras = () => {	
+	   fetch(lurl_carga + id_evento, {
+		   method: 'POST',
+		   headers: { 'Content-Type': 'application/json' }
+	   })
+	   .then(response => response.json())
+	   .then(data => { 
+		   cargarFigurasKonva(data);
+		   actualizarListaBusqueda(data);  // Actualizar la lista de búsqueda después de cargar los stands
+		   console.log("Cargado de BD:", data);
+	   })
+	   .catch(error => console.error("Error al cargar los stands: ", error));
+   };
+    function getNewScale(factor) {
+        let currentScale = parseFloat(iframe.style.transform.replace('scale(', '').replace(')', '')) || 1;
+        return Math.max(0.5, Math.min(2, currentScale * factor)); // Limita el zoom entre 0.5x y 2x
+    }
+
 	function inicializarKonva(afnCallback) {
 
 		konva_stage = new Konva.Stage({
@@ -110,7 +230,18 @@ document.addEventListener('DOMContentLoaded', function () {
 				konva_stage.position(newPos);
 				konva_stage.batchDraw(); // Redibujar el escenario
 		});
-
+		// ✅ Agregar un evento al `stage` para deseleccionar si se hace clic fuera de una figura
+		konva_layer_elem.getStage().on('click', function (e) {
+			// Si el clic no fue en una figura, quitar la selección
+			if (!e.target || !e.target.getClassName || e.target.getClassName() !== 'Rect') {
+				if (figuraSeleccionada) {
+					figuraSeleccionada.shape.stroke('black');  // Restaurar borde negro
+					figuraSeleccionada.shape.strokeWidth(2);
+					figuraSeleccionada = null;
+					konva_layer_elem.batchDraw();  // Redibujar
+				}
+			}
+		});
 		// Cargar la imagen de fondo
 		var image = new Image();
 		image.src = limagen; // Ruta de la imagen
@@ -158,6 +289,31 @@ document.addEventListener('DOMContentLoaded', function () {
 				updateShapeInfo(shape); // Llamar la función de actualización (si existe)
 			}
 		});
+
+		// Funciones de zoom y reset
+		function zoom(scale) {
+			konva_stage.scale({ x: scale, y: scale });
+			konva_stage.batchDraw();
+		}
+
+		function resetView() {
+			konva_stage.scale({ x: 1, y: 1 });
+			konva_stage.position({ x: 0, y: 0 });
+			konva_stage.batchDraw();
+		}
+	
+		// Eventos de los botones
+		document.getElementById('zoomIn').addEventListener('click', function () {
+			let currentScale = konva_stage.scaleX();
+			zoom(currentScale * 1.2); // Aumentar el zoom
+		});
+	
+		document.getElementById('zoomOut').addEventListener('click', function () {
+			let currentScale = konva_stage.scaleX();
+			zoom(currentScale / 1.2); // Reducir el zoom
+		});
+	
+		document.getElementById('reset').addEventListener('click', resetView);
 
 
 		konva_layer_elem.on('dblclick dbltap', function (e) {
@@ -293,8 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		}, 250);
 	}
-
-			
+	
 	// Función para hacer la petición AJAX a CodeIgniter 4
 	function verificarStandRegistrado(idkonva) {
 		return new Promise((resolve, reject) => {
@@ -350,7 +505,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 		});
 	}
-		
 	/**
 	 * Funcion para cargar las figuras desde la base de datos
 	 * y dibujarlas en el escenario konva
@@ -397,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 	
 	function cargarFigurasKonva(arg_shapes) {
-		//console.log('Cargando figuras:', arg_shapes);
+		console.log('Cargando figuras:', arg_shapes);
 	
 		let lsigue_buscando = true;
 		codeRGB = false;
@@ -428,6 +582,8 @@ document.addEventListener('DOMContentLoaded', function () {
 					shape: null,
 					shapeIndex: null,
 					info: null,
+					empresa: shape.nombreEmpresa,
+					numeroStand: shape.numero,
 					title: shape.title || "Figura " + (stdx_shapes.length + 1)  // Título predeterminado
 				};
 	
@@ -951,23 +1107,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			});
 		});
 	};
-	
-	
-	const cargarFiguras = () => {	
-		fetch(lurl_carga + id_evento, {
-			method: 'POST',
-			headers: {
-
-				'Content-Type': 'application/json'
-			}
-		})
-		.then(response => response.json())
-		.then(data => { 
-			cargarFigurasKonva(data);
-			console.log("Cargado de BD:", data) 
-		})
-		.catch(error => console.error("Error al cargar los stands:  ", error));
-	};
 
 	function saveState() {
 			// Remove any future states if we're in the middle of the historial
@@ -1092,8 +1231,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 	}
 
-
-		// JSON variable for type dropdown
+	// JSON variable for type dropdown
 	let _sts_typeOptions = [
 		{ value: "Rect", label: "Rectangle" },
 		{ value: "Circle", label: "Circle" },

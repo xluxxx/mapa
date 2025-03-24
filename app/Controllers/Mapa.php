@@ -70,7 +70,6 @@ class Mapa extends BaseController
         ]);
     }
     
-    
     public function obtenerEmpresa()
     {
         $id_konva = $this->request->getPost('id_konva');
@@ -119,15 +118,7 @@ class Mapa extends BaseController
     
         // Obtener el archivo logo, si existe
         $logo = $this->request->getFile('logo');
-    
-        // Comprobar si se ha subido un archivo logo
-        if ($logo && $logo->isValid()) {
-            // Mover el archivo logo a la carpeta uploads/logos
-            $newFileName = $logo->getRandomName();
-            $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newFileName);
-        }
-    
-        // Preparar los datos a actualizar
+
         $data = [
             'numero' => $stand,
             'nombreEmpresa' => $empresa,
@@ -135,10 +126,18 @@ class Mapa extends BaseController
             'correo' => $correo,
             'nombreRepresentante' => $nombre,
             'tel' => $tel,
-            'logo' => $newFileName,
             'status' => 2
-              // Se actualiza el logo solo si se subió uno nuevo
         ];
+
+        // Comprobar si se ha subido un archivo logo
+        if ($logo && $logo->isValid()) {
+            // Mover el archivo logo a la carpeta uploads/logos
+            $newFileName = $logo->getRandomName();
+            $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newFileName);
+            
+            // Agregar el logo solo si se subió uno nuevo
+            $data['logo'] = $newFileName;
+        }
     
         // Realizar la actualización en la base de datos
         $updated = $model->where('id_konva', $id_konva)
