@@ -37,28 +37,37 @@ class Mapa extends BaseController
     }
     public function verificarRegistro()
     {
-        $idKonva = $this->request->getPost('id_konva'); // Obtener el ID Konva desde AJAX
-        
-        if (!$idKonva) {
-            return $this->response->setJSON(['success' => false, 'message' => 'ID Konva no recibido']);
+        $idKonva = $this->request->getPost('id_konva');
+        $idEvento = $this->request->getPost('id_evento'); // Asegúrate de enviar esto desde AJAX
+    
+        if (!$idKonva || !$idEvento) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Datos incompletos'
+            ]);
         }
     
         $standModel = new StandsModel();
-        $stand = $standModel->where('id_konva', $idKonva)->first(); // Buscar por id_konva en la BD
+        $stand = $standModel->where('id_konva', $idKonva)
+                           ->where('id_evento', $idEvento)
+                           ->first();
     
         if ($stand) {
-            // Verificar si el stand está registrado y tiene estado "activo"
-    
+            // Verifica si el stand tiene información básica registrada
+            $tieneInfo = !empty($stand['nombreEmpresa']) && !empty($stand['numero']);
+            
             return $this->response->setJSON([
                 'success' => true,
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'success' => false,
-                'registrado' => false,
-                'message' => 'Stand no encontrado'
+                'registrado' => $tieneInfo, // true si tiene info, false si solo existe
+                'data' => $stand // Opcional: enviar datos si necesitas
             ]);
         }
+    
+        return $this->response->setJSON([
+            'success' => false,
+            'registrado' => false,
+            'message' => 'Stand no existe'
+        ]);
     }
     
     

@@ -161,29 +161,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 		konva_layer_elem.on('dblclick dbltap', function (e) {
-			let lstage = e.target.getStage();
-			lstage.setPointersPositions(e);
-		
-			let shape = e.target;
-			console.log('Doble clic en:', shape);
-		
-			if (shape instanceof Konva.Rect || shape instanceof Konva.Circle) {
-				let idkonva = shape.attrs.id; // Obtener ID del stand desde los atributos
-		
-				// Llamar a la función AJAX para verificar si el stand está registrado
-				verificarStandRegistrado(idkonva)
-					.then((registrado) => {
-						console.log(registrado);
-						if (registrado) {
-							verEmpresa(shape); // Abrir modal de empresa
-						} else {
-							abrirFormulario(shape); // Abrir formulario de registro
-						}
-					})
-					.catch((error) => {
-						console.error('Error verificando el stand:', error);
-					});
+			e.evt.preventDefault();
+			
+			const shape = e.target;
+			if (!shape || !(shape instanceof Konva.Rect || shape instanceof Konva.Circle)) {
+				return;
 			}
+		
+			const idkonva = shape.attrs.id;
+			console.log('Doble clic en:', idkonva);
+		
+			// Feedback visual
+			shape.stroke('orange');
+			shape.strokeWidth(3);
+			konva_layer_elem.batchDraw();
+		
+			verificarStandRegistrado(idkonva)
+				.then((registrado) => {
+					// Restaurar apariencia
+					shape.stroke('black');
+					shape.strokeWidth(1);
+					konva_layer_elem.batchDraw();
+		
+					if (registrado === true) {
+						console.log('Stand registrado - mostrando info');
+						verEmpresa(shape);
+					} else if (registrado === false) {
+						console.log('Stand no registrado - mostrando formulario');
+						abrirFormulario(shape);
+					} else {
+						console.error('Respuesta inesperada');
+						Swal.fire('Error', 'No se pudo determinar el estado del stand', 'error');
+					}
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+					shape.stroke('black');
+					shape.strokeWidth(1);
+					konva_layer_elem.batchDraw();
+					Swal.fire('Error', 'Error al verificar el stand', 'error');
+				});
 		});
 
 		// Seleccionar figuras
@@ -282,20 +299,53 @@ document.addEventListener('DOMContentLoaded', function () {
 	function verificarStandRegistrado(idkonva) {
 		return new Promise((resolve, reject) => {
 			$.ajax({
-				url: '../../Mapa/verificarRegistro',  // Ruta del controlador en CodeIgniter 4
+				url: '../../Mapa/verificarRegistro',
 				type: 'POST',
-				data: { id_konva: idkonva },
+				data: { 
+					id_konva: idkonva,
+					id_evento: id_evento // Asegúrate de enviar el ID del evento
+				},
 				dataType: 'json',
 				success: function (response) {
-					if (response.success) {
-						resolve(response.registrado); // Si está registrado, resuelve con `true`
+					if (!response.success) {
+						// Stand no existe en absoluto
+						resolve(false);
+						return;
+					}
+	
+					// Stand existe, ahora verificamos si está registrado (tiene info)
+					if (response.registrado !== undefined) {
+						resolve(response.registrado);
 					} else {
-						resolve(false); // Si no está registrado, resuelve con `false`
+						// Para compatibilidad con versiones anteriores
+						resolve(response.success);
 					}
 				},
 				error: function (xhr, status, error) {
-					console.error('Error en la petición AJAX:', error);
+					console.error('Error verificando stand:', error);
 					reject(error);
+				}
+			});
+		});
+	}
+	
+	// Función alternativa para verificar el registro
+	function verificarRegistroAlternativo(idkonva) {
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				url: '../../Mapa/obtenerEmpresa',
+				type: 'POST',
+				data: {
+					id_konva: idkonva,
+					id_evento: id_evento
+				},
+				dataType: 'json',
+				success: function(response) {
+					// Si obtiene datos de empresa, está registrado
+					resolve(response.success && response.data !== null);
+				},
+				error: function() {
+					resolve(false);
 				}
 			});
 		});
