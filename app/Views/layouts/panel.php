@@ -21,6 +21,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Clave</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Fecha</th>
@@ -40,13 +41,17 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Editar evento</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
             <div class="modal-body">
                 <form id="editarForm">
                     <input type="hidden" id="id" name="id">
+                    <div class="form-group">
+                        <label for="nombre_generico">Clave del evento </label>
+                        <input type="text" class="form-control" id="clave" name="clave">
+                    </div>
                     <div class="form-group">
                         <label for="nombre_generico">Nombre </label>
                         <input type="text" class="form-control" id="nombre" name="nombre">
@@ -122,6 +127,7 @@
             },
             "columns": [
                 { "data": "id" },
+                { "data": "clave" },
                 { "data": "event_name" },
                 { "data": "description" },
                 { "data": "event_date" },
@@ -210,6 +216,7 @@
 
             // Llenar el formulario del modal con los datos
             $('#id').val(data.id);
+            $('#clave').val(data.clave);
             $('#nombre').val(data.event_name);
             $('#description').val(data.description);
             $('#fecha').val(data.event_date);
@@ -223,6 +230,7 @@
         $('#guardarCambios').on('click', function () {
             // Obtener los datos del formulario
             var id = $('#id').val();
+            var clave = $('#clave').val();
             var nombre_evento = $('#nombre').val();
             var descripcion_evento = $('#description').val();
             var fecha_evento = $('#fecha').val();
@@ -252,6 +260,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify({
                     id: id,
+                    clave: clave,
                     nombre: nombre_evento,
                     descripcion: descripcion_evento,
                     fecha: fecha_evento,

@@ -45,6 +45,10 @@
                             <input type="text" name="description" class="form-control" placeholder="Agrega una pequeña descripcion" value="<?= old('description') ?>">
                         </div>
                         <div class="mb-3 col-md-6">
+                            <label class="form-label">clave del evento </label>
+                            <input type="text" name="clave" class="form-control" placeholder="Agrega la clave del evento" value="<?= old('clave') ?>">
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label>Fecha</label>
                             <input type="date" name="event_date" class="form-control" value="<?= old('event_date') ?>">
                         </div>

@@ -3,9 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\EventModel; // Importar el modelo de eventos
+use App\Models\StandsModel;
 use IonAuth\Libraries\IonAuth;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
+
 class Eventos extends BaseController
 {
     protected $ionAuth;
@@ -163,6 +165,8 @@ class Eventos extends BaseController
                     'required' => 'El campo {field} es requerido',
                 ],
             ]
+
+            
         ];
 
         // Validar los datos del formulario con las reglas definidas
@@ -242,6 +246,7 @@ class Eventos extends BaseController
         foreach ($eventos as $evento) {
             $data[] = [
                 "id" => $evento['id'],
+                "clave" => $evento['clave'],
                 "event_name" => $evento['event_name'],
                 "description" => $evento['description'],
                 "event_date" => $evento['event_date'],
@@ -263,6 +268,34 @@ class Eventos extends BaseController
 
         // Retornar los eventos en formato JSON
         return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function verPorClave($clave)
+    {
+        // 1. Buscar solo datos esenciales del evento
+        $evento = (new EventModel())
+            ->select('id, clave, name_file')
+            ->where('clave', $clave)
+            ->first();
+    
+        if (!$evento) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+    
+        // 2. Verificar que exista el archivo del plano
+        $imagenRelativa = 'public/uploads/planos/' . $evento['name_file'];
+        $imagenAbsoluta = FCPATH . $imagenRelativa;
+
+        if (!file_exists($imagenAbsoluta)) {
+            // Debug: Verifica la ruta física
+            die("El archivo no existe en: " . $imagenAbsoluta);
+        }
+        return view('layouts/plano_konva_view', [
+            'evento' => $evento,
+            'imagen_plano' => base_url($imagenRelativa), // URL pública
+            'imagen_path' => $imagenAbsoluta, // Ruta física (para debug)
+            'stands' => (new StandsModel())->where('id_evento', $evento['id'])->findAll()
+        ]);
     }
 
     // Función para eliminar un evento
