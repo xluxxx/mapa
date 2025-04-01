@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchResults = document.getElementById('searchResults');
     const iframe = document.getElementById('mapFrame');
 	
-	console.log('stdx_shape', stdx_shapes);
+	//console.log('stdx_shape', stdx_shapes);
 
 	// Evento para actualizar la lista de resultados en tiempo real
 	searchInput.addEventListener('input', function () {
@@ -711,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Logo</label>
-						<input type="file" id="editlogo" class="form-control">${data.logo  ||''}
+						<input type="file" id="editlogo" class="form-control">
 					</div>
 					`,
 					showCancelButton: true,
@@ -759,21 +759,23 @@ document.addEventListener('DOMContentLoaded', function () {
 					}
 				}).then((result) => {
 					if (result.isConfirmed) {
-						// Limpiar y recargar el canvas
-						konva_layer_elem.destroyChildren();
-						stdx_shapes = [];
-						
+
 						// Obtener figuras actualizadas
 						$.ajax({
 							url: '../../Mapa/buscar_stands/' + id_evento,
 							type: 'GET',
 							success: function(response) {
-								cargarFigurasKonva(response);
+								//cargarFigurasKonva(response);
+								// Mostrar SweetAlert2 Toast de éxito
 								Swal.fire({
 									icon: 'success',
-									title: 'Actualizado',
-									text: 'Los cambios se guardaron correctamente',
-									timer: 2000
+									title: 'Guardado exitoso',
+									text: 'Figura actualizada.',
+									toast: true,
+									position: 'top-end',
+									showConfirmButton: false,
+									timer: 3000,
+									timerProgressBar: true
 								});
 							},
 							error: function() {

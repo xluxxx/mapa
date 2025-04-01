@@ -123,7 +123,7 @@
 		<?= $this->endSection(); ?>
 
 		<?= $this->section('customJS'); ?>
-		<script src="<?= base_url('assets/js/mapa_editor.js?v=1.16'); ?>" 
+		<script src="<?= base_url('assets/js/mapa_editor.js?v=1.17'); ?>" 
 				evento="<?= $evento['id']; ?>" 
 				imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
 				url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"

@@ -67,7 +67,44 @@
         <div class="deznav">
             <div class="deznav-scroll">
 
-						</div>
+        <!--************
+            Sidebar start
+        *************-->
+        <div class="deznav">
+            <div class="deznav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li>
+                        <a onclick="window.location.href='<?= base_url('Eventos/') ?>'">
+                            <i class="fa-solid fa-plus"></i>
+                            <span class="nav-text">Crear evento</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="window.location.href='<?= base_url('Home/') ?>'">
+                            <i class="fa-solid fa-table"></i>
+                            <span class="nav-text">Ver eventos</span>
+                        </a>
+                    </li>
+                    <li>
+                    <a onclick="window.location.href='<?= base_url('auth/logout') ?>'">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="nav-text">Cerrar sesión</span>
+                    </a>
+                    </li>
+                </ul>
+
+                <div class="copyright">
+                    <p><strong>SERVICIOS INTEGRALES DE EXPOSICIONES SA DE CV.</strong> más de 30 años de experiencia en
+                        el mercado.</p>
+                    <p>Made with <span class="heart"></span> by Lu</p>
+                </div>
+            </div>
+        </div>
+
+        <!--************
+            Sidebar end
+        *************-->
+			</div>
         </div>
         <!--************
             Sidebar end
