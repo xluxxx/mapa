@@ -17,8 +17,9 @@ class Mapa extends BaseController
         $this->ionAuth = new IonAuth(); // Instancia de IonAuth
     }
 
-    public function obtenerFiguraPorIdKonva($konva)
+    public function obtenerFiguraPorIdKonva($konva, $evento)
     {
+
         // Validar que el nombre no esté vacío
         if (empty($konva)) {
             return $this->response->setJSON(['error' => 'Id Konva no válido'], 400); // 400 Bad Request
@@ -26,7 +27,7 @@ class Mapa extends BaseController
     
         // Consultar si el nombre existe en la base de datos
         $model = new StandsModel();
-        $figura = $model->where('id_konva', $konva)->first();  // Buscar por nombre en la base de datos
+        $figura = $model->where('id_evento', $evento)->where('id_konva', $konva)->first();  // Buscar por nombre en la base de datos
     
         if (!$figura) {
             return $this->response->setJSON(['error' => 'Figura no encontrada'], 404); // 404 Not Found
@@ -91,70 +92,63 @@ class Mapa extends BaseController
 
     public function actualizarFigura()
     {
-        // Obtener los valores de los campos del formulario
-        $id_konva = $this->request->getPost('id_konva');
-        $id_evento = $this->request->getPost('id_evento');
-        $stand = $this->request->getPost('stand');
-        $empresa = $this->request->getPost('empresa');
-        $pagina = $this->request->getPost('pagina');
-        $correo = $this->request->getPost('correo');
-        $nombre = $this->request->getPost('nombre');
-        $tel = $this->request->getPost('tel');
-    
-        // Inicializar el modelo
-        $model = new StandsModel();
-    
-        // Verificar si el registro con id_konva e id_evento existe
-        $registroExistente = $model->where('id_konva', $id_konva)
-                                   ->where('id_evento', $id_evento)
-                                   ->first();
-    
-        if (!$registroExistente) {
-            return $this->response->setJSON([
-                'success' => false,
-                'error' => 'No se encontró un registro con el ID proporcionado.'
-            ]);
+        // Validar que todos los campos requeridos estén presentes
+        $required = ['id_konva', 'id_evento', 'stand', 'empresa', 'status'];
+        foreach ($required as $field) {
+            if (empty($this->request->getPost($field))) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'error' => "El campo $field es requerido"
+                ]);
+            }
         }
-    
-        // Obtener el archivo logo, si existe
-        $logo = $this->request->getFile('logo');
 
+        $model = new StandsModel();
+        
+        // Preparar datos para actualización
         $data = [
-            'numero' => $stand,
-            'nombreEmpresa' => $empresa,
-            'paginaweb' => $pagina,
-            'correo' => $correo,
-            'nombreRepresentante' => $nombre,
-            'tel' => $tel,
-            'status' => 2
+            'numero' => $this->request->getPost('stand'),
+            'nombreEmpresa' => $this->request->getPost('empresa'),
+            'paginaweb' => $this->request->getPost('pagina'),
+            'correo' => $this->request->getPost('correo'),
+            'nombreRepresentante' => $this->request->getPost('nombre'),
+            'tel' => $this->request->getPost('tel'),
+            'descripcion' => $this->request->getPost('descripcion'),
+            'status' => $this->request->getPost('status') // Asegurar que el estado se guarda correctamente
         ];
 
-        // Comprobar si se ha subido un archivo logo
+        // Manejar el logo si se subió uno nuevo
+        $logo = $this->request->getFile('logo');
         if ($logo && $logo->isValid()) {
-            // Mover el archivo logo a la carpeta uploads/logos
-            $newFileName = $logo->getRandomName();
-            $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newFileName);
-            
-            // Agregar el logo solo si se subió uno nuevo
-            $data['logo'] = $newFileName;
+            $newName = $logo->getRandomName();
+            $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newName);
+            $data['logo'] = $newName;
         }
-    
-        // Realizar la actualización en la base de datos
-        $updated = $model->where('id_konva', $id_konva)
-                         ->where('id_evento', $id_evento)
-                         ->set($data)
-                         ->update();
-    
-        // Retornar la respuesta
+
+        // Actualizar el registro
+        $updated = $model->where('id_konva', $this->request->getPost('id_konva'))
+                        ->where('id_evento', $this->request->getPost('id_evento'))
+                        ->set($data)
+                        ->update();
+
         if ($updated) {
-            return $this->response->setJSON(['success' => true]);
-        } else {
+            // Devolver los datos actualizados
+            $updatedData = $model->where('id_konva', $this->request->getPost('id_konva'))
+                                ->where('id_evento', $this->request->getPost('id_evento'))
+                                ->first();
+            
             return $this->response->setJSON([
-                'success' => false,
-                'error' => 'No se pudo actualizar la figura.'
+                'success' => true,
+                'data' => $updatedData
             ]);
         }
+
+        return $this->response->setJSON([
+            'success' => false,
+            'error' => 'No se pudo actualizar la figura'
+        ]);
     }
+
     
     public function index(): string
     {

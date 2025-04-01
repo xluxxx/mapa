@@ -502,10 +502,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	 * @param {Array} shapes - Arreglo de figuras a cargar
 	 */
 	const verEmpresa = (shape) => {
-
 		var id_konva = shape.attrs.id; // Obtener el ID de la figura seleccionada
 		var id_evento = lid_evento; // Asegúrate de definir esta variable con el evento actual
-
+	
 		// Realizar una petición AJAX para obtener los datos de la empresa
 		$.ajax({
 			url: '../../Mapa/obtenerEmpresa', // Ruta en el backend
@@ -521,14 +520,15 @@ document.addEventListener('DOMContentLoaded', function () {
 					$('#modalEmpresa #empresaTel').text(response.data.tel);
 					$('#modalEmpresa #empresaStand').text(response.data.numero);
 					$('#modalEmpresa #empresaRepresentante').text(response.data.nombreRepresentante);
-	
+					$('#modalEmpresa #empresaDescripcion').text(response.data.descripcion);
+		
 					// Si tiene un logo, mostrarlo
 					if (response.data.logo) {
 						$('#modalEmpresa #empresaLogo').attr('src', '/mapa/files/uploads/'+response.data.logo).show();
 					} else {
-						$('#modalEmpresa #empresaLogo').hide();
+						$('#modalEmpresa #empresaLogo').hide(); // Corregido el ID aquí
 					}
-	
+		
 					// Abrir el modal
 					$('#modalEmpresa').modal('show');
 				} else {
@@ -678,6 +678,10 @@ document.addEventListener('DOMContentLoaded', function () {
 						<label class="form-label">Pagina Web</label>
 						<input type="text" id="editpagina" class="form-control" value="${data.paginaweb}">
 					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Descripción</label>
+						<input type="text" id="editdescripcion" class="form-control" value="${data.descripcion}">
+					</div>
 					<input type="file" id="editlogo" class="swal2-file">
 					`,
 					showCancelButton: true,
@@ -691,7 +695,9 @@ document.addEventListener('DOMContentLoaded', function () {
 						var figuraNombre = $('#editnombre').val();
 						var tel = $('#edittel').val();
 						var pagina = $('#editpagina').val();
+						var descripcion = $('#editdescripcion').val();
 						var editlogo = document.getElementById('editlogo'); // Suponiendo que el input de archivo tiene el id 'logo'
+
 
 						// Crear el objeto FormData
 						const formData = new FormData();
@@ -703,6 +709,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						formData.append("correo", correo);
 						formData.append("nombre", figuraNombre);
 						formData.append("tel", tel);
+						formData.append("descripcion", descripcion);
 
 						// Verificar si el logo ha sido seleccionado
 						if (editlogo.files.length > 0) {
@@ -970,6 +977,10 @@ document.addEventListener('DOMContentLoaded', function () {
 						<label class="form-label">Pagina Web</label>
 						<input type="text" id="pagina" class="form-control">
 					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Descripción</label>
+						<textarea id="descripcion" class="form-control" rows="3"></textarea>
+					</div>
 					<input type="file" id="logo" class="swal2-file">
 			`,
 			showCancelButton: true,
@@ -982,6 +993,8 @@ document.addEventListener('DOMContentLoaded', function () {
 				const correo = document.getElementById("correo").value;
 				const nombre = document.getElementById("nombre").value;
 				const tel = document.getElementById("tel").value;
+				const descripcion = document.getElementById("descripcion").value;
+
 
 	
 				if (!stand || !empresa || !pagina) {
@@ -998,6 +1011,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				formData.append("correo", correo);
 				formData.append("nombre", nombre);
 				formData.append("tel", tel);
+				formData.append("descripcion", descripcion);
 
 				if (logo.files.length > 0) {
 					formData.append("logo", logo.files[0]);
@@ -1379,6 +1393,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			_sts_setFormValue('_sts_numero', data.numero);
 			_sts_setFormValue('_sts_status', data.status);
 			_sts_setFormValue('_sts_contacto', data.contacto);
+			_sts_setFormValue('_sts_descripcion', data.descripcion);
 			
 			// Toggle fields based on type
 			_sts_toggleFieldsBasedOnType();
@@ -1478,6 +1493,15 @@ document.addEventListener('DOMContentLoaded', function () {
 					_sts_nombre.classList.add('is-valid');
 			}
 			
+			// Validate nombre (required, max 200 chars)
+			const _sts_descripcion = document.getElementById('_sts_descripcion');
+			if (!_sts_descripcion.value.trim() || _sts_descripcion.value.length > 200) {
+					_sts_descripcion.classList.add('is-invalid');
+					_sts_isValid = false;
+			} else {
+					_sts_descripcion.classList.add('is-valid');
+			}
+			
 			// Validate numero (required, max 200 chars)
 			const _sts_numero = document.getElementById('_sts_numero');
 			if (!_sts_numero.value.trim() || _sts_numero.value.length > 200) {
@@ -1510,6 +1534,7 @@ document.addEventListener('DOMContentLoaded', function () {
 							stroke_width: parseInt(_sts_stroke_width.value),
 							id_evento: parseInt(document.getElementById('_sts_id_evento').value),
 							nombre: _sts_nombre.value.trim(),
+							descripcion: _sts_descripcion.value.trim(),
 							numero: _sts_numero.value.trim(),
 							status: document.getElementById('_sts_status').checked,
 							contacto: _sts_contacto.value.trim()

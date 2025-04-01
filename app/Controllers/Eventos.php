@@ -30,7 +30,8 @@ class Eventos extends BaseController
             'nombre'    => 'required|string',
             'id_evento' => 'required|numeric',
             'id_konva'  => 'required|string',
-            'logo'      => 'is_image[logo]|max_size[logo,2048]'
+            'logo'      => 'is_image[logo]|max_size[logo,2048]',
+            'descripcion'   => 'required|string|max_length[500]'
         ];
     
         if (!$this->validate($rules)) {
@@ -44,6 +45,7 @@ class Eventos extends BaseController
         $correo    = $this->request->getPost('correo');
         $tel       = $this->request->getPost('tel');
         $nombre    = $this->request->getPost('nombre');
+        $descripcion= $this->request->getPost('descripcion');
         $id_evento = $this->request->getPost('id_evento');
         $id_konva  = $this->request->getPost('id_konva');
     
@@ -73,6 +75,7 @@ class Eventos extends BaseController
                 'correo'    => $correo,
                 'tel'       => $tel,
                 'nombreRepresentante' => $nombre,
+                'descripcion'       => $descripcion,
                 'id_konva'  => $id_konva,
                 'status' => 3,
                 'logo' => $newName
@@ -94,6 +97,7 @@ class Eventos extends BaseController
                 'correo'    => $correo,
                 'tel'       => $tel,
                 'nombreRepresentante' => $nombre,
+                'descripcion'       => $descripcion,
                 'id_evento' => $id_evento,
                 'id_konva'  => $id_konva,
                 'status' => 2,
@@ -141,14 +145,6 @@ class Eventos extends BaseController
                 'errors' => [
                     'required' => 'El campo {field} es requerido',
                     'min_length' => 'El campo {field} debe tener más de 3 caracteres',
-                ],
-            ],
-            'description' => [
-                'label' => 'description',
-                'rules' => 'required|min_length[5]',
-                'errors' => [
-                    'required' => 'El campo {field} es requerido',
-                    'min_length' => 'El campo {field} debe tener más de 5 caracteres',
                 ],
             ],
             'event_date' => [

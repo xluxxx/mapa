@@ -511,10 +511,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	 * @param {Array} shapes - Arreglo de figuras a cargar
 	 */
 	const verEmpresa = (shape) => {
-
 		var id_konva = shape.attrs.id; // Obtener el ID de la figura seleccionada
 		var id_evento = lid_evento; // Asegúrate de definir esta variable con el evento actual
-
+	
 		// Realizar una petición AJAX para obtener los datos de la empresa
 		$.ajax({
 			url: '../../Mapa/obtenerEmpresa', // Ruta en el backend
@@ -530,14 +529,15 @@ document.addEventListener('DOMContentLoaded', function () {
 					$('#modalEmpresa #empresaTel').text(response.data.tel);
 					$('#modalEmpresa #empresaStand').text(response.data.numero);
 					$('#modalEmpresa #empresaRepresentante').text(response.data.nombreRepresentante);
-	
+					$('#modalEmpresa #empresaDescripcion').text(response.data.descripcion); 
+		
 					// Si tiene un logo, mostrarlo
 					if (response.data.logo) {
 						$('#modalEmpresa #empresaLogo').attr('src', '/mapa/files/uploads/'+response.data.logo).show();
 					} else {
-						$('#modalEmpresa #empresaLogo').hide();
+						$('#modalEmpresa #empresaLogo').hide(); // Corregido el ID aquí
 					}
-	
+		
 					// Abrir el modal
 					$('#modalEmpresa').modal('show');
 				} else {
@@ -560,11 +560,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			arg_shapes.forEach(shape => {
 				// Definir color según el estado
 				if (shape.status === 'reserved') {
-					codeRGB = "rgba(255, 0, 0, 0.50)";
+					codeRGB = "rgba(255, 115, 0, 0.49)";
 				} else if (shape.status === 'available') {
 					codeRGB = "rgba(51, 255, 0, 0.50)";
 				} else if (shape.status === 'occupied') {
 					codeRGB = "rgba(255, 0, 0, 0.50)";
+					
 				}
 	
 				let newShape = {
@@ -620,7 +621,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				konva_layer_elem.add(titleText);
 	
 				// Si la figura está reservada, agregar el logo
-				if (shape.status === 'reserved') {
+				if (shape.status === 'occupied') {
 					let logoImage = new Image();
 					logoImage.src = "/mapa/files/uploads/" + shape.logo;
 
@@ -647,109 +648,145 @@ document.addEventListener('DOMContentLoaded', function () {
 			lsigue_buscando = false;
 		}
 	}
-	
+
 	function editarFigura() {
-		var selectedNode = konva_transformer.nodes()[0]; // Obtener la figura seleccionada
-		var figuraId = selectedNode.attrs.id;
-		console.log("ID de la figura seleccionada:", figuraId);
+		if (konva_transformer.nodes().length === 0) {
+			Swal.fire('Error', 'Por favor selecciona una figura para editar', 'warning');
+			return;
+		}
 	
-		// Realizar la solicitud AJAX para obtener los datos de la figura
+		var selectedNode = konva_transformer.nodes()[0];
+		var figuraId = selectedNode.attrs.id;
+	
 		$.ajax({
-			url: '../../Mapa/obtenerFiguraPorIdKonva/' + figuraId,
+			url: '../../Mapa/obtenerFiguraPorIdKonva/' + figuraId + "/" + id_evento,
 			type: 'GET',
 			dataType: 'json',
 			success: function(data) {
-				// Mostrar la información de la figura en un formulario de SweetAlert
 				Swal.fire({
 					title: 'Editar Figura',
 					html: `
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Nombre de la empresa</label>
-						<input type="text" id="editempresa" class="form-control" value="${data.nombreEmpresa}">
+						<input type="text" id="editempresa" class="form-control" value="${data.nombreEmpresa || ''}">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Correo de contacto</label>
-						<input type="email" id="editcorreo" class="form-control" value="${data.correo}">
+						<input type="email" id="editcorreo" class="form-control" value="${data.correo || ''}">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Numero de stand</label>
-						<input type="number" id="editstand" class="form-control" value="${data.numero}">
+						<input type="number" id="editstand" class="form-control" value="${data.numero || ''}">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Estado del stand</label>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="estadoStand" id="reserved" value="reserved" ${data.status === 'reserved' ? 'checked' : ''}>
+							<label class="form-check-label" for="reserved">
+								Reservado
+							</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="estadoStand" id="occupied" value="occupied" ${data.status === 'occupied' ? 'checked' : ''}>
+							<label class="form-check-label" for="occupied">
+								Ocupado
+							</label>
+						</div>
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Nombre completo del representante</label>
-						<input type="text" id="editnombre" class="form-control" value="${data.nombreRepresentante}">
+						<input type="text" id="editnombre" class="form-control" value="${data.nombreRepresentante || ''}">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Telefóno</label>
-						<input type="number" id="edittel" class="form-control" value="${data.tel}">
+						<input type="number" id="edittel" class="form-control" value="${data.tel || ''}">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Pagina Web</label>
-						<input type="text" id="editpagina" class="form-control" value="${data.paginaweb}">
+						<input type="text" id="editpagina" class="form-control" value="${data.paginaweb || ''}">
 					</div>
-					<input type="file" id="editlogo" class="swal2-file">
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Descripción</label>
+						<textarea id="editdescripcion" class="form-control">${data.descripcion || ''}</textarea>
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Logo</label>
+						<input type="file" id="editlogo" class="form-control">${data.logo  ||''}
+					</div>
 					`,
 					showCancelButton: true,
 					confirmButtonText: 'Guardar',
 					cancelButtonText: 'Cancelar',
+					focusConfirm: false,
 					preConfirm: () => {
-						// Obtener los valores del formulario
-						var nombre = $('#editempresa').val();
-						var correo = $('#editcorreo').val();
-						var stand = $('#editstand').val();
-						var figuraNombre = $('#editnombre').val();
-						var tel = $('#edittel').val();
-						var pagina = $('#editpagina').val();
-						var editlogo = document.getElementById('editlogo'); // Suponiendo que el input de archivo tiene el id 'logo'
-
-						// Crear el objeto FormData
+						const estadoStand = document.querySelector('input[name="estadoStand"]:checked').value;
 						const formData = new FormData();
-						formData.append("id_konva", figuraId);  // Asumiendo que 'shape' es el objeto de Konva
-						formData.append("id_evento", id_evento);    // El id_evento debe estar disponible en el scope
-						formData.append("stand", stand);
-						formData.append("empresa", nombre);
-						formData.append("pagina", pagina);
-						formData.append("correo", correo);
-						formData.append("nombre", figuraNombre);
-						formData.append("tel", tel);
-
-						// Verificar si el logo ha sido seleccionado
-						if (editlogo.files.length > 0) {
-							formData.append("logo", editlogo.files[0]); // Agregar el archivo de logo al FormData
+						
+						// Agregar todos los campos al FormData
+						formData.append("id_konva", figuraId);
+						formData.append("id_evento", id_evento);
+						formData.append("stand", document.getElementById('editstand').value);
+						formData.append("empresa", document.getElementById('editempresa').value);
+						formData.append("pagina", document.getElementById('editpagina').value);
+						formData.append("correo", document.getElementById('editcorreo').value);
+						formData.append("nombre", document.getElementById('editnombre').value);
+						formData.append("tel", document.getElementById('edittel').value);
+						formData.append("descripcion", document.getElementById('editdescripcion').value);
+						formData.append("status", estadoStand);
+						
+						// Manejar el logo
+						const logoInput = document.getElementById('editlogo');
+						if (logoInput.files.length > 0) {
+							formData.append("logo", logoInput.files[0]);
 						}
-
-						// Realizar la solicitud AJAX para actualizar la figura
+	
+						return fetch('../../Mapa/actualizarFigura/', {
+							method: 'POST',
+							body: formData
+						})
+						.then(response => {
+							if (!response.ok) {
+								throw new Error('Error en la respuesta del servidor');
+							}
+							return response.json();
+						})
+						.then(data => {
+							if (!data.success) {
+								throw new Error(data.error || 'Error al actualizar');
+							}
+							return data;
+						});
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// Limpiar y recargar el canvas
+						konva_layer_elem.destroyChildren();
+						stdx_shapes = [];
+						
+						// Obtener figuras actualizadas
 						$.ajax({
-							url: '../../Mapa/actualizarFigura/',  // URL del controlador para manejar la actualización
-							type: 'POST',
-							data: formData,
-							processData: false,  // Impide que jQuery intente procesar los datos
-							contentType: false,  // Permite enviar archivos sin necesidad de especificar el tipo de contenido
+							url: '../../Mapa/buscar_stands/' + id_evento,
+							type: 'GET',
 							success: function(response) {
-								if (response.success) {
-									Swal.fire({
-										icon: 'success',
-										title: 'Guardado exitoso',
-										text: 'Información actualizada correctamente',
-										toast: true,
-										position: 'top-end',
-										showConfirmButton: false,
-										timer: 3000,
-										timerProgressBar: true
-									});
-								} else {
-									Swal.fire('Error', 'No se pudo actualizar la figura.', 'error');
-								}
+								cargarFigurasKonva(response);
+								Swal.fire({
+									icon: 'success',
+									title: 'Actualizado',
+									text: 'Los cambios se guardaron correctamente',
+									timer: 2000
+								});
 							},
-							error: function(xhr, status, error) {
-								Swal.fire('Error', 'Hubo un problema al actualizar la figura.', 'error');
+							error: function() {
+								Swal.fire('Error', 'No se pudieron cargar las figuras actualizadas', 'error');
 							}
 						});
 					}
+				}).catch(error => {
+					Swal.fire('Error', error.message, 'error');
 				});
 			},
-			error: function(xhr, status, error) {
-				console.error('Error al obtener los datos de la figura:', error);
+			error: function(xhr) {
+				Swal.fire('Error', 'No se pudieron cargar los datos de la figura', 'error');
 			}
 		});
 	}
@@ -979,6 +1016,10 @@ document.addEventListener('DOMContentLoaded', function () {
 						<label class="form-label">Pagina Web</label>
 						<input type="text" id="pagina" class="form-control">
 					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Descripción</label>
+						<textarea id="descripcion" class="form-control" rows="3"></textarea>
+					</div>
 					<input type="file" id="logo" class="swal2-file">
 			`,
 			showCancelButton: true,
@@ -991,6 +1032,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				const correo = document.getElementById("correo").value;
 				const nombre = document.getElementById("nombre").value;
 				const tel = document.getElementById("tel").value;
+				const descripcion = document.getElementById("descripcion").value;
 
 	
 				if (!stand || !empresa || !pagina) {
@@ -1007,6 +1049,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				formData.append("correo", correo);
 				formData.append("nombre", nombre);
 				formData.append("tel", tel);
+				formData.append("descripcion", descripcion);
 
 				if (logo.files.length > 0) {
 					formData.append("logo", logo.files[0]);
