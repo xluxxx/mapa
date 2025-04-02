@@ -31,6 +31,7 @@ class Eventos extends BaseController
             'id_evento' => 'required|numeric',
             'id_konva'  => 'required|string',
             'logo'      => 'is_image[logo]|max_size[logo,2048]',
+            'render'      => 'is_image[render]|max_size[render,2048]',
             'descripcion'   => 'required|string|max_length[500]'
         ];
     
@@ -51,13 +52,20 @@ class Eventos extends BaseController
     
         // Manejo de archivo (opcional)
         $logoURL = null;
+        $renderURL = null;
         $logo = $this->request->getFile('logo');
+        $render = $this->request->getFile('render');
+
         if ($logo && $logo->isValid() && !$logo->hasMoved()) {
             $newName = $logo->getRandomName();
             $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newName);
             $logoURL = base_url('uploads/logosEmpresasExpositoras/' . $newName);
         }
-    
+        if ($render && $render->isValid() && !$render->hasMoved()) {
+            $newName = $render->getRandomName();
+            $render->move(WRITEPATH . 'uploads/renders', $newName);
+            $renderURL = base_url('uploads/renders/' . $newName);
+        }
         // Cargar el modelo
         $standModel = new \App\Models\StandsModel();
     
@@ -84,7 +92,9 @@ class Eventos extends BaseController
             if ($logoURL) {
                 $dataUpdate['logo'] = $logoURL;
             }
-    
+            if ($renderURL) {
+                $dataUpdate['render'] = $renderURL;
+            }
             $standModel->update($standExistente['id'], $dataUpdate);
     
             return $this->respond(['message' => 'Registro actualizado con éxito', 'logoURL' => $logoURL], 200);
@@ -108,7 +118,9 @@ class Eventos extends BaseController
             if ($logoURL) {
                 $dataInsert['logo'] = $logoURL;
             }
-    
+            if ($renderURL) {
+                $dataInsert['render'] = $renderURL;
+            }
             $standModel->insert($dataInsert);
     
             return $this->respond(['message' => 'Nuevo registro guardado con éxito', 'logoURL' => $logoURL], 201);

@@ -158,7 +158,7 @@
     <script src="<?= base_url('assets/mophy/vendor/chart.js/Chart.bundle.min.js') ?>"></script>
     <script src="<?= base_url('assets/mophy/js/custom.min.js') ?>"></script>
     <script src="<?= base_url('assets/mophy/js/deznav-init.js'); ?>"></script>
-
+    <script src="<?= base_url('assets/mophy/vendor/vendor/lightgallery/js/lightgallery-all.min.js'); ?>"></script>
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <!-- DataTables JS -->

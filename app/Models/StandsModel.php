@@ -11,7 +11,7 @@ class StandsModel extends Model
     protected $allowedFields = [
         'id', 'type', 'x', 'y', 'width', 'height', 'radius', 'stroke_width',
         'id_evento', 'id_konva', 'numero', 'map_id', 'stand_id', 'nombreEmpresa',
-        'status', 'correo', 'paginaweb', 'tel', 'nombreRepresentante', 'logo','descripcion'
+        'status', 'correo', 'paginaweb', 'tel', 'nombreRepresentante', 'logo','descripcion', 'render'
     ];
     
 }

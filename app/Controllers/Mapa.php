@@ -124,7 +124,13 @@ class Mapa extends BaseController
             $logo->move(WRITEPATH . 'uploads/logosEmpresasExpositoras', $newName);
             $data['logo'] = $newName;
         }
-
+        // Manejar el logo si se subió uno nuevo
+        $render = $this->request->getFile('render');
+        if ($render && $render->isValid()) {
+            $newName = $render->getRandomName();
+            $render->move(WRITEPATH . 'uploads/renders', $newName);
+            $data['render'] = $newName;
+        }
         // Actualizar el registro
         $updated = $model->where('id_konva', $this->request->getPost('id_konva'))
                         ->where('id_evento', $this->request->getPost('id_evento'))

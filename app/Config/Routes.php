@@ -28,4 +28,6 @@ $routes->post('/eliminarEvento', 'Eventos::eliminarEvento'); // Guardar los dato
 $routes->post('/actualizarEvento', 'Eventos::actualizarEvento'); // Guardar los datos del formulario
 $routes->get('auth/agregar-admin', 'Auth::agregarAdmin');
 $routes->get('files/uploads/(:segment)', 'FileController::serveImage/$1');
+$routes->get('filerender/uploads/(:segment)', 'FileController::serveImageRender/$1');
+
 $routes->get('plano/(:any)', 'Eventos::verPorClave/$1');  // ":any" acepta cualquier valor en la URL

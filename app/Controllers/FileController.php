@@ -18,4 +18,16 @@ class FileController extends Controller
             ->setContentType(mime_content_type($path))
             ->setBody(file_get_contents($path));
     }
+    public function serveImageRender($filename)
+    {
+        $path = WRITEPATH . 'uploads/renders/' . $filename;
+
+        if (!file_exists($path)) {
+            return $this->response->setStatusCode(404)->setBody('File not found');
+        }
+
+        return $this->response
+            ->setContentType(mime_content_type($path))
+            ->setBody(file_get_contents($path));
+    }
 }

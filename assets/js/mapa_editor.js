@@ -2,6 +2,8 @@ let limagen = document.currentScript.getAttribute('imagen');
 let lid_evento = document.currentScript.getAttribute('evento');
 let lurl_guardado = document.currentScript.getAttribute('url_guardado');
 let lurl_carga = document.currentScript.getAttribute('url_carga');
+let base_url = document.currentScript.getAttribute('base_url');
+
 var konva_stage;
 var konva_layer_bg;
 var konva_layer_elem;
@@ -36,11 +38,11 @@ var maxHistorialSteps = 50; // Maximum number of steps to store
 let standForm = null;
 let _sts_typeSelect = null;
 
-document.addEventListener('DOMContentLoaded', function () {
-	// inicializarKonva();
-	inicializarKonva(cargarFiguras);
-	// cargarFiguras();
-});
+	document.addEventListener('DOMContentLoaded', function () {
+		// inicializarKonva();
+		inicializarKonva(cargarFiguras);
+		// cargarFiguras();
+	});
 
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
@@ -75,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 
-
     // Controles de zoom
     document.getElementById('zoomIn').addEventListener('click', function () {
         iframe.style.transform = `scale(${getNewScale(1.2)})`;
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
    // Función para actualizar la lista de búsqueda con eventos de selección
    function actualizarListaBusqueda(data) {
 	   searchResults.innerHTML = ''; // Limpiar lista anterior
-	   console.log(data);
+	   //console.log(data);
 
 	   data.forEach(stand => {
 		   let li = document.createElement('li');
@@ -153,10 +154,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	   .then(data => { 
 		   cargarFigurasKonva(data);
 		   actualizarListaBusqueda(data);  // Actualizar la lista de búsqueda después de cargar los stands
-		   console.log("Cargado de BD:", data);
+		   //console.log("Cargado de BD:", data);
 	   })
 	   .catch(error => console.error("Error al cargar los stands: ", error));
    };
+   
     function getNewScale(factor) {
         let currentScale = parseFloat(iframe.style.transform.replace('scale(', '').replace(')', '')) || 1;
         return Math.max(0.5, Math.min(2, currentScale * factor)); // Limita el zoom entre 0.5x y 2x
@@ -325,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		
 			const idkonva = shape.attrs.id;
-			console.log('Doble clic en:', idkonva);
+			//console.log('Doble clic en:', idkonva);
 		
 			// Feedback visual
 			shape.stroke('orange');
@@ -340,13 +342,13 @@ document.addEventListener('DOMContentLoaded', function () {
 					konva_layer_elem.batchDraw();
 		
 					if (registrado === true) {
-						console.log('Stand registrado - mostrando info');
+						//console.log('Stand registrado - mostrando info');
 						verEmpresa(shape);
 					} else if (registrado === false) {
-						console.log('Stand no registrado - mostrando formulario');
+						//console.log('Stand no registrado - mostrando formulario');
 						abrirFormulario(shape);
 					} else {
-						console.error('Respuesta inesperada');
+						//console.error('Respuesta inesperada');
 						Swal.fire('Error', 'No se pudo determinar el estado del stand', 'error');
 					}
 				})
@@ -380,14 +382,14 @@ document.addEventListener('DOMContentLoaded', function () {
 				const newWidth = shape.width() * shape.scaleX();
 				const newHeight = shape.height() * shape.scaleY();
 		
-				console.log("Nueva dimensión - Ancho:", newWidth, "Alto:", newHeight);
+				//console.log("Nueva dimensión - Ancho:", newWidth, "Alto:", newHeight);
 					updateShapeInfo(shape); // Llamar la función de actualización (si existe)
 				}
 				if (e.target.name() === 'background-image') {
-						console.log('Click en la imagen de fondo');
+						//console.log('Click en la imagen de fondo');
 						return;
 				}
-				console.log('click sobre la figura', e.target);
+				//console.log('click sobre la figura', e.target);
 				if (e.target === konva_stage) {
 						konva_transformer.nodes([]);
 						konva_layer_elem.batchDraw();
@@ -442,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		setTimeout(() => {
 			if(afnCallback) {
-				console.log('enviando a cargar las figuras de bd');
+				//console.log('enviando a cargar las figuras de bd');
 				afnCallback();
 			} else {
 				console.log('no hay callback');
@@ -513,7 +515,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	const verEmpresa = (shape) => {
 		var id_konva = shape.attrs.id; // Obtener el ID de la figura seleccionada
 		var id_evento = lid_evento; // Asegúrate de definir esta variable con el evento actual
-	
+		let baseUrl = base_url;
+
 		// Realizar una petición AJAX para obtener los datos de la empresa
 		$.ajax({
 			url: '../../Mapa/obtenerEmpresa', // Ruta en el backend
@@ -522,22 +525,60 @@ document.addEventListener('DOMContentLoaded', function () {
 			dataType: 'json',
 			success: function(response) {
 				if (response.success) {
+					const statusMap = {
+						occupied: '<span class="badge badge-pill badge-danger">Ocupado</span>',
+						available: '<span class="badge badge-pill badge-success">Disponible</span>',
+					};
+					estadoStand = statusMap[response.data.status] || '<span class="badge badge-pill badge-warning">Reservado</span>';
 					// Rellenar los campos del modal con los datos obtenidos
 					$('#modalEmpresa #empresaNombre').text(response.data.nombreEmpresa);
+					$('#modalEmpresa #empresaStatus').html(estadoStand);
 					$('#modalEmpresa #empresaCorreo').text(response.data.correo);
-					$('#modalEmpresa #empresaPagina').html('<a href="' + response.data.paginaweb + '" target="_blank">' + response.data.paginaweb + '</a>');
+					$('#modalEmpresa #empresaPagina').text( response.data.paginaweb);
 					$('#modalEmpresa #empresaTel').text(response.data.tel);
-					$('#modalEmpresa #empresaStand').text(response.data.numero);
+					$('#modalEmpresa #empresaStand').html("<span class='badge badge-primary'>"+response.data.numero+"</span>");
 					$('#modalEmpresa #empresaRepresentante').text(response.data.nombreRepresentante);
 					$('#modalEmpresa #empresaDescripcion').text(response.data.descripcion); 
 		
 					// Si tiene un logo, mostrarlo
 					if (response.data.logo) {
-						$('#modalEmpresa #empresaLogo').attr('src', '/mapa/files/uploads/'+response.data.logo).show();
+						let logoUrl = baseUrl + 'files/uploads/' + response.data.logo;
+					
+						$('#empresaLogoLink')  // Asegurarse de que el <a> tenga el href correcto
+							.attr('href', logoUrl)
+							.attr('data-src', logoUrl)
+							.attr('data-exthumbimage', logoUrl)
+							.show();
+					
+						$('#empresaLogo')
+							.attr('src', baseUrl + 'files/uploads/' + response.data.logo)
+							.show();
 					} else {
-						$('#modalEmpresa #empresaLogo').hide(); // Corregido el ID aquí
+						$('#empresaLogoLink').hide();
 					}
-		
+					
+					if (response.data.render) {
+						let renderUrl = baseUrl + 'filerender/uploads/' + response.data.render;
+					
+						$('#detRenderLink') // Asegurar que el <a> tenga el href correcto
+							.attr('href', renderUrl)
+							.attr('data-src', renderUrl)
+							.attr('data-exthumbimage', renderUrl)
+							.show();
+					
+						$('#empresaRender')
+							.attr('src', renderUrl)
+							.show();
+					} else {
+						$('#detRenderLink').hide();
+					}
+					
+					// Inicializar LightGallery después de modificar los elementos
+					$('#modalEmpresa').lightGallery({
+						selector: 'a' // Selecciona los enlaces dentro del modal
+					});
+					
+				
 					// Abrir el modal
 					$('#modalEmpresa').modal('show');
 				} else {
@@ -551,7 +592,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 	
 	function cargarFigurasKonva(arg_shapes) {
-		console.log('Cargando figuras:', arg_shapes);
+		//console.log('Cargando figuras:', arg_shapes);
 	
 		let lsigue_buscando = true;
 		codeRGB = false;
@@ -593,35 +634,62 @@ document.addEventListener('DOMContentLoaded', function () {
 				newShape.shape = lrect;
 				newShape.shapeIndex = lrect.index;
 				newShape.info = null;
-	
+
 				// Añadir la forma al array
 				stdx_shapes.push(newShape);
-	
-				// Crear el texto
+
+				// Función para calcular el tamaño del texto según la figura
+				function calcularFontSize(shape) {
+					return Math.max(10, shape.height * 0.15); // 15% de la altura del rectángulo, mínimo 10px
+				}
+
+				// Crear el texto con tamaño dinámico
+				let fontSize = calcularFontSize(newShape);
+				//console.log(shape.numero);
+				if (shape.numero == null) {
+					numerostand = "";
+				}else{
+					numerostand = "(" + shape.numero + ")";
+				}
 				let titleText = new Konva.Text({
-					text: shape.numero,
-					fontSize: Math.max(10, newShape.height * 0.15),  // Ajustar tamaño del texto al 15% de la figura
+					text: shape.nombreEmpresa  + numerostand,
+					fontSize: fontSize,
 					fontFamily: 'Arial',
 					fill: 'white',
-					align: 'center'
+					align: 'center',
+					width: newShape.width * 0.9,  // Ajusta el ancho máximo al 90% de la figura
+					wrap: 'word'
 				});
-	
-				// Medir tamaño del texto
-				let textWidth = titleText.measureSize(shape.numero).width;
-				let textHeight = titleText.measureSize(shape.numero).height;
-	
-				// Centrar el texto en la figura
+
+				// Agregar temporalmente el texto para medirlo
+				konva_layer_elem.add(titleText);
+
+				// Ajustar el tamaño del texto si es más grande que el rectángulo
+				while (titleText.width() > newShape.width * 0.9 && fontSize > 5) {
+					fontSize -= 1;
+					titleText.fontSize(fontSize);
+				}
+
+				// Centrar el texto dentro del rectángulo
 				titleText.position({
-					x: newShape.x + (newShape.width / 2) - (textWidth / 2),
-					y: newShape.y + (newShape.height / 2) - (textHeight / 2) + (newShape.height * 0.10)  // Espacio para el logo arriba
+					x: newShape.x + (newShape.width - titleText.width()) / 2,
+					y: newShape.y + (newShape.height - titleText.height()) / 2 + (newShape.height * 0.10) // Espacio para el logo
 				});
-	
-				// Agregar la figura y el título al layer
+
+				// Agregar la figura y el texto al layer
 				konva_layer_elem.add(lrect);
 				konva_layer_elem.add(titleText);
+
+				// 🔹 Escalar dinámicamente el texto con la figura
+				konva_stage.on('scaleXChange scaleYChange', () => {
+					let scale = konva_stage.scaleX(); // Obtener el nivel de zoom
+					let newFontSize = calcularFontSize(newShape) / scale; // Ajustar el tamaño de la fuente al zoom
+					titleText.fontSize(newFontSize);
+				});
+
 	
 				// Si la figura está reservada, agregar el logo
-				if (shape.status === 'occupied') {
+				/*if (shape.status === 'occupied') {
 					let logoImage = new Image();
 					logoImage.src = "/mapa/files/uploads/" + shape.logo;
 
@@ -641,7 +709,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						konva_layer_elem.add(logo);
 						konva_layer_elem.batchDraw();  // Redibujar la capa
 					};
-				}
+				}*/
 			});
 	
 			saveState();
@@ -706,12 +774,16 @@ document.addEventListener('DOMContentLoaded', function () {
 						<input type="text" id="editpagina" class="form-control" value="${data.paginaweb || ''}">
 					</div>
 					<div class="mb-3 col-md-12">
-						<label class="form-label">Descripción</label>
+						<label class="form-label">Detalles</label>
 						<textarea id="editdescripcion" class="form-control">${data.descripcion || ''}</textarea>
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Logo</label>
 						<input type="file" id="editlogo" class="form-control">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Render</label>
+						<input type="file" id="editrender" class="form-control">
 					</div>
 					`,
 					showCancelButton: true,
@@ -736,10 +808,14 @@ document.addEventListener('DOMContentLoaded', function () {
 						
 						// Manejar el logo
 						const logoInput = document.getElementById('editlogo');
+						const renderInput = document.getElementById('editrender');
+
 						if (logoInput.files.length > 0) {
 							formData.append("logo", logoInput.files[0]);
 						}
-	
+						if (renderInput.files.length > 0) {
+							formData.append("render", renderInput.files[0]);
+						}
 						return fetch('../../Mapa/actualizarFigura/', {
 							method: 'POST',
 							body: formData
@@ -765,7 +841,8 @@ document.addEventListener('DOMContentLoaded', function () {
 							url: '../../Mapa/buscar_stands/' + id_evento,
 							type: 'GET',
 							success: function(response) {
-								//cargarFigurasKonva(response);
+								location.reload();
+								//cargarFiguras();
 								// Mostrar SweetAlert2 Toast de éxito
 								Swal.fire({
 									icon: 'success',
@@ -887,7 +964,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function fnDibujarNuevoRectangulo(info) {
-		const pos = konva_stage.getPointerPosition();
+		const pos = konva_stage.setPointersPositions(info);
 		let localx, localy;
 		if (!pos) {
 			localx = (info.x - konva_stage.x()) / scale;
@@ -1019,10 +1096,17 @@ document.addEventListener('DOMContentLoaded', function () {
 						<input type="text" id="pagina" class="form-control">
 					</div>
 					<div class="mb-3 col-md-12">
-						<label class="form-label">Descripción</label>
+						<label class="form-label">Detalles</label>
 						<textarea id="descripcion" class="form-control" rows="3"></textarea>
 					</div>
-					<input type="file" id="logo" class="swal2-file">
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Logo</label><br>
+						<input type="file" id="logo" class="swal2-file">
+					</div>
+					<div class="mb-3 col-md-12">
+						<label class="form-label">Render</label><br>
+						<input type="file" id="render" class="swal2-file">
+					</div>
 			`,
 			showCancelButton: true,
 			confirmButtonText: "Guardar",
@@ -1031,6 +1115,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				const empresa = document.getElementById("empresa").value;
 				const pagina = document.getElementById("pagina").value;
 				const logo = document.getElementById("logo");
+				const render = document.getElementById("render");
 				const correo = document.getElementById("correo").value;
 				const nombre = document.getElementById("nombre").value;
 				const tel = document.getElementById("tel").value;
@@ -1056,7 +1141,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				if (logo.files.length > 0) {
 					formData.append("logo", logo.files[0]);
 				}
-	
+				if (render.files.length > 0) {
+					formData.append("render", render.files[0]);
+				}
 				return fetch('../guardarInformacionStand', {
 					method: "POST",
 					body: formData
@@ -1092,7 +1179,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 	function updateShapeInfo(shape) {
 		const boundingBox = shape.getClientRect(); // Obtener tamaño real de la figura
-		console.log("Ancho:", boundingBox.width, "Alto:", boundingBox.height);
+		//console.log("Ancho:", boundingBox.width, "Alto:", boundingBox.height);
 
 			const index = stdx_shapes.findIndex(s => s.shape === shape);
 			if (index !== -1) {
@@ -1110,9 +1197,19 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 	}
 
+	function limpiarLienzo() {
+		if (!konva_layer_elem) {
+			console.error("Error: La capa no está definida.");
+			return;
+		}
+	
+		konva_layer_elem.destroyChildren(); // Elimina todas las figuras dentro de la capa
+		konva_layer_elem.batchDraw(); // Redibuja la capa para actualizar los cambios
+		console.log("Figuras eliminadas de la capa.");
+	}
+	
 	// Función para guardar las figuras
 	const guardarFiguras = () => {
-		console.log(stdx_shapes);
 		fetch(lurl_guardado + id_evento, {
 			method: 'POST',
 			headers: {
@@ -1122,7 +1219,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		})
 		.then(response => response.json())
 		.then(data => {
-			console.log("Guardado en BD2:", data);
+			//console.log("Guardado en BD2:", data);
 			// Mostrar SweetAlert2 Toast de éxito
 			Swal.fire({
 				icon: 'success',
@@ -1134,8 +1231,8 @@ document.addEventListener('DOMContentLoaded', function () {
 				timer: 3000,
 				timerProgressBar: true
 			});
-			        // Recargar las figuras en el lienzo después de guardar
-					//inicializarKonva();
+			location.reload();
+
 		})
 		.catch(error => {
 			console.error("Error al guardar:", error);
@@ -1313,20 +1410,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	function sts_ocultarForm() {
 		standForm.classList.remove('shown');
 	}
-	function descargarSVG() {
-		const svgString = stage.toSVG(); // Genera SVG del lienzo
 
-		// Crear un enlace de descarga
-		const blob = new Blob([svgString], { type: "image/svg+xml" });
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = "dibujo.svg";
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		URL.revokeObjectURL(url);
-	}
 	// Function to toggle fields based on selected type
 	function _sts_toggleFieldsBasedOnType() {
 			const _sts_type = document.getElementById('_sts_type').value;
