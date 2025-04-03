@@ -155,6 +155,24 @@ class Mapa extends BaseController
         ]);
     }
 
+    public function deleteShape()
+    {
+        $json = $this->request->getJSON();
+        $shapeId = $json->shapeId;
+        $idEvento = $json->idEvento;
+    
+        $model = new StandsModel();
+    
+        $deleted = $model->where('id_konva', $shapeId)
+                         ->where('id_evento', $idEvento)
+                         ->delete();
+    
+        return $this->response->setJSON([
+            'status' => $deleted ? 'success' : 'error',
+            'message' => $deleted ? 'Elemento eliminado correctamente' : 'Error al eliminar el elemento'
+        ]);
+    }
+    
     
     public function index(): string
     {

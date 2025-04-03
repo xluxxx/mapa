@@ -31,3 +31,4 @@ $routes->get('files/uploads/(:segment)', 'FileController::serveImage/$1');
 $routes->get('filerender/uploads/(:segment)', 'FileController::serveImageRender/$1');
 
 $routes->get('plano/(:any)', 'Eventos::verPorClave/$1');  // ":any" acepta cualquier valor en la URL
+$routes->post('shape/delete', 'Mapa::deleteShape'); //eliminar figura

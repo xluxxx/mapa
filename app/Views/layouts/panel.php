@@ -135,8 +135,9 @@
                 { "data": "plano" },
                 { "data": "acciones", "orderable": false }
             ],
+            "order": [[1, "desc"]],
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" // Ajusta según sea necesario
+                "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
             },
         });
         // Manejador de eventos para el botón "Eliminar"

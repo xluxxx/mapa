@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 
-
     // Controles de zoom
     document.getElementById('zoomIn').addEventListener('click', function () {
         iframe.style.transform = `scale(${getNewScale(1.2)})`;
@@ -89,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function () {
         iframe.style.transform = 'scale(1)';
     });
 
-	
    // Variable para almacenar la última figura seleccionada
    let figuraSeleccionada = null;
 

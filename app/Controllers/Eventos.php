@@ -247,7 +247,7 @@ class Eventos extends BaseController
         }
 
         $eventModel = new EventModel();
-        $eventos = $eventModel->findAll(); // Obtener todos los eventos
+        $eventos = $eventModel->orderBy('id', 'DESC')->findAll(); // Obtener eventos ordenados por fecha descendente
 
         // Preparar los datos para la vista (con botones de editar y eliminar)
         $data = [];
