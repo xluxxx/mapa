@@ -2,6 +2,7 @@ let limagen = document.currentScript.getAttribute('imagen');
 let lid_evento = document.currentScript.getAttribute('evento');
 let lurl_guardado = document.currentScript.getAttribute('url_guardado');
 let lurl_carga = document.currentScript.getAttribute('url_carga');
+let base_url = document.currentScript.getAttribute('base_url');
 var konva_stage;
 var konva_layer_bg;
 var konva_layer_elem;
@@ -502,38 +503,76 @@ document.addEventListener('DOMContentLoaded', function () {
 	const verEmpresa = (shape) => {
 		var id_konva = shape.attrs.id; // Obtener el ID de la figura seleccionada
 		var id_evento = lid_evento; // Asegúrate de definir esta variable con el evento actual
-	
+		let baseUrl = base_url;
 		// Realizar una petición AJAX para obtener los datos de la empresa
 		$.ajax({
-			url: '../../Mapa/obtenerEmpresa', // Ruta en el backend
+			url: base_url + 'Mapa/obtenerEmpresa', // Ruta en el backend
 			type: 'POST',
 			data: { id_konva: id_konva, id_evento: id_evento },
 			dataType: 'json',
-			success: function(response) {
+			success: function (response) {
 				if (response.success) {
+					const statusMap = {
+						occupied: '<span class="badge badge-pill badge-danger">Ocupado</span>',
+						available: '<span class="badge badge-pill badge-success">Disponible</span>',
+					};
+					estadoStand = statusMap[response.data.status] || '<span class="badge badge-pill badge-warning">Reservado</span>';
 					// Rellenar los campos del modal con los datos obtenidos
 					$('#modalEmpresa #empresaNombre').text(response.data.nombreEmpresa);
+					$('#modalEmpresa #empresaStatus').html(estadoStand);
 					$('#modalEmpresa #empresaCorreo').text(response.data.correo);
-					$('#modalEmpresa #empresaPagina').html('<a href="' + response.data.paginaweb + '" target="_blank">' + response.data.paginaweb + '</a>');
+					$('#modalEmpresa #empresaPagina').text(response.data.paginaweb);
 					$('#modalEmpresa #empresaTel').text(response.data.tel);
-					$('#modalEmpresa #empresaStand').text(response.data.numero);
+					$('#modalEmpresa #empresaStand').html("<span class='badge badge-primary'>" + response.data.numero + "</span>");
 					$('#modalEmpresa #empresaRepresentante').text(response.data.nombreRepresentante);
 					$('#modalEmpresa #empresaDescripcion').text(response.data.descripcion);
-		
+	
 					// Si tiene un logo, mostrarlo
 					if (response.data.logo) {
-						$('#modalEmpresa #empresaLogo').attr('src', '/mapa/files/uploads/'+response.data.logo).show();
+						let logoUrl = baseUrl + 'files/uploads/' + response.data.logo;
+	
+						$('#empresaLogoLink')  // Asegurarse de que el <a> tenga el href correcto
+							.attr('href', logoUrl)
+							.attr('data-src', logoUrl)
+							.attr('data-exthumbimage', logoUrl)
+							.show();
+	
+						$('#empresaLogo')
+							.attr('src', baseUrl + 'files/uploads/' + response.data.logo)
+							.show();
 					} else {
-						$('#modalEmpresa #empresaLogo').hide(); // Corregido el ID aquí
+						$('#empresaLogoLink').hide();
 					}
-		
+	
+					if (response.data.render) {
+						let renderUrl = baseUrl + 'filerender/uploads/' + response.data.render;
+	
+						$('#detRenderLink') // Asegurar que el <a> tenga el href correcto
+							.attr('href', renderUrl)
+							.attr('data-src', renderUrl)
+							.attr('data-exthumbimage', renderUrl)
+							.show();
+	
+						$('#empresaRender')
+							.attr('src', renderUrl)
+							.show();
+					} else {
+						$('#detRenderLink').hide();
+					}
+	
+					// Inicializar LightGallery después de modificar los elementos
+					$('#modalEmpresa').lightGallery({
+						selector: 'a' // Selecciona los enlaces dentro del modal
+					});
+	
+	
 					// Abrir el modal
 					$('#modalEmpresa').modal('show');
 				} else {
 					Swal.fire('Error', 'No se encontraron datos de la empresa.', 'error');
 				}
 			},
-			error: function() {
+			error: function () {
 				Swal.fire('Error', 'No se pudo obtener la información.', 'error');
 			}
 		});

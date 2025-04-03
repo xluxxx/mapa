@@ -43,29 +43,45 @@
         <button id="reset" style="width: 40px; height: 40px; border-radius: 50%; background: white; border: 1px solid gray; cursor: pointer;">🔄</button>
     </div>
     <div class="modal fade" id="modalEmpresa" tabindex="-1" aria-labelledby="modalEmpresaLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalEmpresaLabel">Detalles de la Empresa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <img id="empresaLogo" src="" alt="Logo de la Empresa" style="max-width: 150px; display: none;">
-                    </div>
-                    <p><strong>Nombre:</strong> <span id="empresaNombre"></span></p>
-                    <p><strong>Correo:</strong> <span id="empresaCorreo"></span></p>
-                    <p><strong>Página Web:</strong> <span id="empresaPagina"></span></p>
-                    <p><strong>Teléfono:</strong> <span id="empresaTel"></span></p>
-                    <p><strong>Stand:</strong> <span id="empresaStand"></span></p>
-                    <p><strong>Representante:</strong> <span id="empresaRepresentante"></span></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalEmpresaLabel">Detalles de la Empresa</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+
+				<div id="lightgallery" class="row">
+					<div class="row">
+						<div class="col-md-5 .ms-auto">
+							<center><label><strong>Logo empresa:</strong></label>	</center>			
+							<a href="#" id="empresaLogoLink" data-exthumbimage="" class="lg-item col-lg-3 col-md-6 mb-4">
+								<img id="empresaLogo" class="w-100 rounded" src="" data-src="" alt="Logo de la Empresa" style="max-width: 100%; display: none;">
+							</a>
+						</div>
+							<div class="col-md-6 .ms-auto">
+								<center><label><strong>Render:</strong></label>	</center>	
+								<a href="#" id="detRenderLink" data-exthumbimage="" class="lg-item col-lg-3 col-md-6 mb-4">
+									<img id="empresaRender" class="w-100 rounded" src="" data-src="" alt="Render de la Empresa" style="max-width: 100%; display: none;">
+								</a>
+							</div>
+					</div>
+				</div>
+				<p><strong>Status:</strong> <span id="empresaStatus"></span></p>
+				<p><strong>Nombre:</strong> <span id="empresaNombre"></span></p>
+				<p><strong>Correo:</strong> <span id="empresaCorreo"></span></p>
+				<p><strong>Teléfono:</strong> <span id="empresaTel"></span></p>
+				<p><strong>Stand:</strong> <span id="empresaStand"></span></p>
+				<p><strong>Página Web:</strong> <span id="empresaPagina"></span></p>
+				<p><strong>Representante:</strong> <span id="empresaRepresentante"></span></p>
+				<p><strong>Detalles:</strong> <span id="empresaDescripcion"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 <script src="<?= base_url('assets/mophy/vendor/global/global.min.js'); ?>"></script>
 <script src="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/js/bootstrap-select.min.js'); ?>"></script>
@@ -77,12 +93,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/konva@9/konva.min.js"></script>
 <script src="<?= base_url('assets/js/mapa_view.js?v=1.11'); ?>"
-
     evento="<?= $evento['id']; ?>"
     imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
     url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"
     url_carga="<?= base_url('Mapa/buscar_stands/'); ?>"
-    defer></script>
+    base_url="<?= base_url(); ?>"
+	defer></script>
+	<script src="<?= base_url('assets/mophy/vendor/lightgallery/js/lightgallery-all.min.js'); ?>"></script>
+
 <script>
     // evento de domcontentloaded 
     document.addEventListener('DOMContentLoaded', function() {
