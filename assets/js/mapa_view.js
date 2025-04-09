@@ -529,6 +529,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 					// Si tiene un logo, mostrarlo
 					if (response.data.logo) {
+						console.log(baseUrl)
 						let logoUrl = baseUrl + '/writable/uploads/logosEmpresasExpositoras/' + response.data.logo;
 
 						$('#empresaLogoLink')  // Asegurarse de que el <a> tenga el href correcto
