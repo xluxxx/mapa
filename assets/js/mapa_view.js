@@ -529,8 +529,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 					// Si tiene un logo, mostrarlo
 					if (response.data.logo) {
-						let logoUrl = baseUrl + 'files/uploads/' + response.data.logo;
-	
+						let logoUrl = baseUrl + '/writable/uploads/logosEmpresasExpositoras/' + response.data.logo;
+
 						$('#empresaLogoLink')  // Asegurarse de que el <a> tenga el href correcto
 							.attr('href', logoUrl)
 							.attr('data-src', logoUrl)
