@@ -191,6 +191,7 @@ class Eventos extends BaseController
         $descripcion = $this->request->getPost('description');
         $fecha = $this->request->getPost('event_date');
         $lugar = $this->request->getPost('event_place');
+        $clave = $this->request->getPost('clave');
 
         // Verificar que el archivo sea válido y no se haya movido ya
         if ($file && $file->isValid() && !$file->hasMoved()) {
@@ -217,12 +218,14 @@ class Eventos extends BaseController
             'description' => $descripcion,
             'event_date' => $fecha,
             'event_place' => $lugar,
-            'name_file' => $newName // Incluir el nombre del archivo subido
+            'name_file' => $newName, // Incluir el nombre del archivo subido
+            'clave' => $clave,
+            'uuid_event' => $this->generarUUIDv4()
         ];
 
         // Insertar los datos en la base de datos
         $guardar = $eventModel->insert($data);
-
+        
         // Retornar una respuesta dependiendo del resultado de la inserción
         if ($guardar) {
             return $this->response->setJSON([
@@ -371,4 +374,19 @@ class Eventos extends BaseController
 
         return view('layouts/mapa', $data); // Cargar la vista con los detalles del evento
     }
+
+    private function generarUUIDv4() {
+        // Generar 16 bytes (128 bits) aleatorios
+        $data = random_bytes(16);
+
+        // Establecer la versión a 0100 (UUID v4)
+        $data[6] = chr((ord($data[6]) & 0x0f) | 0x40);
+
+        // Establecer los bits del "variant" a 10xx
+        $data[8] = chr((ord($data[8]) & 0x3f) | 0x80);
+
+        // Convertir los bytes en una cadena con formato UUID
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
 }
