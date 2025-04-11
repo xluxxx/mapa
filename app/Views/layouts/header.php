@@ -152,6 +152,7 @@
         Main wrapper end
     *************-->
     <!-- vendors -->
+    <script src="<?= base_url('assets/js/pristine.js'); ?>"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="<?= base_url('assets/mophy/vendor/global/global.min.js') ?>"></script>
     <script src="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/js/bootstrap-select.min.js') ?>"></script>

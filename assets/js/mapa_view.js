@@ -989,7 +989,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const abrirFormulario = (shape) => {
 
 		Swal.fire({
-			title: "Registrar Stand",
+			title: " Stand",
 			html: `
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Nombre de la empresa</label>
@@ -1001,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Numero de stand</label>
-						<input type="number" id="stand" class="form-control">
+						<input type="text" id="stand" class="form-control">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Nombre completo del representante</label>
@@ -1009,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Telefóno</label>
-						<input type="number" id="tel" class="form-control">
+						<input type="text" id="tel" class="form-control">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Pagina Web</label>

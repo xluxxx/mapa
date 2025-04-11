@@ -1117,114 +1117,131 @@ function deleteSelectedShape() {
 }
 
 const abrirFormulario = (shape) => {
+    Swal.fire({
+        title: "Registrar Stand",
+        html: `
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Nombre de la empresa</label>
+                <input type="text" id="empresa" class="form-control">
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Correo de contacto</label>
+                <input type="email" id="correo" class="form-control">
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Numero de stand</label>
+                <input type="text" id="stand" class="form-control">
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Nombre completo del representante</label>
+                <input type="text" id="nombre" class="form-control">
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Telefóno</label>
+                <input type="text" id="tel" class="form-control" maxlength="15">
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Pagina Web</label>
+                <input type="text" id="pagina" class="form-control">
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Detalles</label>
+                <textarea id="descripcion" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Logo</label><br>
+                <input type="file" id="logo" class="swal2-file" accept="image/jpeg, image/png">
+            </div>
+            <div class="mb-3 col-md-12">
+                <label class="form-label">Render</label><br>
+                <input type="file" id="render" class="swal2-file" accept="image/jpeg, image/png">
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Guardar",
+        focusConfirm: false,
+        preConfirm: () => {
+            // Obtener valores
+            const stand = document.getElementById("stand").value;
+            const empresa = document.getElementById("empresa").value;
+            const pagina = document.getElementById("pagina").value;
+            const logo = document.getElementById("logo");
+            const render = document.getElementById("render");
+            const correo = document.getElementById("correo").value;
+            const nombre = document.getElementById("nombre").value;
+            const tel = document.getElementById("tel").value;
+            const descripcion = document.getElementById("descripcion").value;
 
-	Swal.fire({
-		title: "Registrar Stand",
-		html: `
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Nombre de la empresa</label>
-						<input type="text" id="empresa" class="form-control">
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Correo de contacto</label>
-						<input type="email" id="correo" class="form-control">
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Numero de stand</label>
-						<input type="number" id="stand" class="form-control">
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Nombre completo del representante</label>
-						<input type="text" id="nombre" class="form-control">
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Telefóno</label>
-						<input type="number" id="tel" class="form-control">
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Pagina Web</label>
-						<input type="text" id="pagina" class="form-control">
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Detalles</label>
-						<textarea id="descripcion" class="form-control" rows="3"></textarea>
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Logo</label><br>
-						<input type="file" id="logo" class="swal2-file">
-					</div>
-					<div class="mb-3 col-md-12">
-						<label class="form-label">Render</label><br>
-						<input type="file" id="render" class="swal2-file">
-					</div>
-			`,
-		showCancelButton: true,
-		confirmButtonText: "Guardar",
-		preConfirm: () => {
-			const stand = document.getElementById("stand").value;
-			const empresa = document.getElementById("empresa").value;
-			const pagina = document.getElementById("pagina").value;
-			const logo = document.getElementById("logo");
-			const render = document.getElementById("render");
-			const correo = document.getElementById("correo").value;
-			const nombre = document.getElementById("nombre").value;
-			const tel = document.getElementById("tel").value;
-			const descripcion = document.getElementById("descripcion").value;
+            
+            // Preparar FormData
+            const formData = new FormData();
+            formData.append("id_konva", shape.attrs.id);
+            formData.append("id_evento", id_evento);
+            formData.append("stand", stand);
+            formData.append("empresa", empresa);
+            formData.append("pagina", pagina);
+            formData.append("correo", correo);
+            formData.append("nombre", nombre);
+            formData.append("tel", tel);
+            formData.append("descripcion", descripcion);
 
+            if (logo.files.length > 0) formData.append("logo", logo.files[0]);
+            if (render.files.length > 0) formData.append("render", render.files[0]);
 
-			if (!stand || !empresa || !pagina) {
-				Swal.showValidationMessage("Todos los campos son obligatorios");
-				return false;
-			}
-
-			const formData = new FormData();
-			formData.append("id_konva", shape.attrs.id);
-			formData.append("id_evento", id_evento);
-			formData.append("stand", stand);
-			formData.append("empresa", empresa);
-			formData.append("pagina", pagina);
-			formData.append("correo", correo);
-			formData.append("nombre", nombre);
-			formData.append("tel", tel);
-			formData.append("descripcion", descripcion);
-
-			if (logo.files.length > 0) {
-				formData.append("logo", logo.files[0]);
-			}
-			if (render.files.length > 0) {
-				formData.append("render", render.files[0]);
-			}
-			return fetch('../guardarInformacionStand', {
-				method: "POST",
-				body: formData
-			})
-				.then(response => response.json())
-				.then(data => {
-					if (data.message) {
-						return data;
-					} else {
-						throw new Error("Error al guardar");
-					}
-				})
-				.catch(error => {
-					Swal.showValidationMessage(`Error: ${error.message}`);
-					return false;
-				});
-		}
-	}).then((result) => {
-		if (result.isConfirmed) {
-			Swal.fire({
-				icon: 'success',
-				title: 'Guardado exitoso',
-				text: 'Información guardada correctamente',
-				toast: true,
-				position: 'top-end',
-				showConfirmButton: false,
-				timer: 3000,
-				timerProgressBar: true
-			});
-		}
-	});
+            // Enviar datos
+            return fetch('../guardarInformacionStand', {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.success) {
+                    // Construir mensaje de error detallado
+                    let errorHtml = '<div class="text-left"><ul style="padding-left: 20px; margin-bottom: 0;">';
+                    
+                    if (data.errors) {
+                        for (const [key, error] of Object.entries(data.errors)) {
+                            errorHtml += `<li>${error}</li>`;
+                        }
+                    } else {
+                        errorHtml += `<li>${data.message || 'Error desconocido'}</li>`;
+                    }
+                    
+                    errorHtml += '</ul></div>';
+                    throw new Error(errorHtml);
+                }
+                return data;
+            })
+            .catch(error => {
+                Swal.showValidationMessage(
+                    error.message.includes('<li>') 
+                    ? error.message 
+                    : `<div class="text-left">Error: ${error.message}</div>`
+                );
+                return false;
+            });
+        }
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: result.value.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            }).then(() => {
+                // Actualizar la interfaz si es necesario
+                window.location.reload();
+            });
+        }
+    });
 };
 
 function updateShapeInfo(shape) {

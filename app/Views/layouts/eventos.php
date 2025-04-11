@@ -121,7 +121,7 @@ document.querySelector("form").addEventListener("submit", function(event) {
     })
     .then(response => response.json()) // Convertir la respuesta a JSON
     .then(data => {
-        console.log("Respuesta del servidor:", data); // Imprimir en consola
+       
         
         // Verificar si la respuesta fue exitosa
         if (data.success) {
@@ -133,12 +133,22 @@ document.querySelector("form").addEventListener("submit", function(event) {
                 window.location.href = "<?= base_url('panel/Home') ?>"; // Recargar la página si es necesario
             });
         } else {
-            Swal.fire({
-                title: "Error",
-                text: data.message || "Hubo un problema al guardar el evento.",
-                icon: "error"
-            });
+            let errorMessages = "";
+        if (data.errors) {
+            errorMessages = "<ul>";
+            for (const [key, value] of Object.entries(data.errors)) {
+                errorMessages += `<li>${value}</li>`;
+            }
+            errorMessages += "</ul>";
         }
+        
+        Swal.fire({
+            title: "Error de validación",
+            html: "Por favor corrige los siguientes errores:" + errorMessages,
+            icon: "error"
+        });
+    }
+        
     })
     .catch(error => {
         console.error("Error:", error);
@@ -148,6 +158,7 @@ document.querySelector("form").addEventListener("submit", function(event) {
             icon: "error"
         });
     });
+
 });
 </script>
 

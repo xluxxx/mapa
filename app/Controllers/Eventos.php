@@ -22,21 +22,113 @@ class Eventos extends BaseController
         $validation = \Config\Services::validation();
     
         $rules = [
-            'stand'     => 'required|numeric',
-            'empresa'   => 'required|string',
-            'pagina' => 'required|valid_url',
-            'correo'    => 'required|valid_email',
-            'tel'       => 'required|numeric',
-            'nombre'    => 'required|string',
-            'id_evento' => 'required|numeric',
-            'id_konva'  => 'required|string',
-            'logo'      => 'is_image[logo]|max_size[logo,2048]',
-            'render'      => 'is_image[render]|max_size[render,2048]',
-            'descripcion'   => 'required|string|max_length[500]'
+            'stand' => [
+                'label' => 'Número de Stand',
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => 'El número de stand es obligatorio',
+                    'numeric' => 'El stand debe ser un número válido'
+                ]
+            ],
+            'empresa' => [
+                'label' => 'Nombre de la empresa',
+                'rules' => 'required|string|min_length[3]|max_length[100]',
+                'errors' => [
+                    'required' => 'El nombre de la empresa es obligatorio',
+                    'string' => 'El nombre debe ser texto válido',
+                    'min_length' => 'El nombre debe tener al menos 3 caracteres',
+                    'max_length' => 'El nombre no puede exceder 100 caracteres'
+                ]
+            ],
+            'pagina' => [
+                'label' => 'Página Web',
+                'rules' => 'required|valid_url|max_length[200]',
+                'errors' => [
+                    'required' => 'La página web es obligatoria',
+                    'valid_url' => 'Ingrese una URL válida (ej: https://ejemplo.com)',
+                    'max_length' => 'La URL no puede exceder 200 caracteres'
+                ]
+            ],
+            'correo' => [
+                'label' => 'Correo electrónico',
+                'rules' => 'required|valid_email|max_length[100]',
+                'errors' => [
+                    'required' => 'El correo electrónico es obligatorio',
+                    'valid_email' => 'Ingrese un correo electrónico válido',
+                    'max_length' => 'El correo no puede exceder 100 caracteres'
+                ]
+            ],
+            'tel' => [
+                'label' => 'Teléfono',
+                'rules' => 'required|numeric|min_length[7]|max_length[15]',
+                'errors' => [
+                    'required' => 'El teléfono es obligatorio',
+                    'numeric' => 'El teléfono debe contener solo números',
+                    'min_length' => 'El teléfono debe tener al menos 7 dígitos',
+                    'max_length' => 'El teléfono no puede exceder 15 dígitos'
+                ]
+            ],
+            'nombre' => [
+                'label' => 'Nombre del representante',
+                'rules' => 'required|string|min_length[3]|max_length[100]',
+                'errors' => [
+                    'required' => 'El nombre del representante es obligatorio',
+                    'string' => 'El nombre debe ser texto válido',
+                    'min_length' => 'El nombre debe tener al menos 3 caracteres',
+                    'max_length' => 'El nombre no puede exceder 100 caracteres'
+                ]
+            ],
+            'id_evento' => [
+                'label' => 'ID del Evento',
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => 'Se requiere el ID del evento',
+                    'numeric' => 'ID de evento inválido'
+                ]
+            ],
+            'id_konva' => [
+                'label' => 'ID del Elemento',
+                'rules' => 'required|string',
+                'errors' => [
+                    'required' => 'Se requiere el ID del elemento',
+                    'string' => 'ID de elemento inválido'
+                ]
+            ],
+            'logo' => [
+                'label' => 'Logo',
+                'rules' => 'is_image[logo]|max_size[logo,2048]|mime_in[logo,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'is_image' => 'El logo debe ser una imagen válida (JPG, PNG)',
+                    'max_size' => 'El tamaño máximo del logo es 2MB',
+                    'mime_in' => 'Solo se permiten formatos JPG, JPEG o PNG para el logo'
+                ]
+            ],
+            'render' => [
+                'label' => 'Render',
+                'rules' => 'is_image[render]|max_size[render,2048]|mime_in[render,image/jpg,image/jpeg,image/png]',
+                'errors' => [
+                    'is_image' => 'El render debe ser una imagen válida (JPG, PNG)',
+                    'max_size' => 'El tamaño máximo del render es 2MB',
+                    'mime_in' => 'Solo se permiten formatos JPG, JPEG o PNG para el render'
+                ]
+            ],
+            'descripcion' => [
+                'label' => 'Descripción',
+                'rules' => 'required|string|max_length[500]',
+                'errors' => [
+                    'required' => 'La descripción es obligatoria',
+                    'string' => 'La descripción debe ser texto válido',
+                    'max_length' => 'La descripción no debe exceder los 500 caracteres'
+                ]
+            ]
         ];
     
         if (!$this->validate($rules)) {
-            return $this->failValidationErrors($validation->getErrors());
+            return $this->response->setJSON([
+                'success' => false,
+                'errors' => $this->validator->getErrors(),
+                'message' => 'Error de validación'
+            ]);
         }
     
         // Obtener los datos
@@ -140,106 +232,116 @@ class Eventos extends BaseController
 
     // Función para guardar un nuevo evento
     public function save()
-    {
+{
+    try {
         // Verifica si el usuario está logueado
         if (!is_logged_in()) {
             return redirect()->to('auth/login');
         }
 
-        // Cargar el modelo de eventos para interactuar con la base de datos
+        // Cargar el modelo de eventos
         $eventModel = new EventModel();
 
-        // Definir reglas de validación para los campos del formulario
+        // Definir reglas de validación
         $rules = [
             'event_name' => [
-                'label' => 'event_name',
-                'rules' => 'required|min_length[3]',
+                'label' => 'Nombre del Evento',
+                'rules' => 'required|min_length[3]|max_length[100]',
                 'errors' => [
-                    'required' => 'El campo {field} es requerido',
-                    'min_length' => 'El campo {field} debe tener más de 3 caracteres',
+                    'required' => 'El nombre del evento es obligatorio',
+                    'min_length' => 'El nombre debe tener al menos 3 caracteres',
+                    'max_length' => 'El nombre no puede exceder 100 caracteres'
                 ],
             ],
             'event_date' => [
-                'label' => 'event_date',
-                'rules' => 'required',
+                'label' => 'Fecha del Evento',
+                'rules' => 'required|valid_date',
                 'errors' => [
-                    'required' => 'El campo {field} es requerido',
+                    'required' => 'La fecha del evento es obligatoria',
+                    'valid_date' => 'La fecha proporcionada no es válida'
                 ],
             ],
             'event_place' => [
-                'label' => 'event_place',
-                'rules' => 'required',
+                'label' => 'Lugar del Evento',
+                'rules' => 'required|min_length[3]|max_length[200]',
                 'errors' => [
-                    'required' => 'El campo {field} es requerido',
+                    'required' => 'El lugar del evento es obligatorio',
+                    'min_length' => 'El lugar debe tener al menos 3 caracteres',
+                    'max_length' => 'El lugar no puede exceder 200 caracteres'
                 ],
+            ],
+            'description' => [
+                'label' => 'Descripción',
+                'rules' => 'required|permit_empty|max_length[500]',
+                'errors' => [
+                    'required' => 'La descripción es obligatoria',
+                    'max_length' => 'La descripción no puede exceder 500 caracteres'
+                ],
+            ],
+            'name_file' => [
+                'label' => 'Archivo',
+                'rules' => 'uploaded[name_file]|max_size[name_file,2048]|mime_in[name_file,image/svg+xml,image/jpeg,image/png]',
+                'errors' => [
+                    'uploaded' => 'Debe seleccionar un archivo',
+                    'max_size' => 'El tamaño máximo permitido es 2MB',
+                    'mime_in' => 'Solo se permiten archivos SVG, JPG o PNG'
+                ]
             ]
-
-            
         ];
 
-        // Validar los datos del formulario con las reglas definidas
+        // Validar los datos del formulario
         if (!$this->validate($rules)) {
-            return $this->response->setJSON([ // Si no pasa la validación, retorna errores
-                "result" => $this->validator->getErrors(),
-                "success" => false
+            $errors = $this->validator->getErrors();
+            return $this->response->setJSON([
+                "success" => false,
+                "errors" => $errors,
+                "message" => "Por favor corrija los errores en el formulario"
             ]);
         }
 
-        // Obtener los datos del archivo subido y del formulario
+        // Procesar el archivo subido
         $file = $this->request->getFile('name_file');
-        $nombre = $this->request->getPost('event_name');
-        $descripcion = $this->request->getPost('description');
-        $fecha = $this->request->getPost('event_date');
-        $lugar = $this->request->getPost('event_place');
-        $clave = $this->request->getPost('clave');
+        $newName = null;
 
-        // Verificar que el archivo sea válido y no se haya movido ya
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $mimeType = $file->getMimeType(); // Obtener el tipo MIME del archivo
-            $fileName = $file->getClientName(); // Obtener el nombre original del archivo
-            $allowedTypes = ['image/svg+xml', 'image/jpeg', 'image/png']; // Tipos de archivo permitidos
-
-            // Verificar si el archivo tiene un tipo válido
-            if (!in_array($mimeType, $allowedTypes)) {
-                return $this->response->setJSON([ // Si el archivo no es válido, retornar un mensaje
-                    "result" => "Solo se permiten archivos en formato SVG, JPG o PNG.",
-                    "success" => false
-                ]);
-            }
-
-            // Generar un nuevo nombre aleatorio para el archivo
+        if ($file->isValid() && !$file->hasMoved()) {
             $newName = $file->getRandomName();
-            $file->move(ROOTPATH . 'public/uploads/planos', $newName); // Mover el archivo a la carpeta de destino
+            $file->move(ROOTPATH . 'public/uploads/planos', $newName);
         }
 
-        // Preparar los datos para insertar en la base de datos
+        // Preparar datos para guardar
         $data = [
-            'event_name' => $nombre,
-            'description' => $descripcion,
-            'event_date' => $fecha,
-            'event_place' => $lugar,
-            'name_file' => $newName, // Incluir el nombre del archivo subido
-            'clave' => $clave,
-            'uuid_event' => $this->generarUUIDv4()
+            'event_name' => $this->request->getPost('event_name'),
+            'description' => $this->request->getPost('description'),
+            'event_date' => $this->request->getPost('event_date'),
+            'event_place' => $this->request->getPost('event_place'),
+            'name_file' => $newName,
+            'clave' => $this->request->getPost('clave'),
         ];
 
-        // Insertar los datos en la base de datos
+        // Insertar en la base de datos
         $guardar = $eventModel->insert($data);
         
-        // Retornar una respuesta dependiendo del resultado de la inserción
-        if ($guardar) {
-            return $this->response->setJSON([
-                "result" => "Evento guardado correctamente.",
-                "success" => true,
-                "file_path" => isset($guardar),
-            ]);
-        } else {
-            return $this->response->setJSON([ // Si hay un error al guardar el evento
-                "result" => "Error al guardar el evento.",
-                "success" => false
-            ]);
+        if (!$guardar) {
+            throw new \RuntimeException('Error al guardar en la base de datos');
         }
+
+        return $this->response->setJSON([
+            "success" => true,
+            "message" => "Evento guardado correctamente",
+            "data" => [
+                "event_id" => $guardar,
+                "file_path" => $newName ? base_url('uploads/planos/'.$newName) : null
+            ]
+        ]);
+
+    } catch (\Exception $e) {
+        return $this->response->setJSON([
+            "success" => false,
+            "message" => "Error en el servidor: " . $e->getMessage(),
+            "error" => $e->getTraceAsString()
+        ]);
     }
+}
 
     // Función para obtener todos los eventos
     public function getEventos()

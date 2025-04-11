@@ -38,11 +38,11 @@
 
                                     <?= form_open('auth/login'); ?>
                                     <div class="form-group">
-                                        <label class="mb-1 text-white"><strong>Email/Username</strong></label>
+                                        <label class="mb-1 text-black"><strong>Email/Username</strong></label>
                                         <?= form_input($identity, '', 'class="form-control" placeholder="Ingrese su email o usuario"'); ?>
                                     </div>
                                     <div class="form-group">
-                                        <label class="mb-1 text-white"><strong>Contraseña</strong></label>
+                                        <label class="mb-1 text-black"><strong>Contraseña</strong></label>
                                         <?= form_password($password, '', 'class="form-control" placeholder="Ingrese su contraseña"'); ?>
                                     </div>
                                     <div class="form-row d-flex justify-content-between mt-4 mb-2">
