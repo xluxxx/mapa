@@ -546,7 +546,7 @@ const verEmpresa = (shape) => {
 				if (response.data.logo) {
 					console.log(baseUrl);
 
-					let logoUrl = baseUrl + 'writable/uploads/logosEmpresasExpositoras/' + response.data.logo;
+					let logoUrl = baseUrl + 'files/uploads/' + response.data.logo;
 
 					$('#empresaLogoLink')  // Asegurarse de que el <a> tenga el href correcto
 						.attr('href', logoUrl)
@@ -562,7 +562,7 @@ const verEmpresa = (shape) => {
 				}
 
 				if (response.data.render) {
-					let renderUrl = baseUrl + 'writable/uploads/renders/' + response.data.render;
+					let renderUrl = baseUrl + 'filerender/uploads/' + response.data.render;
 
 					$('#detRenderLink') // Asegurar que el <a> tenga el href correcto
 						.attr('href', renderUrl)

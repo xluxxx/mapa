@@ -10,6 +10,8 @@
     <link href="<?= base_url('assets/mophy/vendor/datatables/css/jquery.dataTables.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/mophy/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/mophy/css/style.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/mophy/vendor/lightgallery/css/lightgallery.min.css')?>" rel="stylesheet">
+
 </head>
 
 <body>
@@ -21,16 +23,16 @@
             height: 100%;
         }
         #container {
-            border: solid 1px black;
-            width: 100%;
-            min-height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid black;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            box-sizing: border-box;
         }
+        
     </style>
 
-    <div id="container" style="border: solid 1px black; width: 100%; height: 100%; position: relative;"></div>
+    <div id="container" style="border: solid 1px black; position: relative;"></div>
     <!-- Buscador y lista de stands -->
     <div id="searchContainer" style="position: absolute; top: 5%; left: 5%; width: 250px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); z-index: 20;">
         <input type="text" id="searchInput" placeholder="Buscar empresa, booth o categoría" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">
@@ -55,15 +57,16 @@
 					<div class="row">
 						<div class="col-md-5 .ms-auto">
 							<center><label><strong>Logo empresa:</strong></label>	</center>			
-							<a href="#" id="empresaLogoLink" data-exthumbimage="" class="lg-item col-lg-3 col-md-6 mb-4">
-								<img id="empresaLogo" class="w-100 rounded" src="" data-src="" alt="Logo de la Empresa" style="max-width: 100%; display: none;">
-							</a>
+                            <a href="ruta/imagen1.jpg" id="empresaLogoLink" data-exthumbimage="ruta/imagen1-thumb.jpg" class="lg-item col-lg-3 col-md-6 mb-4">
+                                <img id="empresaLogo" class="w-100 rounded" src="ruta/imagen1-thumb.jpg" data-src="ruta/imagen1.jpg" alt="Logo de la Empresa" style="max-width: 100%;">
+                            </a>
+
 						</div>
 							<div class="col-md-6 .ms-auto">
 								<center><label><strong>Render:</strong></label>	</center>	
-								<a href="#" id="detRenderLink" data-exthumbimage="" class="lg-item col-lg-3 col-md-6 mb-4">
-									<img id="empresaRender" class="w-100 rounded" src="" data-src="" alt="Render de la Empresa" style="max-width: 100%; display: none;">
-								</a>
+                                <a href="ruta/imagen2.jpg" id="detRenderLink" data-exthumbimage="ruta/imagen2-thumb.jpg" class="lg-item col-lg-3 col-md-6 mb-4">
+                                    <img id="empresaRender" class="w-100 rounded" src="ruta/imagen2-thumb.jpg" data-src="ruta/imagen2.jpg" alt="Render de la Empresa" style="max-width: 100%;">
+                                </a>
 							</div>
 					</div>
 				</div>
@@ -92,7 +95,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://unpkg.com/konva@9/konva.min.js"></script>
-<script src="<?= base_url('assets/js/mapa_view.js?v=1.11'); ?>"
+<script src="<?= base_url('assets/js/mapa_view.js?v=1.12'); ?>"
     evento="<?= $evento['id']; ?>"
     imagen="<?= base_url('public/uploads/planos/' . $evento['name_file']); ?>"
     url_guardado="<?= base_url('Mapa/guardar_posiciones/'); ?>"
@@ -101,22 +104,6 @@
 	defer></script>
 	<script src="<?= base_url('assets/mophy/vendor/lightgallery/js/lightgallery-all.min.js'); ?>"></script>
 
-<script>
-    // evento de domcontentloaded 
-    document.addEventListener('DOMContentLoaded', function() {
-        let sidebar = document.querySelector('.deznav .deznav-scroll');
-        standForm = document.getElementById('stand-form');
-        sidebar.appendChild(standForm);
 
-        fnIniciarForm();
-        sts_mostrarForm();
-    });
-    function adjustSize() {
-    const container = document.getElementById('container');
-    container.style.height = window.innerHeight + 'px';
-}
-window.addEventListener('resize', adjustSize);
-adjustSize();
-</script>
 
 </html>

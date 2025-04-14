@@ -59,6 +59,13 @@
 	#stand-form.shown {
 		display: block;
 	}
+	#container {
+    border: 1px solid black;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    box-sizing: border-box;
+	}
 </style>
 <?= $this->endSection(); ?>
 
@@ -85,7 +92,7 @@
 
 <!-- Contenedor del lienzo -->
 <div>
-	<div id="container" style="border: solid 1px black; width: 1200px; height: 800px; position: relative;"></div>
+	<div id="container" style="border: solid 1px black;position: relative;"></div>
 	<!-- Buscador y lista de stands -->
 	<div id="searchContainer" style="position: absolute; top: 20%; left: 18%; width: 250px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); z-index: 20;">
 		<input type="text" id="searchInput" placeholder="Buscar empresa, booth o categoría" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none;">

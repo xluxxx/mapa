@@ -3,6 +3,7 @@ let lid_evento = document.currentScript.getAttribute('evento');
 let lurl_guardado = document.currentScript.getAttribute('url_guardado');
 let lurl_carga = document.currentScript.getAttribute('url_carga');
 let base_url = document.currentScript.getAttribute('base_url');
+
 var konva_stage;
 var konva_layer_bg;
 var konva_layer_elem;
@@ -53,12 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	searchInput.addEventListener('input', function () {
 		const query = searchInput.value.toLowerCase();
 		searchResults.innerHTML = ''; // Limpiar resultados anteriores
-
-		// Filtrar stands según la búsqueda (usando stdx_shapes de la función cargarFigurasKonva)
-		const filteredStands = stdx_shapes.filter(stand => 
+	
+		// Filtrar stands con un numeroStand válido y que coincidan con la búsqueda
+		const filteredStands = stdx_shapes.filter(stand =>
+			stand.numeroStand && // Verifica que numeroStand no sea null, undefined o vacío
 			stand.empresa.toLowerCase().includes(query) // Buscar por nombre o título
 		);
-
+	
+		console.log(filteredStands);
 		// Generar la lista de resultados
 		filteredStands.forEach(stand => {
 			const li = document.createElement('li');
@@ -66,12 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			li.style.padding = "8px";
 			li.style.cursor = "pointer";
 			li.style.borderBottom = "1px solid #eee";
-			
+	
 			// Evento al hacer clic en un resultado
 			li.addEventListener('click', function () {
 				seleccionarYResaltarFigura(stand.id_konva); // Resaltar y centrar en el mapa
 			});
-
+	
 			searchResults.appendChild(li);
 		});
 	});
@@ -94,24 +97,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
    // Función para actualizar la lista de búsqueda con eventos de selección
    function actualizarListaBusqueda(data) {
-	   searchResults.innerHTML = ''; // Limpiar lista anterior
-	   console.log(data);
+	searchResults.innerHTML = ''; // Limpiar lista anterior
 
-	   data.forEach(stand => {
-		   let li = document.createElement('li');
-		   li.textContent = `${stand.nombreEmpresa} (Stand: ${stand.numero})`;
-		   li.style.padding = "8px";
-		   li.style.cursor = "pointer";
-		   li.style.borderBottom = "1px solid #eee";
+	// Filtrar stands que tienen un número de stand válido
+	const filteredData = data.filter(stand => stand.numero);
 
-		   li.addEventListener('click', function () {
-			   seleccionarYResaltarFigura(stand.id_konva);
-		   });
+	filteredData.forEach(stand => {
+		let li = document.createElement('li');
+		li.textContent = `${stand.nombreEmpresa} (Stand: ${stand.numero})`;
+		li.style.padding = "8px";
+		li.style.cursor = "pointer";
+		li.style.borderBottom = "1px solid #eee";
 
-		   searchResults.appendChild(li);
-	   });
-   }
+		li.addEventListener('click', function () {
+			seleccionarYResaltarFigura(stand.id_konva);
+		});
 
+		searchResults.appendChild(li);
+	});
+}
    // Función para centrar y resaltar una figura en el mapa
    function seleccionarYResaltarFigura(id_konva) {
 	   let stand = stdx_shapes.find(s => s.id_konva === id_konva);
@@ -343,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						verEmpresa(shape);
 					} else if (registrado === false) {
 						console.log('Stand no registrado - mostrando formulario');
-						abrirFormulario(shape);
+						//abrirFormulario(shape);
 					} else {
 						console.error('Respuesta inesperada');
 						Swal.fire('Error', 'No se pudo determinar el estado del stand', 'error');
@@ -504,13 +508,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		var id_konva = shape.attrs.id; // Obtener el ID de la figura seleccionada
 		var id_evento = lid_evento; // Asegúrate de definir esta variable con el evento actual
 		let baseUrl = base_url;
+
 		// Realizar una petición AJAX para obtener los datos de la empresa
 		$.ajax({
 			url: base_url + 'Mapa/obtenerEmpresa', // Ruta en el backend
 			type: 'POST',
 			data: { id_konva: id_konva, id_evento: id_evento },
 			dataType: 'json',
-			success: function (response) {
+			success: function(response) {
 				if (response.success) {
 					const statusMap = {
 						occupied: '<span class="badge badge-pill badge-danger">Ocupado</span>',
@@ -521,59 +526,59 @@ document.addEventListener('DOMContentLoaded', function () {
 					$('#modalEmpresa #empresaNombre').text(response.data.nombreEmpresa);
 					$('#modalEmpresa #empresaStatus').html(estadoStand);
 					$('#modalEmpresa #empresaCorreo').text(response.data.correo);
-					$('#modalEmpresa #empresaPagina').text(response.data.paginaweb);
+					$('#modalEmpresa #empresaPagina').html('<a href="' + response.data.paginaweb + '" target="_blank">' + response.data.paginaweb + '</a>');
 					$('#modalEmpresa #empresaTel').text(response.data.tel);
-					$('#modalEmpresa #empresaStand').html("<span class='badge badge-primary'>" + response.data.numero + "</span>");
+					$('#modalEmpresa #empresaStand').text(response.data.numero);
 					$('#modalEmpresa #empresaRepresentante').text(response.data.nombreRepresentante);
 					$('#modalEmpresa #empresaDescripcion').text(response.data.descripcion);
-	
-					// Si tiene un logo, mostrarlo
-					if (response.data.logo) {
-						console.log(baseUrl)
-						let logoUrl = baseUrl + '/writable/uploads/logosEmpresasExpositoras/' + response.data.logo;
+		
+				// Si tiene un logo, mostrarlo
+				if (response.data.logo) {
+					console.log(baseUrl);
 
-						$('#empresaLogoLink')  // Asegurarse de que el <a> tenga el href correcto
-							.attr('href', logoUrl)
-							.attr('data-src', logoUrl)
-							.attr('data-exthumbimage', logoUrl)
-							.show();
-	
-						$('#empresaLogo')
-							.attr('src', baseUrl + 'files/uploads/' + response.data.logo)
-							.show();
-					} else {
-						$('#empresaLogoLink').hide();
-					}
-	
-					if (response.data.render) {
-						let renderUrl = baseUrl + 'filerender/uploads/' + response.data.render;
-	
-						$('#detRenderLink') // Asegurar que el <a> tenga el href correcto
-							.attr('href', renderUrl)
-							.attr('data-src', renderUrl)
-							.attr('data-exthumbimage', renderUrl)
-							.show();
-	
-						$('#empresaRender')
-							.attr('src', renderUrl)
-							.show();
-					} else {
-						$('#detRenderLink').hide();
-					}
-	
-					// Inicializar LightGallery después de modificar los elementos
-					$('#modalEmpresa').lightGallery({
-						selector: 'a' // Selecciona los enlaces dentro del modal
-					});
-	
-	
+					let logoUrl = baseUrl + 'files/uploads/' + response.data.logo;
+
+					$('#empresaLogoLink')  // Asegurarse de que el <a> tenga el href correcto
+						.attr('href', logoUrl)
+						.attr('data-src', logoUrl)
+						.attr('data-exthumbimage', logoUrl)
+						.show();
+
+					$('#empresaLogo')
+						.attr('src',logoUrl)
+						.show();
+				} else {
+					$('#empresaLogoLink').hide();
+				}
+
+				if (response.data.render) {
+					let renderUrl = baseUrl + 'filerender/uploads/' + response.data.render;
+
+					$('#detRenderLink') // Asegurar que el <a> tenga el href correcto
+						.attr('href', renderUrl)
+						.attr('data-src', renderUrl)
+						.attr('data-exthumbimage', renderUrl)
+						.show();
+
+					$('#empresaRender')
+						.attr('src', renderUrl)
+						.show();
+				} else {
+					$('#detRenderLink').hide();
+				}
+
+				// Inicializar LightGallery después de modificar los elementos
+				$('#modalEmpresa').lightGallery({
+					selector: 'a' // Selecciona los enlaces dentro del modal
+				});
+
 					// Abrir el modal
 					$('#modalEmpresa').modal('show');
 				} else {
 					Swal.fire('Error', 'No se encontraron datos de la empresa.', 'error');
 				}
 			},
-			error: function () {
+			error: function() {
 				Swal.fire('Error', 'No se pudo obtener la información.', 'error');
 			}
 		});
@@ -625,29 +630,56 @@ document.addEventListener('DOMContentLoaded', function () {
 				// Añadir la forma al array
 				stdx_shapes.push(newShape);
 	
-				// Crear el texto
+				// Función para calcular el tamaño del texto según la figura
+				function calcularFontSize(shape) {
+					return Math.max(10, shape.height * 0.15); // 15% de la altura del rectángulo, mínimo 10px
+				}
+
+				// Crear el texto con tamaño dinámico
+				let fontSize = calcularFontSize(newShape);
+				//console.log(shape.numero);
+				if (shape.numero == null) {
+					numerostand = "";
+				} else {
+					numerostand = "(" + shape.numero + ")";
+				}
 				let titleText = new Konva.Text({
-					text: shape.numero,
-					fontSize: Math.max(10, newShape.height * 0.15),  // Ajustar tamaño del texto al 15% de la figura
+					text: shape.nombreEmpresa + numerostand,
+					fontSize: fontSize,
 					fontFamily: 'Arial',
 					fill: 'white',
-					align: 'center'
+					align: 'center',
+					width: newShape.width * 0.9,  // Ajusta el ancho máximo al 90% de la figura
+					wrap: 'word'
 				});
-	
-				// Medir tamaño del texto
-				let textWidth = titleText.measureSize(shape.numero).width;
-				let textHeight = titleText.measureSize(shape.numero).height;
-	
-				// Centrar el texto en la figura
+
+				// Agregar temporalmente el texto para medirlo
+				konva_layer_elem.add(titleText);
+
+				// Ajustar el tamaño del texto si es más grande que el rectángulo
+				while (titleText.width() > newShape.width * 0.9 && fontSize > 5) {
+					fontSize -= 1;
+					titleText.fontSize(fontSize);
+				}
+
+				// Centrar el texto dentro del rectángulo
 				titleText.position({
-					x: newShape.x + (newShape.width / 2) - (textWidth / 2),
-					y: newShape.y + (newShape.height / 2) - (textHeight / 2) + (newShape.height * 0.10)  // Espacio para el logo arriba
+					x: newShape.x + (newShape.width - titleText.width()) / 2,
+					y: newShape.y + (newShape.height - titleText.height()) / 2 + (newShape.height * 0.10) // Espacio para el logo
 				});
-	
-				// Agregar la figura y el título al layer
+
+				// Agregar la figura y el texto al layer
 				konva_layer_elem.add(lrect);
 				konva_layer_elem.add(titleText);
-	
+
+				// 🔹 Escalar dinámicamente el texto con la figura
+				konva_stage.on('scaleXChange scaleYChange', () => {
+					let scale = konva_stage.scaleX(); // Obtener el nivel de zoom
+					let newFontSize = calcularFontSize(newShape) / scale; // Ajustar el tamaño de la fuente al zoom
+					titleText.fontSize(newFontSize);
+				});
+
+
 				// Si la figura está reservada, agregar el logo
 				if (shape.status === 'reserved') {
 					let logoImage = new Image();
@@ -884,7 +916,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function fnDibujarNuevoRectangulo(info) {
-		const pos = konva_stage.getPointerPosition();
+		const pos = konva_stage.setPointersPositions(info);
 		let localx, localy;
 		if (!pos) {
 			localx = (info.x - konva_stage.x()) / scale;
@@ -989,7 +1021,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	const abrirFormulario = (shape) => {
 
 		Swal.fire({
-			title: " Stand",
+			title: "Registrar Stand",
 			html: `
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Nombre de la empresa</label>
@@ -1001,7 +1033,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Numero de stand</label>
-						<input type="text" id="stand" class="form-control">
+						<input type="number" id="stand" class="form-control">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Nombre completo del representante</label>
@@ -1009,7 +1041,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Telefóno</label>
-						<input type="text" id="tel" class="form-control">
+						<input type="number" id="tel" class="form-control">
 					</div>
 					<div class="mb-3 col-md-12">
 						<label class="form-label">Pagina Web</label>
