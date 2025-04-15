@@ -61,8 +61,8 @@
 	}
 	#container {
     border: 1px solid black;
-    width: 100vw;
-    height: 100vh;
+    width: 1400px;
+    height: 800px;
     position: relative;
     box-sizing: border-box;
 	}

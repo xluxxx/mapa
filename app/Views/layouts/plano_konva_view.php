@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mapa Interactivo</title>
     <link href="<?= base_url('assets/mophy/vendor/jqvmap/css/jqvmap.min.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('assets/mophy/vendor/chartist/css/chartist.min.css') ?>">
     <link href="<?= base_url('assets/mophy/vendor/datatables/css/jquery.dataTables.min.css') ?>" rel="stylesheet">
@@ -16,20 +16,23 @@
 
 <body>
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
-        #container {
-            border: 1px solid black;
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            box-sizing: border-box;
-        }
-        
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#container {
+    border: 1px solid black;
+    width: 1400px;
+    height: 800px;
+    position: relative;
+    box-sizing: border-box;
+}
     </style>
 
     <div id="container" style="border: solid 1px black; position: relative;"></div>
